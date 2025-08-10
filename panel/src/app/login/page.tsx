@@ -1,20 +1,35 @@
+"use client";
+import { useState } from "react";
+import { API_URL } from "../lib/api";
+
 export default function LoginPage() {
+  const [email, setEmail] = useState("admin@entelequia.local");
+  const [password, setPassword] = useState("admin1234");
+  const [err, setErr] = useState<string | null>(null);
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    setErr(null);
+    const r = await fetch(`${API_URL}/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password })
+    });
+    if (!r.ok) return setErr("Credenciales inválidas");
+    const j = await r.json();
+    localStorage.setItem("token", j.token);
+    window.location.href = "/import";
+  }
+
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gray-50 p-6">
-      <div className="w-full max-w-sm rounded-lg border bg-white p-6 shadow-sm">
-        <h1 className="mb-4 text-center text-2xl font-semibold text-gray-900">Login</h1>
-        <form className="space-y-4">
-          <div>
-            <label htmlFor="email" className="mb-1 block text-sm font-medium text-gray-700">Email</label>
-            <input id="email" name="email" type="email" placeholder="you@example.com" className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:border-blue-500" />
-          </div>
-          <div>
-            <label htmlFor="password" className="mb-1 block text-sm font-medium text-gray-700">Password</label>
-            <input id="password" name="password" type="password" className="w-full rounded-md border px-3 py-2 text-sm outline-none focus:border-blue-500" />
-          </div>
-          <button type="submit" className="mt-2 w-full rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-700">Sign in</button>
-        </form>
-      </div>
-    </main>
+    <div className="max-w-sm mx-auto py-16">
+      <h1 className="text-2xl font-semibold mb-4">Login</h1>
+      <form onSubmit={submit} className="space-y-3">
+        <input className="border p-2 w-full" value={email} onChange={e=>setEmail(e.target.value)} placeholder="Email" />
+        <input className="border p-2 w-full" type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Password" />
+        {err && <p className="text-red-600">{err}</p>}
+        <button className="bg-black text-white px-4 py-2 rounded">Entrar</button>
+      </form>
+    </div>
   );
 }
