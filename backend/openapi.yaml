@@ -1,0 +1,287 @@
+openapi: 3.0.3
+info:
+  title: Entelequia Delivery API
+  version: "0.1.0"
+servers:
+  - url: http://localhost:3001
+paths:
+  /auth/login:
+    post:
+      summary: Login (panel y courier)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: { type: string, format: email }
+                password: { type: string }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token: { type: string }
+                  role: { type: string, enum: [admin, ops, courier] }
+        "401": { description: Unauthorized }
+
+  /orders:
+    get:
+      summary: Listar órdenes
+      parameters:
+        - in: query; name: status; schema: { type: string }
+        - in: query; name: q; schema: { type: string }
+        - in: query; name: page; schema: { type: integer, minimum: 1 }
+      responses: { "200": { description: OK } }
+    post:
+      summary: Crear orden
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/OrderCreate" }
+      responses: { "201": { description: Created } }
+
+  /orders/{id}:
+    get:
+      summary: Obtener orden
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Order" }
+        "404": { description: Not found }
+    patch:
+      summary: Actualizar orden
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: "#/components/schemas/OrderUpdate" } } }
+      responses:
+        "200": { description: OK, content: { application/json: { schema: { $ref: "#/components/schemas/Order" } } } }
+        "404": { description: Not found }
+
+  /shipments:
+    get: { summary: Listar envíos, responses: { "200": { description: OK } } }
+    post:
+      summary: Crear envío
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: "#/components/schemas/ShipmentCreate" } } }
+      responses: { "201": { description: Created } }
+
+  /shipments/{id}:
+    get:
+      summary: Obtener envío (incluye timeline)
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ShipmentWithEvents" }
+        "404": { description: Not found }
+    patch:
+      summary: Actualizar envío
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: "#/components/schemas/ShipmentUpdate" } } }
+      responses:
+        "200": { description: OK, content: { application/json: { schema: { $ref: "#/components/schemas/Shipment" } } } }
+        "404": { description: Not found }
+
+  /shipments/{id}/assign:
+    post:
+      summary: Asignar a repartidor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [courier_id]
+              properties:
+                courier_id: { type: string, format: uuid }
+      responses: { "200": { description: OK }, "404": { description: Not found } }
+
+  /shipments/{id}/otp:
+    post:
+      summary: Regenerar OTP/QR
+      responses: { "200": { description: OK }, "404": { description: Not found } }
+
+  /imports/orders/dry_run:
+    post:
+      summary: Importar CSV (prueba)
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file, format]
+              properties:
+                file:
+                  type: string
+                  format: binary
+                format:
+                  type: string
+                  enum: [csv_exact, csv_normalized]
+      responses:
+        "200":
+          description: Reporte de validación
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ImportDryRunResult"
+
+  /imports/orders/commit:
+    post:
+      summary: Importar CSV (commit)
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file, format]
+              properties:
+                file: { type: string, format: binary }
+                format: { type: string, enum: [csv_exact, csv_normalized] }
+      responses: { "202": { description: Lote aceptado } }
+
+  /locations:
+    post:
+      summary: Ping de ubicación (idempotente)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LocationPing"
+      responses:
+        "201": { description: Created }
+        "200": { description: Duplicate ignored (idempotent) }
+
+  /realtime/stream:
+    get:
+      summary: SSE stream
+      responses:
+        "200":
+          description: text/event-stream
+
+components:
+  schemas:
+    Order:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        external_ref: { type: string }
+        status: { type: string }
+        amount_cents: { type: integer }
+        currency: { type: string }
+        channel: { type: string }
+        metadata: { type: object }
+
+    Address:
+      type: object
+      properties:
+        line1: { type: string }
+        city: { type: string }
+        province_state: { type: string }
+        country: { type: string, default: "AR" }
+        postal_code: { type: string }
+        lat: { type: number }
+        lon: { type: number }
+
+    OrderCreate:
+      type: object
+      required: [external_ref, amount_cents, currency]
+      properties:
+        external_ref: { type: string }
+        customer: { type: object, properties: { name: {type: string}, phone: {type: string}, email: {type: string} } }
+        address: { $ref: "#/components/schemas/Address" }
+        channel: { type: string, enum: [web, mercado_libre, tienda, other], default: web }
+        amount_cents: { type: integer }
+        currency: { type: string, default: ARS }
+        status: { type: string, default: received }
+        delivery_window_from: { type: string, format: date-time }
+        delivery_window_to: { type: string, format: date-time }
+        metadata: { type: object }
+
+    OrderUpdate:
+      type: object
+      properties:
+        status: { type: string }
+        metadata: { type: object }
+
+    ShipmentCreate:
+      type: object
+      required: [order_id]
+      properties:
+        order_id: { type: string, format: uuid }
+        delivery_method: { type: string, enum: [courier, pickup, carrier, other], default: courier }
+
+    ShipmentUpdate:
+      type: object
+    Shipment:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        order_id: { type: string, format: uuid }
+        status: { type: string }
+        delivery_method: { type: string }
+        qr_token: { type: string }
+        eta: { type: string, format: date-time }
+
+    Event:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        type_key: { type: string }
+        subject_id: { type: string, format: uuid }
+        occurred_at: { type: string, format: date-time }
+        payload: { type: object }
+
+    ShipmentWithEvents:
+      allOf:
+        - $ref: "#/components/schemas/Shipment"
+        - type: object
+          properties:
+            events:
+              type: array
+              items: { $ref: "#/components/schemas/Event" }
+      properties:
+        status: { type: string, enum: [queued, out_for_delivery, delivered, failed, canceled] }
+        assigned_courier_id: { type: string, format: uuid }
+        eta: { type: string, format: date-time }
+
+    ImportDryRunResult:
+      type: object
+      properties:
+        rows_total: { type: integer }
+        rows_valid: { type: integer }
+        rows_invalid: { type: integer }
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              row_number: { type: integer }
+              message: { type: string }
+
+    LocationPing:
+      type: object
+      required: [courier_id, ts, lat, lon]
+      properties:
+        courier_id: { type: string, format: uuid }
+        ts: { type: string, format: date-time }
+        lat: { type: number }
+        lon: { type: number }
+        accuracy: { type: number }
+        speed: { type: number }
+        battery: { type: integer }
+        app_version: { type: string }
