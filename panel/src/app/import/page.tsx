@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { API_URL, apiForm } from "../lib/api";
+import { apiForm, ApiError } from "../lib/api";
 
 type DryRunResult = { rows_total:number; rows_valid:number; rows_invalid:number; errors:{row_number:number; message:string}[] };
 
@@ -20,8 +20,10 @@ export default function ImportPage() {
     try {
       const j = await apiForm<DryRunResult>(`/imports/orders/dry_run`, fd);
       setReport(j);
-    } catch (e:any) {
-      setReport({ rows_total:0, rows_valid:0, rows_invalid:0, errors:[{ row_number:0, message: e.message }]});
+    } catch (err: unknown) {
+      const msg: string =
+      err instanceof ApiError ? (err.payload?.error ?? "Unexpected error") : "Unexpected error";
+      setReport({ rows_total:0, rows_valid:0, rows_invalid:0, errors:[{ row_number:0, message: msg }]});
     } finally {
       setLoading(false);
     }
@@ -36,8 +38,9 @@ export default function ImportPage() {
     try {
       await apiForm(`/imports/orders/commit`, fd);
       setDone("Importación aceptada");
-    } catch (e:any) {
-      setDone(e.message || "Error al commitear");
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Error al commitear";
+      setDone(msg);
     } finally {
       setLoading(false);
     }
@@ -47,7 +50,7 @@ export default function ImportPage() {
     <div className="max-w-2xl mx-auto py-10 space-y-6">
       <h1 className="text-2xl font-semibold">Importar pedidos (CSV)</h1>
       <div className="space-y-3">
-        <select className="border p-2" value={format} onChange={e=>setFormat(e.target.value as any)}>
+          <select className="border p-2" value={format} onChange={e=>setFormat(e.target.value as "csv_exact" | "csv_normalized") }>
           <option value="csv_exact">Encabezados actuales</option>
           <option value="csv_normalized">Normalizado (recomendado)</option>
         </select>
