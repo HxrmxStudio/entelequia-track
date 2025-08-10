@@ -37,4 +37,4 @@ jobs:
         run: npx expo doctor --ci || true
 
       - name: Web export (static)
-        run: npx expo export --platform web --no-interactive
+        run: npx expo export --platform web --non-interactive
