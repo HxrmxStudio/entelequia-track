@@ -1,0 +1,30 @@
+{
+  "name": "entelequia-track",
+  "version": "1.0.0",
+  "description": "A comprehensive delivery tracking system with backend API, internal panel, and courier mobile app",
+  "scripts": {
+    "setup": "./setup.sh",
+    "dev": "concurrently \"cd backend && rails server\" \"cd panel && npm run dev\" \"cd courier-app && npm run web\"",
+    "backend": "cd backend && rails server",
+    "panel": "cd panel && npm run dev",
+    "courier": "cd courier-app && npm run web",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "install:all": "npm install && cd panel && npm install && cd ../courier-app && npm install",
+    "build:all": "cd panel && npm run build && cd ../courier-app && npm run build"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "keywords": [
+    "delivery",
+    "tracking",
+    "rails",
+    "nextjs",
+    "expo",
+    "typescript"
+  ],
+  "author": "Entelequia Team",
+  "license": "MIT"
+} 
