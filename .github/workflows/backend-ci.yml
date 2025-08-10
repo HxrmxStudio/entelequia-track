@@ -33,7 +33,6 @@ jobs:
     env:
       RAILS_ENV: test
       DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/entelequia_test
-      BUNDLE_GEMFILE: backend/Gemfile
 
     steps:
       - name: Checkout
@@ -48,20 +47,23 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.4.2'
-          bundler-cache: true
+          working-directory: backend
 
       - name: Install gems (backend)
-        run: bundle install
+        working-directory: backend
+        run: bundle install --jobs 4 --retry 3
 
       - name: Database prepare
-        run: |
-          bundle exec rails db:prepare
+        working-directory: backend
+        run: bundle exec rails db:prepare
 
       - name: Lint (Rubocop)
+        working-directory: backend
         run: |
           bundle exec rubocop --version || true
           bundle exec rubocop || true
 
       - name: Security (Brakeman)
+        working-directory: backend
         run: |
           bundle exec brakeman -A -q || true
