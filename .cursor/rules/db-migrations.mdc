@@ -1,0 +1,12 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+- Utiliza siempre **strong_migrations** para reducir riesgos de bloqueos.
+- AL CRERA UNA MIGRACION DEBES REVISAR QUE EL TIMESTAMP QUE VA AL INICIO DEL NMBRE DEL ARCHIVO EA CONSISTENTE CON LA ULTIMA MIGRACION.
+- Nunca crees migrciones sin preguntar al usuario!!!
+- Al agregar columnas con valores por defecto, emplea métodos no bloqueantes (por ejemplo, `add_column_default` o `change_column_default` con cuidado).
+- Antes de eliminar columnas, renómbralas a `old_*` en una migración previa y elimínalas en una migración posterior.
+- Para PostGIS, usa la gema **activerecord-postgis-adapter** y especifica claramente el tipo (por ejemplo, `geography(point, 4326)`).
+- Asegúrate de indexar adecuadamente: si la columna se consulta frecuentemente, sugiere índices (usando `concurrently` cuando sea posible) Para columnas JSONB, recomienda índices GIN.

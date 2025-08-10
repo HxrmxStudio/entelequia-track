@@ -1,0 +1,9 @@
+---
+description: Mejores prácticas y estilo para las respuestas JSON en modo API, tanto en controladores como en serializers, garantizando endpoints coherentes y seguros.
+globs: app/controllers/**,app/serializers/**
+alwaysApply: false
+---
+- Las respuestas deben usar status HTTP semánticos: por ejemplo, :ok (200), :created (201), :no_content (204), :unprocessable_entity (422), etc.
+- Utiliza **ActiveModelSerializers** [active_model_serializers.rb](mdc:config/initializers/active_model_serializers.rb) para formatear la salida JSON en lugar de renderizar `to_json` manualmente.
+- Mantén la lógica en los controladores al mínimo; cualquier proceso complejo debe delegarse a servicios o concerns (siguiendo el enfoque DDD).
+- Al sugerir código para endpoints, revisa la documentación técnica [Doc-Tecnica-enero-2025.md](mdc:docs/Doc-Tecnica-enero-2025.md) para alinear los endpoints con el flujo principal y las definiciones de estados con AASM, si es necesario.

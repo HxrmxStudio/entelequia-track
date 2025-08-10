@@ -1,0 +1,211 @@
+---
+description: Lineamientos para el uso de ActiveModelSerializers, especialmente cuando se usan serializers anidados (segundo y tercer nivel).
+globs:
+alwaysApply: true
+---
+# Serializers and Nested Serializers Best Practices
+
+Esta regla documenta las mejores prácticas para el uso de ActiveModelSerializers, especialmente cuando se usan serializers anidados (segundo y tercer nivel).
+
+## Problema Común: Serializers Anidados con `belongs_to`
+
+### ❌ Problema Frecuente
+
+Cuando un serializer se reutiliza en diferentes niveles (ej: `BasicJobSerializer` usado dentro de `AiHuntSerializer`), las asociaciones `belongs_to` con condiciones `if:` fallan:
+
+### ❌ Problema Frecuente
+Cuando un serializer se reutiliza en diferentes niveles (ej: `BasicJobSerializer` usado dentro de `AiHuntSerializer`), las asociaciones `belongs_to` con condiciones `if:` fallan:
+
+```ruby
+# ❌ PROBLEMÁTICO en serializers anidados
+class BasicJobSerializer < ActiveModel::Serializer
+  belongs_to :location, if: -> { object.location.present? }
+  belongs_to :client, if: -> { object.client.present? }
+end
+```
+
+### 🔍 Por qué ocurre:
+1. **Evaluación prematura**: ActiveModelSerializers evalúa `if:` ANTES del eager loading
+2. **Contexto anidado**: Dentro de serializers anidados, `object.association` puede no estar cargado
+3. **Lazy loading conflictivo**: Rails intenta hacer queries adicionales que rompen el contexto
+
+## ✅ Soluciones Recomendadas
+
+### **Solución 1: Atributos Custom (RECOMENDADO)**
+Reemplazar `belongs_to` con atributos custom para asociaciones problemáticas:
+
+```ruby
+# ✅ ROBUSTO - Funciona en cualquier nivel de anidación
+class BasicJobSerializer < ActiveModel::Serializer
+  # En lugar de: belongs_to :location, if: -> { object.location.present? }
+  attribute :location do
+    if object.location.present?
+      {
+        id: object.location.id,
+        name: object.location.name,
+        city: object.location.city,
+        country: object.location.country,
+        latitude: object.location.latitude&.to_f,
+        longitude: object.location.longitude&.to_f
+      }
+    else
+      nil
+    end
+  end
+
+  # En lugar de: belongs_to :client, if: -> { object.client.present? }
+  attribute :client do
+    if object.client.present?
+      {
+        id: object.client.id,
+        name: object.client.name,
+        industry: object.client.industry&.name,
+        company_size: object.client.company_size
+        # ... otros campos necesarios
+      }
+    else
+      nil
+    end
+  end
+end
+```
+
+### **Solución 2: Quitar Condiciones `if:`**
+Para casos simples, quitar la condición ya que AMS maneja `nil` automáticamente:
+
+```ruby
+# ✅ SIMPLE - AMS maneja nil automáticamente
+belongs_to :location  # Sin if: condition
+```
+
+### **Solución 3: Condiciones con Foreign Keys**
+Si necesitas condición, usar foreign keys en lugar de la asociación:
+
+```ruby
+# ✅ SEGURO - foreign keys siempre disponibles
+belongs_to :location, if: -> { object.location_id.present? }
+```
+
+### **Solución 4: Include Conditional (AVANZADA)**
+Para casos complejos con múltiples condiciones:
+
+```ruby
+class BasicJobSerializer < ActiveModel::Serializer
+  def attributes(*args)
+    data = super
+    data[:location] = location_data if include_location?
+    data[:client] = client_data if include_client?
+    data
+  end
+
+  private
+
+  def include_location?
+    object.location_id.present?
+  end
+
+  def location_data
+    LocationSerializer.new(object.location).as_json
+  end
+
+  def include_client?
+    object.client_id.present?
+  end
+
+  def client_data
+    BasicClientSerializer.new(object.client).as_json
+  end
+end
+```
+
+## 🎯 Cuándo Aplicar
+
+- **Primer nivel**: `belongs_to` generalmente funciona bien
+- **Segundo nivel**: Problemas empiezan a aparecer con condiciones `if:`
+- **Tercer nivel**: Casi siempre requiere atributos custom
+
+## 📋 Checklist para Serializers Reutilizables
+
+- [ ] ¿Se usa el serializer en múltiples niveles?
+- [ ] ¿Tiene asociaciones con condiciones `if: -> { object.association.present? }`?
+- [ ] ¿Se reportan asociaciones como `null` en nested contexts?
+- [ ] Si sí → Convertir a atributos custom
+
+## 💡 Tips Adicionales
+
+### 1. **Eager Loading en Controladores**
+Siempre incluir asociaciones necesarias:
+```ruby
+base_scope.includes(
+  :requested_by,
+  :completed_by,
+  job: [:location, :client, :created_by, :job_recruiters, :job_languages, :job_fee]
+)
+```
+
+### 2. **Performance y Control**
+- Atributos custom permiten control fino sobre qué campos incluir
+- Evitan N+1 queries cuando están bien implementados
+- Más predecibles que `belongs_to` anidados
+
+### 3. **Debugging**
+- Atributos custom son más fáciles de debuggear
+- Puedes agregar logs dentro del bloque para debugging
+- Errores más claros y específicos
+
+### 4. **Consistencia**
+- Una vez que conviertes una asociación a atributo custom, mantén esa estrategia
+- Documenta qué serializers usan qué estrategia
+- Considera crear serializers específicos para diferentes contextos si es necesario
+
+## 🚨 Señales de Alerta
+
+- Asociaciones aparecen como `null` en respuestas anidadas
+- Queries N+1 inesperadas en serializers anidados
+- Errores de "association not loaded" en testing
+- Comportamiento inconsistente entre primer nivel y niveles anidados
+
+## 📝 Ejemplos de Refactoring
+
+### Antes (Problemático):
+```ruby
+class BasicJobSerializer < ActiveModel::Serializer
+  belongs_to :location, if: -> { object.location.present? }
+  belongs_to :client, if: -> { object.client.present? }
+  belongs_to :created_by, if: -> { object.created_by.present? }
+end
+```
+
+### Después (Robusto):
+```ruby
+class BasicJobSerializer < ActiveModel::Serializer
+  # Asociaciones simples sin condiciones funcionan bien
+  belongs_to :created_by, serializer: BasicUserSerializer
+
+  # Asociaciones complejas como atributos custom
+  attribute :location do
+    if object.location.present?
+      {
+        id: object.location.id,
+        name: object.location.name,
+        city: object.location.city,
+        country: object.location.country
+      }
+    end
+  end
+
+  attribute :client do
+    if object.client.present?
+      {
+        id: object.client.id,
+        name: object.client.name,
+        industry: object.client.industry&.name
+      }
+    end
+  end
+end
+```
+description:
+globs:
+alwaysApply: false
+---

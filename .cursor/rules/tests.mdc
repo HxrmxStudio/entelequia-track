@@ -1,0 +1,112 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Rule para Pruebas de Integración y Documentación de Endpoints en Rails
+
+Eres un experto en escribir pruebas de integración y documentación de endpoints para aplicaciones Rails usando RSpec, FactoryBot y rswag.
+
+## Estrategia General
+- **Solo pruebas de integración y de endpoints:** No se escriben tests unitarios.
+- **Adaptación al código existente:** Tus pruebas deben alinearse al código actual, sin modificar la lógica de la aplicación para que pase un test.
+- **Generación de datos realistas:** Utilizas FactoryBot junto con Faker.
+- **Ubicación de specs:** Ubica tus specs de endpoints dentro de `spec/integration/`, siguiendo la convención REST (por ejemplo, `integration/users_spec.rb`).
+- Basate en [api_testing_guide.md](mdc:docs/api_testing_guide.md)
+
+## Generación de Documentación (Swagger/OpenAPI)
+- Utiliza rswag para describir con precisión todos los parámetros, respuestas y errores posibles de cada endpoint.
+- La documentación debe reflejar el comportamiento real del controlador y los serializers.
+- Define los tags, parámetros, tipos de datos y respuestas en cada bloque de path.
+- Prioriza claridad y precisión en los ejemplos de request y response mostrados en Swaggerobertura y Profundidad de los Tests
+- **Escenarios completos:** Simula casos exitosos (200, 201) y de error (400, 401, 404, 422, etc.).
+- **Cobertura de endpoint:** Cada endpoint debe cubrir:
+  - Validaciones de modelos según **@schema.rb**
+  - Parámetros requeridos vs. opcionales
+  - Tipos de datos, enums, límites, formatos
+- **Lógica adicional:** Testea paginación, filtros, ordenamiento si aplica.
+
+## Aislamiento y Dependencias Externas
+- **Uso de webmock y VCR:** Evita llamadas externas en tests para asegurar consistencia.
+- **Ubicación de las cassettes:** `spec/vcr_cassettes/`.
+
+## Buenas Prácticas
+- **Base de datos limpia:** Usa `database_cleaner-active_record` para asegurar una DB limpia en cada test.
+- **Cobertura de código:** Mide la cobertura con SimpleCov.
+- **Validaciones concisas:** Usa shoulda-matchers para validar expectativas del modelo.
+- **Organización de tests:** Organiza tus pruebas con `describe` y `context` para legibilidad.
+- **Uso de helpers:** Prefiere `let`, `before`, `subject` y helpers personalizados en `spec/support/` para mantener tus specs DRY y legibles.
+
+## Estilo y Convenciones
+- **Cumplimiento de Rubocop:** Sigue `rubocop-rails-omakase`.
+- **Evitar duplicación:** Evita la duplicación de código en tests usando ejemplos compartidos (`shared_examples`) si es necesario.
+- **Estructura del proyecto:** Mantén consistencia en las rutas, nombres de archivos y estructura, como sigue:
+  spec/
+    integration/
+      users_spec.rb
+    factories/
+    support/
+    vcr_cassettes/
+    swagger_helper.rb
+    spec_helper.rb
+    rails_helper.rb
+
+## Configuración de Autenticación en Tests
+
+Para evitar errores y mantener consistencia en los tests de endpoints autenticados, se establece la siguiente guía: SIEMPRE CONSULTA EL DOCUMENTO [api_testing_guide.md](mdc:docs/api_testing_guide.md)
+
+
+### Configuración Básica para Tests de API
+```ruby
+let(:auth_setup) do
+  user = create(:user, :admin)  # Crear usuario con rol apropiado
+  user.confirm                  # Confirmar el usuario si es necesario
+  setup_authentication_with_user(user)
+end
+let(:auth_user) { auth_setup[:user] }
+let(:auth_headers) { auth_setup[:header_tokens] }
+
+# Headers requeridos
+let(:'access-token') { auth_headers['access-token'] }
+let(:client) { auth_headers['client'] }
+let(:uid) { auth_headers['uid'] }
+```
+
+### Definición de Parámetros en Endpoints (para Swagger/OpenAPI)
+```ruby
+parameter name: 'access-token', in: :header, type: :string, required: true
+parameter name: 'client', in: :header, type: :string, required: true
+parameter name: 'uid', in: :header, type: :string, required: true
+```
+
+### Puntos Clave
+1. **Tokens Requeridos:** Solo `access-token`, `client` y `uid` son necesarios como headers de autenticación.
+2. **Agency Context:** El contexto de agencia (`agency_id`) se obtiene automáticamente del usuario autenticado y no debe incluirse como parámetro requerido en Swagger.
+3. **Casos de Prueba:** Para cada endpoint, incluir siempre casos de:
+   - Éxito (token válido)
+   - Error 401 (token inválido)
+4. **Helper de Autenticación:** Usar siempre `setup_authentication_with_user(user)` que configura:
+   - Tokens válidos.
+   - `Current.user` y `Current.agency`.
+   - Otros datos necesarios para las pruebas.
+5. **Definición de Seguridad:** Todos los endpoints autenticados deben incluir:
+   ```ruby
+   security [ devise_token_auth: [] ]
+   ```
+
+### Ejemplo para Tests de 401 (No Autorizado)
+```ruby
+response "401", "unauthorized" do
+  let(:'access-token') { 'invalid-token' }
+  let(:client) { 'invalid-client' }
+  let(:uid) { 'invalid@example.com' }
+
+  run_test! do |response|
+    expect(response.status).to eq(401)
+  end
+end
+```
+
+## Objetivo Final
+Tu objetivo es validar la aplicación y generar una documentación clara, precisa y automatizada que funcione como fuente de verdad para cualquier consumidor externo de la API, asegurando además que la autenticación se maneje de manera consistente en todos los tests.
+SIEMPRE CONSULTA EL DOCUMENTO [api_testing_guide.md](mdc:docs/api_testing_guide.md)

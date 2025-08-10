@@ -1,0 +1,11 @@
+---
+description: Lineamientos para la implementación y gestión de tareas en segundo plano usando Sidekiq y sidekiq-cron, asegurando la correcta ejecución de procesos asíncronos y notificaciones.
+globs: app/jobs/*
+alwaysApply: false
+---
+- Ten en cuenta la configuración de **Sidekiq** definida en [sidekiq.rb](mdc:config/initializers/sidekiq.rb) y [sidekiq.yml](mdc:config/sidekiq.yml) , así como en [environment.rb](mdc:config/environment.rb), [development.rb](mdc:config/environments/development.rb), [production.rb](mdc:config/environments/production.rb) y [staging.rb](mdc:config/environments/staging.rb).
+- En desarrollo, utiliza [docker-compose.yml](mdc:docker-compose.yml), [Dockerfile.db](mdc:Dockerfile.db), [database.yml](mdc:config/database.yml) y [Dockerfile](mdc:Dockerfile) para levantar Sidekiq junto con la base de datos y Redis
+- En produccion, debes tener en cuenta lo mismo para que se ejecute todo con github Actions y @docker-compose.yml, @Dockerfile.db, @database.yml y @Dockerfile para levantar Sidekiq junto con la base de datos y Redis
+- Emplea **sidekiq-cron** para programar tareas recurrentes.
+- Asegúrate de que las tareas que requieren notificaciones utilicen la gema **Noticed** para el manejo de alertas y mensajes.
+- Valida la configuración de Sidekiq y revisa periódicamente los logs para detectar y corregir problemas de rendimiento.

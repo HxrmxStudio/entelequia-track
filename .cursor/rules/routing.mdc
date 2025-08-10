@@ -1,0 +1,11 @@
+---
+description: Lineamientos sobre convenciones de rutas en Rails, garantizando endpoints semánticos, claros y ordenados. Se prohíbe el uso de PUT, prefiriendo PATCH para actualizaciones parciales.
+globs: config/routes.rb
+alwaysApply: false
+---
+- Las rutas deben utilizar verbos HTTP semánticos y claros.
+- Evita el uso de **PUT**; utiliza en su lugar **PATCH** para actualizaciones parciales.
+- Asegúrate de que los endpoints sean semánticamente coherentes, evitando rutas enredadas o redundantes.
+- Organiza las rutas utilizando namespaces y recursos, siguiendo las mejores prácticas de Rails.
+- Revisa la documentación oficial de Rails para el diseño de rutas y aplica consistentemente estas convenciones.
+- Siempre ten en cuenta la logica del negocio [Doc-Tecnica-enero-2025.md](mdc:docs/Doc-Tecnica-enero-2025.md) y los controllers del proyecto y de cada endpoint antes de crear una ruta.

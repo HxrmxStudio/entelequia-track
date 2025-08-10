@@ -1,0 +1,74 @@
+---
+description: Establece las convenciones para los mensajes de commit en GitHub, garantizando que cada commit incluya, entre paréntesis, el modelo o archivo al que se relaciona (cuando corresponda) antes de los dos puntos. Esto facilita la revisión y seguimiento de cambios.
+globs: .git/COMMIT_EDITMSG
+alwaysApply: true
+---
+# Rule para Commits
+
+Esta rule establece las pautas para generar commit messages claros, concisos y consistentes, y para gestionar el flujo de cambios utilizando Git.
+
+- Siempre recopile y valide el contexto utilizando herramientas como `codebase_search`, `grep_search` o comandos de terminal antes de continuar.
+
+## Primero Git Status
+
+- **Ejecuta `git status`** para revisar todos los cambios que se han hecho y subir cambios en orden.
+- **Importante:** Haz commit de todos los cambios existentes, asegurándote de que cada commit contenga menos de 6 archivos y esté ordenado por modelo o funcionalidad.
+
+## Prohibiciones
+
+- **NUNCA hagas `git diff`.**
+- *NUNCA ejecutes un comando con `--no-verify`.*
+
+## Formato General del Commit
+
+El mensaje de commit debe seguir el siguiente patrón:
+
+ Typo (Modelo/Archivo): Mensaje descriptivo
+
+## Tipos de Commit
+
+- **feat (Modelo/Archivo):** Se introduce una nueva característica o funcionalidad.  
+  *Ejemplo:* `feat (User): Agrega validación de email.`
+
+- **fix (Modelo/Archivo):** Se soluciona un error o bug que afecta la funcionalidad.  
+  *Ejemplo:* `fix (Auth): Corrige error en el login.`
+
+- **perf (Modelo/Archivo):** Se realizan cambios para mejorar el rendimiento del sistema.  
+  *Ejemplo:* `perf (Order): Optimiza consulta a la base de datos.`
+
+- **docs (Modelo/Archivo):** Se actualiza o corrige la documentación.  
+  *Ejemplo:* `docs (Docs): Actualiza la guía de instalación.`
+
+- **style (Modelo/Archivo):** Se aplican cambios en el formato o estilo del código sin afectar su funcionalidad.  
+  *Ejemplo:* `style (UI): Ajusta formato del código.`
+
+- **refactor (Modelo/Archivo):** Se reestructura el código sin modificar su comportamiento.  
+  *Ejemplo:* `refactor (Payment): Reorganiza funciones en el controlador.`
+
+- **test (Modelo/Archivo):** Se añaden o refactorizan pruebas sin impactar el código de producción.  
+  *Ejemplo:* `test (Payment): Agrega pruebas unitarias.`
+
+- **build (Modelo/Archivo):** Se realizan cambios en el sistema de build, despliegue o instalación.  
+  *Ejemplo:* `build (CI/CD): Actualiza configuración del build.`
+
+- **ci (Modelo/Archivo):** Se hacen ajustes en la integración continua.  
+  *Ejemplo:* `ci (CI): Modifica pipeline en GitLab.`
+
+- **chore (Modelo/Archivo):** Se actualizan tareas, configuraciones o dependencias sin afectar directamente el código.  
+  *Ejemplo:* `chore (Infra): Actualiza paquetes y configura scripts del admin.`
+
+## Notas Adicionales
+
+- Cuando el cambio esté relacionado con un modelo o archivo específico, indica dicho modelo/archivo entre paréntesis antes de los dos puntos.
+- Mantén siempre un mensaje claro, conciso y descriptivo.
+- **Para buscar diferencias o cambios, utiliza `grep` u otras herramientas; NO se debe usar `git diff`.**
+
+## Flujo de Trabajo
+
+1. **Revisa el estado de Git:** Ejecuta `git status` para visualizar todos los cambios realizados.
+2. **Realiza commits ordenados:** 
+   - Cada commit debe incluir menos de 6 archivos.
+   - Los commits deben estar ordenados por modelo o funcionalidad.
+3. **Genera el commit message siguiendo el formato general** indicado anteriormente.
+
+Este conjunto de reglas tiene como objetivo mantener un historial de commits organizado, facilitar la revisión de cambios y asegurar que el mensaje de cada commit sea significativo para el equipo.

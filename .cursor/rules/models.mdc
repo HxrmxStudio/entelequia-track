@@ -1,0 +1,12 @@
+---
+description: Lineamientos sobre la estructura de modelos en Rails 8, asegurando claridad, cohesión y respeto al principio de responsabilidad única.
+globs: app/models/*
+alwaysApply: false
+---
+- Aplica el principio de responsabilidad única: si un modelo supera aproximadamente 300-400 líneas, sugiere extraer métodos a concerns o servicios.
+  - **Concern:** módulo reutilizable que se incluye en modelos o controladores para compartir y centralizar funcionalidades comunes sin duplicar código.
+  - **Servicio:** clase dedicada que encapsula y ejecuta lógica de negocio compleja o procesos independientes, permitiendo que los modelos y controladores se mantengan enfocados en sus responsabilidades principales.
+- Implementa **Paranoia** (soft delete) **SIEMPRE**.
+- Implementa **PaperTrail** para el registro de versiones cuando sea necesario.
+- Para la gestión de estados en procesos complejos, utiliza **AASM** con un enumerado de estados claro, según [Doc-Tecnica-enero-2025.md](mdc:docs/Doc-Tecnica-enero-2025.md).
+- Asegura validaciones de presencia y unicidad en atributos críticos, apoyándote en gemas que correspondan según el modelo y según creas necesario [Doc-Tecnica-enero-2025.md](mdc:docs/Doc-Tecnica-enero-2025.md)

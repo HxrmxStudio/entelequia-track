@@ -1,0 +1,135 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Model Documentation Standard
+
+Esta rule define el estándar para documentar y revisar modelos en el proyecto, asegurando consistencia y completitud en la documentación técnica.
+
+## Formato General
+
+```markdown
+### **[Número] [Nombre del Modelo]**
+
+**ESTADO DE IMPLEMENTACIÓN: [Emoji] [Descripción concisa del estado]**
+[✅ Implementado] [⚠️ Parcialmente implementado] [⛔️ No implementado]
+
+**Funcionalidad e Importancia**
+
+[Descripción clara del propósito del modelo y su rol en el sistema]
+
+**Gemas Asociadas**
+
+- **[Nombre Gema]:** [Emoji] [Estado]. [Descripción breve de uso]
+[Repetir para cada gema relevante]
+
+**Relaciones**
+
+- `[relación]`: [Emoji] [Estado]. [Descripción si necesaria]
+[Listar todas las relaciones]
+
+**Configuraciones**
+
+- **Índices:** [Emoji] [Estado]
+  - [Lista de índices importantes]
+- **Validaciones:** [Emoji] [Estado]
+  - [Lista de validaciones]
+- **[Otras configuraciones relevantes]**
+
+**Services:** [Si aplica]
+[Lista de servicios relacionados]
+
+**Events Domain:** [Si aplica]
+[Descripción de eventos]
+
+**ActiveJob: (Noticed)** [Si aplica]
+[Lista de jobs relacionados]
+
+**Campos**
+
+- `[nombre_campo]` (`[tipo]`, **[constraints]**): [Emoji] [Estado]. [Descripción si necesaria]
+[Listar todos los campos]
+
+*Notas:*
+
+1. ***[Tema Importante]:*** [Emoji] [Estado].
+    - [Detalles relevantes]
+[Agregar notas adicionales según necesidad]
+```
+
+## Emojis Estándar
+
+- ✅ Implementado completamente
+- ⚠️ Parcialmente implementado o requiere revisión
+- ⛔️ No implementado
+- 💡 Sugerencia de mejora
+- 🔍 Requiere verificación
+- 🚫 Deprecado o removido
+
+## Proceso de Revisión
+
+1. **Verificación de Implementación**
+   - Revisar cada componente listado
+   - Marcar con el emoji correspondiente
+   - Agregar comentarios específicos sobre el estado
+
+2. **Identificación de Pendientes**
+   - Listar funcionalidades faltantes
+   - Marcar con ⛔️ o ⚠️ según corresponda
+   - Agregar notas sobre impacto y prioridad
+
+3. **Sugerencias de Mejora**
+   - Identificar oportunidades de optimización
+   - Marcar con 💡
+   - Incluir justificación y beneficios esperados
+
+## Actualizaciones
+
+Cada vez que se modifique un modelo:
+
+0. REVISAR EL ROYECTO COMPLETO Y LA IMPLEMENTACION DEL MODELO CORRESPONDIENTE EN TODAS PARTES. REVISION COMPLETA
+1. Actualizar el estado de implementación
+2. Revisar y actualizar todas las secciones afectadas
+3. Mantener el historial de cambios en las notas
+4. Verificar la consistencia con otros modelos relacionados
+
+## Ejemplo de Uso
+
+```markdown
+### **3.1.1 User**
+
+**ESTADO DE IMPLEMENTACIÓN: ✅ Modelo implementado con funcionalidades completas de autenticación/autorización. ⚠️ Algunas relaciones comentadas.**
+
+**Funcionalidad e Importancia**
+[...]
+```
+
+## Consideraciones Adicionales
+
+- Mantener la documentación actualizada con cada cambio significativo
+- Asegurar que la documentación refleje el estado actual del código
+- Incluir ejemplos de uso cuando sea relevante
+- Documentar decisiones de diseño importantes
+- Mantener referencias a otros modelos relacionados
+- REVISAR EL ROYECTO COMPLETO Y LA IMPLEMENTACION DEL MODELO CORRESPONDIENTE EN TODAS PARTES. REVISION COMPLETA
+
+
+## Validación
+
+Antes de confirmar la documentación, verificar:
+
+1. Completitud de todas las secciones
+2. Consistencia en el uso de emojis
+3. Claridad en la descripción de estados
+4. Precisión en la información técnica
+5. Referencias actualizadas a otros modelos
+
+## Mantenimiento
+
+La documentación debe revisarse y actualizarse:
+
+- Cuando se implementen nuevas funcionalidades
+- Al corregir bugs significativos
+- Durante refactorizaciones importantes
+- En cada release mayor

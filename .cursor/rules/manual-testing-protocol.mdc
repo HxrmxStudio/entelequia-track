@@ -1,0 +1,187 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+# Rule para Protocolo de Testing Manual en Staging (Versión Mejorada)
+
+- **Reinicio obligatorio:** Tras cada cambio de código, reiniciar el servidor. `pkill -9 -f puma` y luego `RAILS_ENV=staging rails s`
+
+Esta rule define el protocolo OBLIGATORIO y exhaustivo para testing manual en Mainder-API, asegurando calidad, estabilidad y trazabilidad antes de cualquier deployment.
+NUNCA EJECUTES
+  ```bash
+  RAILS_ENV=staging rails server -p 3000 -d
+  ```
+  NUNCA USES EL FLAG '-d'
+
+---
+
+## 1. Entorno de Testing - NUNCA USES -d (modo daemon)
+
+- **Servidor:** SIEMPRE ejecutar en modo staging:
+  ```bash
+  RAILS_ENV=staging rails s
+  ```
+  NUNCA USES EL FLAG '-d'
+
+- **Puerto:** 3000 (`http://localhost:3000`)
+- **Reinicio obligatorio:** Tras cada cambio de código, reiniciar el servidor. `pkill -9 -f puma` y luego `RAILS_ENV=staging rails s`
+- **Base de datos:** Verificar que la base de datos de staging esté actualizada y migrada.
+- **Sidekiq/Redis:** Asegurar que Sidekiq y Redis estén activos si la feature lo requiere.
+- NUNCA USES -d (modo daemon) NUNCA USES EL FLAG '-d'
+
+---
+
+## 2. Credenciales y Roles de Testing
+
+EL endpoint de auth es este: `/auth/sign_in`
+
+- **Agencia:**
+  - SIEMPRE HAZ LOS TEST Y PRUEBAS CON LA AGENCIA `TalentHub Solutions` con id: `50a62057-cb8c-42d9-be98-412da680cee5`
+
+- **Usuarios con distintos roles de  `TalentHub Solutions`:**
+Los emails son y deben incluir todo el + y el resto.
+
+  - Role: admin
+  - Email: `cristian.vera+admin@mainder.ai`
+  - Password: `defaultPassword`
+
+  - Role: manager
+  - Email: `cristian.vera+manager@mainder.ai`
+  - Password: `defaultPassword`
+
+  - Role: recruiter
+  - Email: `cristian.vera+recruiter@mainder.ai`
+  - Password: `defaultPassword`
+
+  - Role: freelance
+  - Email: `cristian.vera+freelance@mainder.ai`
+  - Password: `defaultPassword`
+
+- **Usuario SUPER admin:**
+  - Email: `superadmin@mainder.ai`
+  - Password: `defaultPassword`
+
+- **Tokens:** Validar con tokens válidos, expirados y ausentes.
+
+---
+
+## 3. Protocolo de Testing
+
+### Antes de Empezar
+
+1. Ejecutar `RAILS_ENV=staging rails s` - NUNCA USES -d (modo daemon)
+2. Verificar logs (`tail -f log/staging.log`)
+3. Hacer login con credenciales de testing
+4. Confirmar que Sidekiq y Redis están activos (si aplica)
+5. Asegurar que la base de datos está migrada (`rails db:migrate:status`)
+
+### Durante el Testing
+
+1. Probar cada endpoint individualmente (incluyendo errores y edge cases)
+2. Documentar resultados (éxito/fallo, capturas, logs)
+3. Verificar estructura y contenido de respuestas JSON
+4. Validar side effects (BD, jobs, emails, archivos)
+5. Probar performance (tiempos de respuesta, queries N+1)
+6. Probar concurrencia si aplica (requests simultáneas)
+7. Validar migraciones en staging antes de producción
+
+### Después de CADA Cambio
+
+1. Parar y reiniciar el servidor
+2. Re-testear todos los endpoints afectados
+3. Limpiar datos de testing si es necesario
+4. Actualizar colecciones, DOCUMENTACION y ejemplos cURL
+
+---
+
+## 4. Herramientas y Evidencia
+
+- **cURL:**
+  - Mantener comandos actualizados
+  - Incluir headers de autenticación
+- **Logs:**
+  - Monitorear logs de Rails, Sidekiq, PostgreSQL, Redis
+- **Evidencia:**
+  - Adjuntar capturas de respuestas, logs relevantes y side effects
+
+---
+
+## 5. Checklist Obligatorio
+
+### Para Nuevos Endpoints
+
+- [ ] Endpoint responde correctamente (200, 201, etc.)
+- [ ] Autenticación y autorización funcionan (todos los roles)
+- [ ] Validaciones de entrada y errores (422, 400, etc.)
+- [ ] Respuesta JSON: estructura, tipos y mensajes correctos
+- [ ] Códigos de estado HTTP apropiados (incluyendo 404, 500)
+- [ ] Side effects: BD, jobs, emails, archivos
+- [ ] Performance aceptable (<500ms por request)
+- [ ] Pruebas de concurrencia (si aplica)
+- [ ] Pruebas de límites y edge cases
+- [ ] Emails enviados: contenido, formato, links
+- [ ] Archivos: uploads, descargas, formatos, límites
+- [ ] Migraciones ejecutan correctamente en staging
+
+### Para Modificaciones
+
+- [ ] Funcionalidad existente no se rompe (regresión)
+- [ ] Nuevas features funcionan según specs
+- [ ] Backward compatibility mantenida
+- [ ] Migraciones ejecutan correctamente
+- [ ] Jobs de Sidekiq funcionan (si aplica)
+- [ ] Performance no degradada
+- [ ] Colecciones Postman/Insomnia actualizadas
+
+---
+
+## 6. Casos de Testing Específicos
+
+- **Autenticación:** Login/logout, expiración de tokens, refresh
+- **Roles:** Probar todos los perfiles y permisos
+- **CRUD:** Create (válido/inválido), Read (filtros, paginación), Update (parcial/completa), Delete (soft/hard)
+- **Errores:** 400, 401, 403, 404, 422, 500
+- **Archivos:** Tipos, tamaños, formatos, errores
+- **Emails:** Envío, contenido, links, formatos
+- **Sidekiq:** Jobs encolados, ejecutados, fallos
+- **Performance:** Requests simultáneas, stress test básico
+
+---
+
+## 7. Debugging y Troubleshooting
+
+- **Logs:** Rails, Sidekiq, PostgreSQL, Redis
+- **Comandos útiles:**
+  ```bash
+  tail -f log/staging.log
+  bundle exec sidekiq
+  RAILS_ENV=staging rails console
+  ```
+- **Rollback:** Documentar pasos para revertir cambios si se detectan fallos críticos
+
+---
+
+## 8. Criterios de Aprobación
+
+- [ ] Todos los endpoints y features funcionan en staging
+- [ ] Todas las casuísticas y roles han sido probados
+- [ ] No hay errores ni warnings en los logs
+- [ ] Performance aceptable y sin degradación
+- [ ] Documentación y colecciones actualizadas
+- [ ] Tests automatizados pasan (si existen)
+- [ ] Evidencia de testing adjunta (capturas, logs, tickets)
+- [ ] Checklist completado y firmado por responsable
+
+---
+
+## 9. Notas y Responsabilidades
+
+- **NUNCA** hacer deployment sin testing completo y evidencia en staging
+- **SIEMPRE** usar credenciales y roles de testing
+- **DOCUMENTAR** issues y resultados
+- **COMUNICAR** resultados al equipo antes de merge/deploy
+- **MANTENER** este protocolo actualizado con nuevos casos de uso
+- **LIMPIAR** datos de testing tras pruebas si es necesario
+
+---

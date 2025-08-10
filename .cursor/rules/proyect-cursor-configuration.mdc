@@ -1,0 +1,81 @@
+---
+description: Esta regla se debe usar siempre en este proyecto
+globs:
+alwaysApply: true
+---
+# Cursor.sh Configuration
+
+# File type associations
+associations:
+  .rb: ruby
+  .rake: ruby
+  .gemspec: ruby
+  .ru: ruby
+  .builder: ruby
+  .py: python    # Scripts Python (migraciones especiales, OCR, etc.)
+
+
+# Custom AI Prompts
+prompts:
+  global_instructions: >
+    - Responder siempre en español para explicaciones, descripciones y textos narrativos.
+    - TODO EL CÓDIGO (incluyendo comentarios, variables, funciones, etc.) DEBE ESTAR EN INGLÉS.
+    - En el codigo NUNCA USES ' para strings siempre ".
+    - Respeta las convenciones de Ruby on Rails en modo API REST y los principios de DDD, generando código limpio, modular y bien documentado.
+    - Aplica las mejores prácticas de seguridad, validaciones robustas, manejo de errores y pruebas automatizadas PARA PROYECTOS RAILS 8 en modo API REST  (usando RSpec, FactoryBot, PaperTrail, Paranoia y strong_migrations).
+    - Para el diseño de APIs, prioriza controladores RESTful con respuestas JSON mediante ActiveModelSerializers y delega la lógica compleja a servicios o concerns.
+
+  application_overview: >
+    Este es un proyecto Rails 8 (Ruby 3.4.4, PostgreSQL 17) en modo API puro, bautizado como “Mainder-API”.
+    Utilizamos principios de Domain-Driven Design (DDD) para separar la lógica de negocio en servicios y entidades,
+    con minimal uso de vistas .erb únicamente para los emails de Devise Token Auth (confirmación y recuperación de contraseña).
+    Emplea PostgreSQL con extensiones PostGIS, Redis en AWS ElastiCache para Sidekiq (procesamiento en segundo plano),
+    y Searchkick/OpenSearch para búsquedas avanzadas. Almacenamos archivos (CVs, PDFs, etc.) en AWS S3.
+    Además, aplicamos gemas como Pundit, Paranoia, Devise Token Auth, PaperTrail, Ahoy, strong_migrations, y otras descritas en la documentación de modelos. @Doc-Tecnica-enero-2025.md
+    No usamos Webpacker: para un API no es necesario; los correos se generan con .erb de ActionMailer.
+
+  ruby: >
+    Eres un experto en Ruby on Rails 8 (Ruby 3.4.4). Por favor, sigue la guía de estilo RuboCop Omakase.
+    Aplica el enfoque Domain-Driven Design: mantén la lógica de negocio fuera de los controladores y/o modelos.
+    La autenticación se hace con devise_token_auth, la autorización con Pundit, y se versiona la data con PaperTrail.
+    Utiliza PostGIS para lo geoespacial y Sidekiq/Redis para procesos en segundo plano, indexando datos con Searchkick/OpenSearch.
+    Minimiza vistas .erb; solo se usan para emails automáticos (Devise).
+
+    - **Reinicio obligatorio:** Tras cada cambio de código, reiniciar el servidor. `pkill -9 -f puma` y luego `RAILS_ENV=staging rails s`
+
+
+  python: >
+    Se usa Python 3 para scripts de migraciones específicas y procesamientos puntuales (OCR, doc conversions).
+    Aplica las convenciones PEP8 y mantén el entorno lo más ligero posible. Usa librerías como docx, rtesseract, etc., según la doc.
+
+# Documentation Links
+documentation_links:
+  rails_official: https://guides.rubyonrails.org
+
+  MAINDER-API-DOCUMENTATION: [Doc-Tecnica-enero-2025.md](mdc:docs/Doc-Tecnica-enero-2025.md)
+
+
+# Framework Versions
+frameworks:
+  rails: 8.0.1
+  ruby: 3.4.4
+  postgres: 17
+  redis: latest
+  sidekiq: latest
+  searchkick: latest
+  opensearch: latest
+
+  frontend:
+    next: 15.x
+    react: 18.x
+
+# Additional Context
+additional_context: >
+  - Mantener respuestas en chat al usuario en español, pero el código, documentacion, variables, funciones, comentarios, etc. siempre en inglés.
+  - No se usan Webpacker ni asset pipeline, es 100% API + correos Devise.
+  - Principio DDD y guías RuboCop Omakase.
+  - Guiate en @Doc-Tecnica-enero-2025.md
+  - Para hacer commits usa la rule git-commits
+  - NUNCA EJECUTES UN COMANDO CON --no-verify
+   - NUNCA HAGAS git diff
+  - *NUNCA EJECUTES UN COMANDOs git CON --no-verify*
