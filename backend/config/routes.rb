@@ -15,4 +15,14 @@ Rails.application.routes.draw do
 
   resources :locations, only: [:create]
   get "/realtime/stream", to: "realtime#stream"
+
+  resources :shipments, only: [:index, :show, :create, :update] do
+    member do
+      post :assign
+      post :otp
+    end
+    resources :proofs, only: [:create], module: :shipments
+    resources :events, only: [:create], module: :shipments
+  end
+  
 end
