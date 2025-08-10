@@ -1,0 +1,21 @@
+default: &default
+  adapter: postgis
+  encoding: unicode
+  pool: 10
+  username: <%= ENV.fetch("POSTGRES_USER", "postgres") %>
+  password: <%= ENV.fetch("POSTGRES_PASSWORD", "postgres") %>
+  host: <%= ENV.fetch("POSTGRES_HOST", "127.0.0.1") %>
+  port: <%= ENV.fetch("POSTGRES_PORT", 5433) %>
+
+development:
+  <<: *default
+  database: <%= ENV.fetch("POSTGRES_DB", "entelequia") %>
+
+test:
+  <<: *default
+  database: entelequia_test
+
+production:
+  <<: *default
+  database: <%= ENV.fetch("POSTGRES_DB", "entelequia_prod") %>
+  host: <%= ENV.fetch("POSTGRES_HOST", "db") %>

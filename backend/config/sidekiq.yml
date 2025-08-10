@@ -1,0 +1,16 @@
+:concurrency: <%= ENV.fetch("SIDEKIQ_CONCURRENCY", 5) %>
+:queues:
+  - imports
+  - default
+  - mailers
+  - active_storage
+  - [critical, 3]
+  - [default, 2]
+  - [low, 1]
+
+:max_retries: 3
+:retry_interval: 5
+
+:redis:
+  url: <%= ENV.fetch("REDIS_URL") { "redis://localhost:6379/0" } %>
+  namespace: sidekiq 
