@@ -1,0 +1,255 @@
+{
+    "info": {
+      "name": "Entelequia Delivery API (MVP)",
+      "_postman_id": "6f0e2a19-7b8c-4a0b-9f7a-raw-raw-raw",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+      "description": "Colección para probar Auth, Orders, Shipments, Imports (CSV), Locations y Realtime (SSE) en local."
+    },
+    "variable": [
+      { "key": "base_url", "value": "http://localhost:3001" },
+      { "key": "token", "value": "" }
+    ],
+    "item": [
+      {
+        "name": "Auth",
+        "item": [
+          {
+            "name": "Login",
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "const json = pm.response.json();",
+                    "if (json.token) {",
+                    "  pm.collectionVariables.set('token', json.token);",
+                    "  pm.environment.set('token', json.token);",
+                    "  console.log('Token guardado en collection/env');",
+                    "}"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ],
+            "request": {
+              "method": "POST",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "url": { "raw": "{{base_url}}/auth/login", "host": ["{{base_url}}"], "path": ["auth", "login"] },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"email\": \"admin@entelequia.local\",\n  \"password\": \"admin1234\"\n}"
+              },
+              "description": "Devuelve { token, role } y guarda el token en variables."
+            },
+            "response": []
+          }
+        ]
+      },
+      {
+        "name": "Orders",
+        "item": [
+          {
+            "name": "List Orders",
+            "request": {
+              "method": "GET",
+              "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+              "url": { "raw": "{{base_url}}/orders", "host": ["{{base_url}}"], "path": ["orders"] }
+            },
+            "response": []
+          },
+          {
+            "name": "Create Order",
+            "request": {
+              "method": "POST",
+              "header": [
+                { "key": "Authorization", "value": "Bearer {{token}}" },
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "url": { "raw": "{{base_url}}/orders", "host": ["{{base_url}}"], "path": ["orders"] },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"external_ref\": \"POSTMAN-ORDER-001\",\n  \"amount_cents\": 12345,\n  \"currency\": \"ARS\",\n  \"channel\": \"web\",\n  \"status\": \"received\",\n  \"metadata\": {\"source\":\"postman\"}\n}"
+              }
+            },
+            "response": []
+          },
+          {
+            "name": "Get Order by ID",
+            "request": {
+              "method": "GET",
+              "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+              "url": { "raw": "{{base_url}}/orders/:id", "host": ["{{base_url}}"], "path": ["orders", ":id"] },
+              "description": "Reemplaza :id por el UUID."
+            },
+            "response": []
+          },
+          {
+            "name": "Update Order (PATCH)",
+            "request": {
+              "method": "PATCH",
+              "header": [
+                { "key": "Authorization", "value": "Bearer {{token}}" },
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "url": { "raw": "{{base_url}}/orders/:id", "host": ["{{base_url}}"], "path": ["orders", ":id"] },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"status\": \"preparing\",\n  \"metadata\": {\"note\":\"patched from postman\"}\n}"
+              }
+            },
+            "response": []
+          }
+        ]
+      },
+      {
+        "name": "Shipments",
+        "item": [
+          {
+            "name": "List Shipments",
+            "request": {
+              "method": "GET",
+              "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+              "url": { "raw": "{{base_url}}/shipments", "host": ["{{base_url}}"], "path": ["shipments"] }
+            },
+            "response": []
+          },
+          {
+            "name": "Create Shipment",
+            "request": {
+              "method": "POST",
+              "header": [
+                { "key": "Authorization", "value": "Bearer {{token}}" },
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "url": { "raw": "{{base_url}}/shipments", "host": ["{{base_url}}"], "path": ["shipments"] },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"order_id\": \"REPLACE_WITH_ORDER_UUID\",\n  \"delivery_method\": \"courier\"\n}"
+              }
+            },
+            "response": []
+          },
+          {
+            "name": "Get Shipment by ID (Serializer)",
+            "request": {
+              "method": "GET",
+              "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+              "url": { "raw": "{{base_url}}/shipments/:id", "host": ["{{base_url}}"], "path": ["shipments", ":id"] },
+              "description": "Devuelve { id, order_id, status, delivery_method, qr_token, eta, events[] } según ShipmentSerializer."
+            },
+            "response": []
+          },
+          {
+            "name": "Update Shipment (PATCH)",
+            "request": {
+              "method": "PATCH",
+              "header": [
+                { "key": "Authorization", "value": "Bearer {{token}}" },
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "url": { "raw": "{{base_url}}/shipments/:id", "host": ["{{base_url}}"], "path": ["shipments", ":id"] },
+              "body": { "mode": "raw", "raw": "{\n  \"status\": \"out_for_delivery\"\n}" }
+            },
+            "response": []
+          },
+          {
+            "name": "Assign Courier",
+            "request": {
+              "method": "POST",
+              "header": [
+                { "key": "Authorization", "value": "Bearer {{token}}" },
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "url": { "raw": "{{base_url}}/shipments/:id/assign", "host": ["{{base_url}}"], "path": ["shipments", ":id", "assign"] },
+              "body": { "mode": "raw", "raw": "{\n  \"courier_id\": \"REPLACE_WITH_COURIER_UUID\"\n}" }
+            },
+            "response": []
+          },
+          {
+            "name": "Regenerate OTP/QR",
+            "request": {
+              "method": "POST",
+              "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+              "url": { "raw": "{{base_url}}/shipments/:id/otp", "host": ["{{base_url}}"], "path": ["shipments", ":id", "otp"] }
+            },
+            "response": []
+          }
+        ]
+      },
+      {
+        "name": "Imports (CSV)",
+        "item": [
+          {
+            "name": "Dry Run (csv_exact)",
+            "request": {
+              "method": "POST",
+              "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+              "url": { "raw": "{{base_url}}/imports/orders/dry_run", "host": ["{{base_url}}"], "path": ["imports", "orders", "dry_run"] },
+              "body": {
+                "mode": "formdata",
+                "formdata": [
+                  { "key": "format", "type": "text", "value": "csv_exact" },
+                  { "key": "file", "type": "file", "src": [] }
+                ]
+              },
+              "description": "Adjuntá un CSV con encabezados: Pedido #, Cliente, Fecha, Monto, Entrega, Estado."
+            },
+            "response": []
+          },
+          {
+            "name": "Commit (csv_exact)",
+            "request": {
+              "method": "POST",
+              "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+              "url": { "raw": "{{base_url}}/imports/orders/commit", "host": ["{{base_url}}"], "path": ["imports", "orders", "commit"] },
+              "body": {
+                "mode": "formdata",
+                "formdata": [
+                  { "key": "format", "type": "text", "value": "csv_exact" },
+                  { "key": "file", "type": "file", "src": [] }
+                ]
+              }
+            },
+            "response": []
+          }
+        ]
+      },
+      {
+        "name": "Locations",
+        "item": [
+          {
+            "name": "Create Location (idempotent)",
+            "request": {
+              "method": "POST",
+              "header": [
+                { "key": "Authorization", "value": "Bearer {{token}}" },
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "url": { "raw": "{{base_url}}/locations", "host": ["{{base_url}}"], "path": ["locations"] },
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"courier_id\": \"REPLACE_WITH_COURIER_UUID\",\n  \"ts\": \"2025-08-10T12:00:00Z\",\n  \"lat\": -34.6037,\n  \"lon\": -58.3816,\n  \"accuracy\": 10,\n  \"speed\": 2.1,\n  \"battery\": 88,\n  \"app_version\": \"0.1.0\"\n}"
+              }
+            },
+            "response": []
+          }
+        ]
+      },
+      {
+        "name": "Realtime (SSE)",
+        "item": [
+          {
+            "name": "Stream (SSE)",
+            "request": {
+              "method": "GET",
+              "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+              "url": { "raw": "{{base_url}}/realtime/stream", "host": ["{{base_url}}"], "path": ["realtime", "stream"] },
+              "description": "Postman no renderiza bien SSE; preferible curl o el panel (EventSource)."
+            },
+            "response": []
+          }
+        ]
+      }
+    ]
+  }
+  
