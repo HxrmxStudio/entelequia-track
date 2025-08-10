@@ -12,7 +12,10 @@ class RealtimeBus
       end
   
       def publish(type, data)
-        @subscribers.each { |blk| blk.call({ type:, data: }) }
+        payload = { type: type, data: data }
+        @subscribers.each { |blk| blk.call(payload) }
+        # Also fan-out to ActionCable default realtime stream
+        ActionCable.server.broadcast("realtime", payload)
       end
     end
   end

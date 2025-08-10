@@ -15,7 +15,6 @@ module Shipments
           occurred_at: Time.current
         )
         RealtimeBus.publish("shipment.event", ev.as_json)
-        ActionCable.server.broadcast("realtime", { type: "shipment.event", data: ev.as_json })
         render json: ev, status: :created
       rescue ActiveRecord::RecordNotFound
         render json: { error: "shipment_not_found" }, status: :not_found

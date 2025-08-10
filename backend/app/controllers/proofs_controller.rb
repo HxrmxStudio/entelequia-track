@@ -68,7 +68,6 @@ module Shipments
           occurred_at: Time.current
         )
         RealtimeBus.publish("shipment.updated", { id: s.id, status: s.status })
-        ActionCable.server.broadcast("realtime", { type: "shipment.updated", data: { id: s.id, status: s.status } })
   
         render json: { ok: true, proof_id: p.id, photo_url: p.photo_url }, status: :created
       rescue ActiveRecord::RecordNotFound
