@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  mount ActionCable.server => "/cable"
+
   post "/auth/login", to: "auth#login"
   get "/health", to: "health#show"
 
@@ -24,5 +26,5 @@ Rails.application.routes.draw do
     resources :proofs, only: [:create], module: :shipments
     resources :events, only: [:create], module: :shipments
   end
-  
+
 end
