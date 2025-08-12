@@ -2,8 +2,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { listShipments } from "@/services/shipments/listShipments";
 import Link from "next/link";
+import { useRequireAuth } from "@/app/lib/useRequireAuth";
 
 export default function ShipmentsPage() {
+  useRequireAuth();
   const [rows, setRows] = useState<ReadonlyArray<{ id: string; order_id?: string; status: string; delivery_method: string; eta?: string | null }>>([]);
   const [status, setStatus] = useState<string>("");
   const [loading, setLoading] = useState(false);

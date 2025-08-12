@@ -13,6 +13,9 @@ export default function LoginPage() {
     try {
       const j = await postLogin({ email, password });
       localStorage.setItem("token", j.token);
+      localStorage.setItem("token_exp", String(j.exp));
+      localStorage.setItem("token_type", j.token_type);
+      localStorage.setItem("user_email", j.user.email);
     } catch {
       return setErr("Credenciales inválidas");
     }

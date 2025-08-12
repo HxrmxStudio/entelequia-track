@@ -14,8 +14,8 @@ gem "sidekiq", "~> 7.0"
 gem "aws-sdk-s3", "~> 1.0"
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS)
 gem "rack-cors"
-gem "bcrypt", "~> 3.1"
-gem "jwt", "~> 2.8"
+gem "bcrypt", "~> 3.1"  # password hashing for has_secure_password
+gem "jwt", "~> 2.8"      # JSON Web Tokens for stateless auth
 # Ruby 3.4+: csv moved out of default gems
 gem "csv"
 # composite_primary_keys is not compatible with Rails 8 yet; fallback approach will be used

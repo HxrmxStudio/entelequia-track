@@ -3,11 +3,13 @@ import { useEffect, useRef, useState } from "react";
 import maplibregl from "maplibre-gl";
 import { subscribeRealtime } from "../lib/cable";
 import { useMapLibre } from "../lib/useMapLibre";
+import { useRequireAuth } from "@/app/lib/useRequireAuth";
 
 type CourierPing = { courier_id:string; ts:string; lat:number; lon:number };
 type ShipmentUpdate = { id:string; status:string };
 
 export default function DashboardLive() {
+  useRequireAuth();
   const mapDiv = useRef<HTMLDivElement|null>(null);
   const { map } = useMapLibre({
     containerRef: mapDiv,

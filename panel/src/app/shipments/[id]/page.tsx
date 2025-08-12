@@ -5,8 +5,10 @@ import { postAssignShipment } from "@/services/shipments/postAssignShipment";
 import { postRegenOtp } from "@/services/shipments/postRegenOtp";
 import { useParams } from "next/navigation";
 import type { ShipmentWithEvents } from "@/services/shipments/types";
+import { useRequireAuth } from "@/app/lib/useRequireAuth";
 
 export default function ShipmentDetailPage() {
+  useRequireAuth();
   const params = useParams<{ id: string }>();
   const id = params.id;
   const [s, setS] = useState<ShipmentWithEvents | null>(null);

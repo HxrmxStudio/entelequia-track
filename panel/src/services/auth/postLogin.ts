@@ -2,7 +2,12 @@ import { API_URL } from "@/app/lib/api";
 import { authEndpoints } from "./endpoints";
 
 export interface LoginRequest { email: string; password: string }
-export interface LoginResponse { token: string; role: "admin" | "ops" | "courier" }
+export interface LoginResponse {
+  token: string;
+  exp: number;
+  token_type: "Bearer";
+  user: { id: string; email: string };
+}
 
 export async function postLogin(payload: LoginRequest): Promise<LoginResponse> {
   const res = await fetch(`${API_URL}${authEndpoints.login()}`, {

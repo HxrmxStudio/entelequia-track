@@ -1,10 +1,13 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { apiForm, ApiError } from "../lib/api";
 
 type DryRunResult = { rows_total:number; rows_valid:number; rows_invalid:number; errors:{row_number:number; message:string}[] };
 
 export default function ImportPage() {
+  const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
   const [format, setFormat] = useState<"csv_exact"|"csv_normalized">("csv_exact");
   const [report, setReport] = useState<DryRunResult | null>(null);
@@ -38,6 +41,7 @@ export default function ImportPage() {
     try {
       await apiForm(`/imports/orders/commit`, fd);
       setDone("Importación aceptada");
+      setTimeout(() => { router.push("/shipments"); }, 1200);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Error al commitear";
       setDone(msg);
@@ -82,7 +86,14 @@ export default function ImportPage() {
         </div>
       )}
 
-      {done && <p className="text-blue-700">{done}</p>}
+      {done && (
+        <div className="space-y-2">
+          <p className="text-blue-700">{done}</p>
+          <div>
+            <Link href="/shipments" className="underline text-blue-600">Ir a envíos</Link>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -12,6 +12,10 @@ Rails.application.configure do
   # Show full error reports.
   config.consider_all_requests_local = true
 
+  # Allow RSpec requests (Rack::Test default host) when running tests in development env
+  config.hosts << "example.org"
+  config.hosts << "www.example.com"
+
   # Enable server timing.
   config.server_timing = true
 
