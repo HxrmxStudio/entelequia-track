@@ -15,3 +15,8 @@ declare module "@rails/actioncable" {
 
   export default ActionCable
 }
+
+declare module "@rails/actioncable/app/assets/javascripts/actioncable.esm" {
+  import type { Consumer } from "@rails/actioncable"
+  export function createConsumer(url: string): Consumer
+}
