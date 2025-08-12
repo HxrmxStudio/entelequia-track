@@ -29,8 +29,21 @@ class ShipmentsController < ApplicationController
   
     def otp
       s = Shipment.find(params[:id])
-      s.update!(qr_token: SecureRandom.uuid) # placeholder; OTP hash en Sprint 3
-      render json: { qr_token: s.qr_token }
+      begin
+        code = OtpService.generate!(s)
+        # TODO: Notify customer via SMS/Email with `code` (do not return via API)
+        Rails.logger.info("OTP generated for shipment=#{s.id}")
+        render json: { ok: true }, status: :ok
+      rescue => e
+        case e.message
+        when "locked"
+          render json: { error: "otp_locked" }, status: :locked
+        when "throttled"
+          render json: { error: "otp_throttled" }, status: :too_many_requests
+        else
+          render json: { error: "otp_generation_failed" }, status: :unprocessable_entity
+        end
+      end
     end
   
     private
