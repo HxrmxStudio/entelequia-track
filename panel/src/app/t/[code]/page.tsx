@@ -26,7 +26,7 @@ export default function PublicTrackPage({ params }: PublicTrackPageProps) {
     let isMounted = true;
     fetchPublicTrack(code)
       .then((payload: PublicTrack) => { if (isMounted) setData(payload); })
-      .catch((_err: unknown) => { if (isMounted) setData(null); });
+      .catch(() => { if (isMounted) setData(null); });
     return () => { isMounted = false; };
   }, [code]);
 

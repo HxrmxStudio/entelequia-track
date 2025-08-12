@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { API_URL } from "../lib/api";
+import { postLogin } from "@/services/auth/postLogin";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("admin@entelequia.local");
@@ -10,14 +10,12 @@ export default function LoginPage() {
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setErr(null);
-    const r = await fetch(`${API_URL}/auth/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password })
-    });
-    if (!r.ok) return setErr("Credenciales inválidas");
-    const j = await r.json();
-    localStorage.setItem("token", j.token);
+    try {
+      const j = await postLogin({ email, password });
+      localStorage.setItem("token", j.token);
+    } catch {
+      return setErr("Credenciales inválidas");
+    }
     window.location.href = "/import";
   }
 
