@@ -8,12 +8,6 @@ Rails.application.routes.draw do
   post "/imports/orders/commit",  to: "imports#commit"
 
   resources :orders, only: [:index, :show, :create, :update]
-  resources :shipments, only: [:index, :show, :create, :update] do
-    member do
-      post :assign
-      post :otp
-    end
-  end
 
   resources :locations, only: [:create]
   get "/realtime/stream", to: "realtime#stream"
@@ -25,6 +19,10 @@ Rails.application.routes.draw do
     end
     resources :proofs, only: [:create], module: :shipments
     resources :events, only: [:create], module: :shipments
+  end
+  
+  namespace :public do
+    get "track/:code", to: "track#show"
   end
 
 end
