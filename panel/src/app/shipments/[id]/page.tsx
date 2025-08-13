@@ -52,10 +52,10 @@ export default function ShipmentDetailPage() {
   if (!s) return <div className="p-6">Cargando…</div>;
 
   return (
-    <div className="p-6 space-y-4 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-semibold">Envío</h1>
+    <div className="p-6 space-y-6 max-w-4xl mx-auto">
+      <h1 className="text-2xl font-semibold tracking-tight">Envío</h1>
 
-      <div className="border rounded p-4 text-sm space-y-1">
+      <div className="border border-gray-200 rounded-lg p-4 text-sm space-y-1 bg-white shadow-sm text-gray-800">
         <div><b>ID:</b> {s.id}</div>
         <div><b>Order:</b> {s.order_id}</div>
         <div><b>Estado:</b> {s.status}</div>
@@ -64,18 +64,18 @@ export default function ShipmentDetailPage() {
         <div><b>ETA:</b> {s.eta ? new Date(s.eta).toLocaleString() : "-"}</div>
       </div>
 
-      <div className="border rounded p-4 text-sm space-y-3">
+      <div className="border border-gray-200 rounded-lg p-4 text-sm space-y-3 bg-white shadow-sm text-gray-800">
         <h2 className="font-semibold">Acciones</h2>
         <div className="flex flex-wrap gap-2 items-center">
-          <input className="border p-2" placeholder="Courier UUID" value={courierId} onChange={e=>setCourierId(e.target.value)} />
-          <button disabled={busy || !courierId} onClick={doAssign} className="px-3 py-2 rounded bg-black text-white">Asignar</button>
-          <button disabled={busy} onClick={doRegenOtp} className="px-3 py-2 rounded border">Regenerar OTP</button>
-          <button onClick={copyTracking} className="px-3 py-2 rounded border">Copiar link tracking</button>
+          <input className="border border-gray-300 rounded-md px-3 py-2" placeholder="Courier UUID" value={courierId} onChange={e=>setCourierId(e.target.value)} />
+          <button disabled={busy || !courierId} onClick={doAssign} className="px-3 py-2 rounded-md text-white bg-primary-600 hover:bg-primary-700 disabled:opacity-50">Asignar</button>
+          <button disabled={busy} onClick={doRegenOtp} className="px-3 py-2 rounded-md border border-gray-300 hover:bg-gray-50 disabled:opacity-50">Regenerar OTP</button>
+          <button onClick={copyTracking} className="px-3 py-2 rounded-md border border-gray-300 hover:bg-gray-50">Copiar link tracking</button>
         </div>
         {msg && <p className="text-blue-700">{msg}</p>}
       </div>
 
-      <div className="border rounded p-4 text-sm">
+      <div className="border border-gray-200 rounded-lg p-4 text-sm bg-white shadow-sm text-gray-800">
         <h2 className="font-semibold mb-2">Timeline</h2>
         <ul className="space-y-1">
           {s.events?.length ? s.events.map((e)=>(

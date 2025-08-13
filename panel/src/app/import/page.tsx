@@ -52,26 +52,26 @@ export default function ImportPage() {
 
   return (
     <div className="max-w-2xl mx-auto py-10 space-y-6">
-      <h1 className="text-2xl font-semibold">Importar pedidos (CSV)</h1>
+      <h1 className="text-2xl font-semibold tracking-tight">Importar pedidos (CSV)</h1>
       <div className="space-y-3">
-          <select className="border p-2" value={format} onChange={e=>setFormat(e.target.value as "csv_exact" | "csv_normalized") }>
+          <select className="border border-gray-300 bg-white rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400" value={format} onChange={e=>setFormat(e.target.value as "csv_exact" | "csv_normalized") }>
           <option value="csv_exact">Encabezados actuales</option>
           <option value="csv_normalized">Normalizado (recomendado)</option>
         </select>
-        <input type="file" accept=".csv" onChange={e=>setFile(e.target.files?.[0]||null)} />
+        <input type="file" accept=".csv" onChange={e=>setFile(e.target.files?.[0]||null)} className="block text-sm" />
         <div className="flex gap-3">
-          <button disabled={!file||loading} onClick={onDryRun} className="bg-gray-800 text-white px-3 py-2 rounded">
+          <button disabled={!file||loading} onClick={onDryRun} className="bg-gray-800 hover:bg-gray-900 text-white px-3 py-2 rounded-md transition disabled:opacity-50">
             {loading ? "Validando..." : "Dry-run"}
           </button>
-          <button disabled={!file||!report||loading} onClick={onCommit} className="bg-emerald-600 text-white px-3 py-2 rounded">
+          <button disabled={!file||!report||loading} onClick={onCommit} className="bg-primary-600 hover:bg-primary-700 text-white px-3 py-2 rounded-md transition disabled:opacity-50">
             {loading ? "Subiendo..." : "Commit"}
           </button>
         </div>
       </div>
 
       {report && (
-        <div className="border rounded p-4">
-          <h2 className="font-semibold mb-2">Resultado de validación</h2>
+        <div className="border border-gray-200 rounded-lg p-4 bg-white shadow-sm text-gray-800">
+          <h2 className="font-semibold mb-2 tracking-tight">Resultado de validación</h2>
           <p>Total: {report.rows_total} — Válidas: {report.rows_valid} — Inválidas: {report.rows_invalid}</p>
           {report.errors?.length > 0 && (
             <table className="mt-3 w-full text-sm">

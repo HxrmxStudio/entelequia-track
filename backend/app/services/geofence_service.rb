@@ -14,14 +14,22 @@ class GeofenceService
       ) AS distance_meters
     SQL
 
+    wkt = if destination_geom.respond_to?(:as_text)
+      destination_geom.as_text
+    else
+      destination_geom.to_s
+    end
+    return Result.new(inside: true, distance_m: nil, radius_m: radius) if wkt.to_s.strip.empty?
+
     query = ActiveRecord::Base.send(
       :sanitize_sql_array,
-      [sql, lon, lat, destination_geom.as_text]
+      [sql, lon, lat, wkt]
     )
 
     row = ActiveRecord::Base.connection.exec_query(query).first
-    distance = row && row["distance_meters"].to_f
+    distance_value = row && row["distance_meters"]
+    distance = distance_value.nil? ? Float::INFINITY : distance_value.to_f
 
-    Result.new(inside: distance <= radius, distance_m: distance, radius_m: radius)
+    Result.new(inside: distance <= radius, distance_m: distance.finite? ? distance : nil, radius_m: radius)
   end
 end

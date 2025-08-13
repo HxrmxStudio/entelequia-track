@@ -29,7 +29,11 @@ class AuthController < ApplicationController
   private
 
   def auth_params
-    params.permit(:email, :password)
+    if params[:auth].is_a?(ActionController::Parameters)
+      params.require(:auth).permit(:email, :password)
+    else
+      params.permit(:email, :password)
+    end
   end
 
   def normalized_email

@@ -18,13 +18,19 @@ class OtpService
 
       code = rand(10**(length_i - 1)..(10**length_i - 1)).to_s
 
-      shipment.update!(
+      attrs = {
         otp_code_hash: hash(code),
         otp_attempts: 0,
-        otp_locked_until: nil,
-        otp_generated_at: Time.current,
-        otp_expires_at: ttl_minutes.positive? ? ttl_minutes.minutes.from_now : nil
-      )
+        otp_locked_until: nil
+      }
+      # Only set timestamp fields when they exist on the model
+      if shipment.has_attribute?(:otp_generated_at)
+        attrs[:otp_generated_at] = Time.current
+      end
+      if shipment.has_attribute?(:otp_expires_at)
+        attrs[:otp_expires_at] = ttl_minutes.positive? ? ttl_minutes.minutes.from_now : nil
+      end
+      shipment.update!(attrs)
       code
     end
 
