@@ -1,0 +1,146 @@
+{
+  "info": {
+    "name": "Supabase Storage Direct",
+    "_postman_id": "a8fd8b8e-1111-4c2a-9999-raw-raw-raw",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Direct Supabase Storage tests: sign upload, upload via signed URL, sign download, and download. Uses service role key."
+  },
+  "variable": [
+    { "key": "SUPABASE_URL", "value": "https://REPLACE-PROJECT-REF.supabase.co" },
+    { "key": "SUPABASE_SERVICE_KEY", "value": "REPLACE-SERVICE-ROLE-KEY" },
+    { "key": "bucket_name", "value": "pod-photos" },
+    { "key": "upload_content_type", "value": "image/jpeg" },
+    { "key": "object_path", "value": "" },
+    { "key": "signed_upload_url", "value": "" },
+    { "key": "upload_token", "value": "" },
+    { "key": "signed_download_url", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Admin: Get Bucket",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{SUPABASE_SERVICE_KEY}}" },
+          { "key": "apikey", "value": "{{SUPABASE_SERVICE_KEY}}" }
+        ],
+        "url": { "raw": "{{SUPABASE_URL}}/storage/v1/bucket/{{bucket_name}}", "host": ["{{SUPABASE_URL}}"], "path": ["storage","v1","bucket","{{bucket_name}}"] }
+      },
+      "response": []
+    },
+    {
+      "name": "Admin: Create Bucket",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{SUPABASE_SERVICE_KEY}}" },
+          { "key": "apikey", "value": "{{SUPABASE_SERVICE_KEY}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": { "raw": "{{SUPABASE_URL}}/storage/v1/bucket", "host": ["{{SUPABASE_URL}}"], "path": ["storage","v1","bucket"] },
+        "body": { "mode": "raw", "raw": "{\n  \"name\": \"{{bucket_name}}\",\n  \"public\": false\n}" }
+      },
+      "response": []
+    },
+    {
+      "name": "Sign Upload URL",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "function pad(n){return n<10 ? '0'+n : ''+n;}",
+              "function uuid(){return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c){var r=Math.random()*16|0,v=c=='x'?r:(r&0x3|0x8);return v.toString(16);});}",
+              "var d=new Date(); var y=d.getUTCFullYear(); var m=pad(d.getUTCMonth()+1); var day=pad(d.getUTCDate());",
+              "if(!pm.environment.get('object_path')){ pm.environment.set('object_path', `proofs/${y}/${m}/${day}/${uuid()}.jpg`); }",
+              "if(!pm.environment.get('upload_content_type')){ pm.environment.set('upload_content_type','image/jpeg'); }"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "let json=null; try{json=pm.response.json();}catch(e){}",
+              "if(json && (json.signedUrl||json.signedURL||json.url)){",
+              "  const p=json.signedUrl||json.signedURL||json.url;",
+              "  pm.collectionVariables.set('signed_upload_url', p); pm.environment.set('signed_upload_url', p);",
+              "  if(json.token){ pm.collectionVariables.set('upload_token', json.token); pm.environment.set('upload_token', json.token); }",
+              "  console.log('Saved signed_upload_url and token');",
+              "} else { console.log('Sign upload response missing signedUrl', pm.response.text()); }"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{SUPABASE_SERVICE_KEY}}" },
+          { "key": "apikey", "value": "{{SUPABASE_SERVICE_KEY}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": { "raw": "{{SUPABASE_URL}}/storage/v1/object/upload/sign/{{bucket_name}}", "host": ["{{SUPABASE_URL}}"], "path": ["storage","v1","object","upload","sign","{{bucket_name}}"] },
+        "body": { "mode": "raw", "raw": "{\n  \"objectName\": \"{{object_path}}\",\n  \"contentType\": \"{{upload_content_type}}\",\n  \"expiresIn\": 600,\n  \"upsert\": true\n}" }
+      },
+      "response": []
+    },
+    {
+      "name": "Upload via Signed URL (PUT)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "{{upload_content_type}}" },
+          { "key": "x-upsert", "value": "true" },
+          { "key": "x-upload-token", "value": "{{upload_token}}" }
+        ],
+        "url": { "raw": "{{SUPABASE_URL}}{{signed_upload_url}}", "host": ["{{SUPABASE_URL}}{{signed_upload_url}}"] },
+        "body": { "mode": "binary", "binary": { "src": [] } },
+        "description": "Choose a local file. If your project requires x-upload-token, it's included automatically if set."
+      },
+      "response": []
+    },
+    {
+      "name": "Sign Download URL",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "let json=null; try{json=pm.response.json();}catch(e){}",
+              "if(json && (json.signedURL||json.signedUrl||json.url)){",
+              "  const p=json.signedURL||json.signedUrl||json.url;",
+              "  pm.collectionVariables.set('signed_download_url', p); pm.environment.set('signed_download_url', p);",
+              "  console.log('Saved signed_download_url');",
+              "} else { console.log('Sign download response missing url', pm.response.text()); }"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{SUPABASE_SERVICE_KEY}}" },
+          { "key": "apikey", "value": "{{SUPABASE_SERVICE_KEY}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": { "raw": "{{SUPABASE_URL}}/storage/v1/object/sign/{{bucket_name}}/{{object_path}}", "host": ["{{SUPABASE_URL}}"], "path": ["storage","v1","object","sign","{{bucket_name}}","{{object_path}}"] },
+        "body": { "mode": "raw", "raw": "{\n  \"expiresIn\": 300\n}" }
+      },
+      "response": []
+    },
+    {
+      "name": "Download via Signed URL",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "{{SUPABASE_URL}}{{signed_download_url}}", "host": ["{{SUPABASE_URL}}{{signed_download_url}}"] }
+      },
+      "response": []
+    }
+  ]
+}
+
+

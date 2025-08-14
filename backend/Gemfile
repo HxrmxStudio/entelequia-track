@@ -62,4 +62,7 @@ group :development, :test do
 
   # RSpec testing framework for Rails
   gem "rspec-rails", "~> 6.0"
+
+  # Load environment variables from .env file
+  gem "dotenv-rails"
 end

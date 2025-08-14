@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Proofs", type: :request do
   let(:admin) { User.create!(email: "admin@x.com", password: "secret", role: "admin") }
+  let(:courier_user) { User.create!(email: "courier@x.com", password: "secret", role: "courier") }
 
   def create_shipment_with_address(lat:, lon:)
     addr = Address.create!(line1: "X", country: "AR", geom: "POINT(#{lon} #{lat})")
@@ -24,23 +25,23 @@ RSpec.describe "Proofs", type: :request do
     expect(body["error"]).to eq("Photo is required")
   end
 
-  it "returns 422 when lat/lon missing" do
+  it "returns 422 when lat/lon missing (courier)" do
     s = create_shipment_with_address(lat: -34.6, lon: -58.38)
     photo = Rack::Test::UploadedFile.new(StringIO.new("img"), "image/jpeg", original_filename: "p.jpg")
     post "/shipments/#{s.id}/proofs",
-      headers: auth_header_for(admin),
+      headers: auth_header_for(courier_user),
       params: { method: "photo", photo: photo }
 
     expect(response).to have_http_status(:unprocessable_entity)
-    expect(JSON.parse(response.body)["error"]).to eq("Outside delivery radius")
+    expect(JSON.parse(response.body)["error"]).to eq("Geostamp is required (lat, lon)")
   end
 
-  it "returns 422 when outside geofence" do
+  it "returns 422 when outside geofence (courier)" do
     s = create_shipment_with_address(lat: -34.6, lon: -58.38)
     photo = Rack::Test::UploadedFile.new(StringIO.new("img"), "image/jpeg", original_filename: "p.jpg")
     # Far away coordinates
     post "/shipments/#{s.id}/proofs",
-      headers: auth_header_for(admin),
+      headers: auth_header_for(courier_user),
       params: { method: "photo", photo: photo, lat: 0.0, lon: 0.0 }
 
     expect(response).to have_http_status(:unprocessable_entity)
