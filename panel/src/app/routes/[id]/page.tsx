@@ -14,6 +14,7 @@ import { completeStop } from "@/services/stops/completeStop";
 import { failStop } from "@/services/stops/failStop";
 import type { StopItem } from "@/services/stops/types";
 import ShipmentMap from "@/components/shipments/ShipmentMap";
+import { listCouriers } from "@/services/couriers/listCouriers";
 
 export default function RouteDetailPage() {
   useRequireAuth();
@@ -24,6 +25,7 @@ export default function RouteDetailPage() {
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
   const [courierId, setCourierId] = useState("");
+  const [couriers, setCouriers] = useState<ReadonlyArray<{ id: string; name: string }>>([]);
 
   const load = useCallback(async () => {
     const r = await getRouteById(id);
@@ -32,6 +34,7 @@ export default function RouteDetailPage() {
     setStops(s);
   }, [id]);
   useEffect(() => { void load(); }, [load]);
+  useEffect(() => { (async () => { try { const cs = await listCouriers({ active: true }); setCouriers(cs); } catch {} })(); }, []);
 
   // simplistic drag & drop using HTML5 API
   const [dragId, setDragId] = useState<string | null>(null);
@@ -112,7 +115,10 @@ export default function RouteDetailPage() {
       <div className="border border-gray-200 rounded-lg p-4 text-sm space-y-3 bg-white shadow-sm text-gray-800">
         <h2 className="font-semibold">Acciones</h2>
         <div className="flex flex-wrap gap-2 items-center">
-          <input className="border border-gray-300 rounded-md px-3 py-2" placeholder="Courier UUID" value={courierId} onChange={e=>setCourierId(e.target.value)} />
+          <select className="border border-gray-300 rounded-md px-3 py-2" value={courierId} onChange={e=>setCourierId(e.target.value)}>
+            <option value="">Selecciona courier…</option>
+            {couriers.map(c => (<option key={c.id} value={c.id}>{c.name}</option>))}
+          </select>
           <button disabled={busy || !courierId} onClick={doAssignCourier} className="px-3 py-2 rounded-md text-white bg-primary-600 hover:bg-primary-700 disabled:opacity-50">Asignar courier</button>
           <button disabled={busy} onClick={doStart} className="px-3 py-2 rounded-md border border-gray-300 hover:bg-gray-50 disabled:opacity-50">Iniciar</button>
           <button disabled={busy} onClick={doComplete} className="px-3 py-2 rounded-md border border-gray-300 hover:bg-gray-50 disabled:opacity-50">Completar</button>

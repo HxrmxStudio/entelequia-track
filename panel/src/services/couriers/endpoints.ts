@@ -1,11 +1,17 @@
+export type ListCouriersQuery = { query?: string; active?: boolean };
+
 export const couriersEndpoints = {
-    list: (q?: { query?: string; active?: boolean }) =>
-      `/api/v1/couriers${q ? `?${new URLSearchParams(
-        Object.entries(q).filter(([,v]) => v !== undefined && v !== null).map(([k,v])=>[k,String(v)])
-      )}` : ''}`,
-    detail: (id: string) => `/api/v1/couriers/${id}`,
-    create: `/api/v1/couriers`,
-    update: (id: string) => `/api/v1/couriers/${id}`,
-    destroy: (id: string) => `/api/v1/couriers/${id}`,
-  };
+  list: (q?: ListCouriersQuery) => {
+    if (!q) return `/couriers`;
+    const sp = new URLSearchParams();
+    if (typeof q.query === "string" && q.query.length > 0) sp.set("query", q.query);
+    if (typeof q.active === "boolean") sp.set("active", String(q.active));
+    const qs = sp.toString();
+    return qs.length ? `/couriers?${qs}` : `/couriers`;
+  },
+  detail: (id: string) => `/couriers/${id}`,
+  create: () => `/couriers`,
+  update: (id: string) => `/couriers/${id}`,
+  destroy: (id: string) => `/couriers/${id}`
+} as const;
   
