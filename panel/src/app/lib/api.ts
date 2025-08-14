@@ -36,14 +36,28 @@ async function handleResponse<T>(res: Response): Promise<T> {
   return (text ? (JSON.parse(text) as T) : ({} as T))
 }
 
-export async function apiFetch<T>(path: string, opts: RequestInit = {}): Promise<T> {
+export async function apiFetch<T>(path: string, opts: RequestInit & { timeoutMs?: number } = {}): Promise<T> {
   const headers = authHeaders(opts.headers)
-  const res = await fetch(`${API_URL}${path}`, { ...opts, headers })
-  return handleResponse<T>(res)
+  const timeoutMs = typeof opts.timeoutMs === "number" ? opts.timeoutMs : 15000
+  const controller = !opts.signal ? new AbortController() : undefined
+  const timer = controller ? setTimeout(() => controller.abort(), timeoutMs) : undefined
+  try {
+    const res = await fetch(`${API_URL}${path}`, { ...opts, headers, signal: opts.signal ?? controller?.signal })
+    return await handleResponse<T>(res)
+  } finally {
+    if (timer) clearTimeout(timer)
+  }
 }
 
-export async function apiForm<T>(path: string, formData: FormData, opts: RequestInit = {}): Promise<T> {
+export async function apiForm<T>(path: string, formData: FormData, opts: RequestInit & { timeoutMs?: number } = {}): Promise<T> {
   const headers = authHeaders(opts.headers)
-  const res = await fetch(`${API_URL}${path}`, { method: "POST", ...opts, headers, body: formData })
-  return handleResponse<T>(res)
+  const timeoutMs = typeof opts.timeoutMs === "number" ? opts.timeoutMs : 20000
+  const controller = !opts.signal ? new AbortController() : undefined
+  const timer = controller ? setTimeout(() => controller.abort(), timeoutMs) : undefined
+  try {
+    const res = await fetch(`${API_URL}${path}`, { method: "POST", ...opts, headers, body: formData, signal: opts.signal ?? controller?.signal })
+    return await handleResponse<T>(res)
+  } finally {
+    if (timer) clearTimeout(timer)
+  }
 }

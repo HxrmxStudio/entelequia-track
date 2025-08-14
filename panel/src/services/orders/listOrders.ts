@@ -1,9 +1,11 @@
 import { apiFetch } from "@/app/lib/api";
 import { ordersEndpoints } from "./endpoints";
+import type { OrderItem, OrdersFilter } from "./types";
 
-export async function listOrders(status?: string): Promise<unknown> {
-  const q = status ? new URLSearchParams({ status }).toString() : "";
-  return apiFetch(ordersEndpoints.list(q));
+export async function listOrders(params: OrdersFilter = {}): Promise<OrderItem[]> {
+  const sp = new URLSearchParams();
+  if (params.status) sp.set("status", String(params.status));
+  return apiFetch<OrderItem[]>(ordersEndpoints.list(sp.toString()));
 }
 
 

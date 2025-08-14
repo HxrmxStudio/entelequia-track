@@ -2,10 +2,12 @@ export type ProofMethod = "otp" | "qr" | "photo" | "signature";
 
 export interface ProofCreatePayload {
   method: ProofMethod;
-  lat: number;
-  lon: number;
-  captured_at: string; // ISO8601
   photo: File;
+  key: string; // storage key after presign
+  // Optional geostamp for panel (manual). Required when used by courier-app
+  lat?: number;
+  lon?: number;
+  captured_at?: string; // ISO8601
   otp?: string; // when method = "otp"
   qr_payload?: string; // when method = "qr"
   signature_svg?: string; // when method = "signature"
@@ -14,7 +16,14 @@ export interface ProofCreatePayload {
 export interface ProofResponse {
   ok: boolean;
   proof_id: string;
-  photo_url: string;
+  key?: string;
+  warning?: string;
+}
+
+export interface PresignUploadResponse {
+  upload_url: string;
+  headers: Record<string, string>;
+  key: string;
 }
 
 export interface ProofError {

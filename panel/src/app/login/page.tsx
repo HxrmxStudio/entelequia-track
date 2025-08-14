@@ -19,7 +19,7 @@ export default function LoginPage() {
     } catch {
       return setErr("Credenciales inválidas");
     }
-    window.location.href = "/import";
+    window.location.replace("/dashboard");
   }
 
   return (

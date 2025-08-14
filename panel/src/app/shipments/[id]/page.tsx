@@ -5,7 +5,10 @@ import { postAssignShipment } from "@/services/shipments/postAssignShipment";
 import { postRegenOtp } from "@/services/shipments/postRegenOtp";
 import { useParams } from "next/navigation";
 import type { ShipmentWithEvents } from "@/services/shipments/types";
-import { useRequireAuth } from "@/app/lib/useRequireAuth";
+import { useRequireAuth } from "../../../../hooks/useRequireAuth";
+import ProofButton from "./ProofButton";
+import ShipmentMap from "@/components/shipments/ShipmentMap";
+import { useShipmentRealtime, type ProofCreated } from "../../../../hooks/useShipmentRealtime";
 
 export default function ShipmentDetailPage() {
   useRequireAuth();
@@ -21,6 +24,15 @@ export default function ShipmentDetailPage() {
     setS(data);
   }, [id]);
   useEffect(() => { void load(); }, [load]);
+
+  useShipmentRealtime(id, {
+    onProofCreated: async (evt: ProofCreated) => {
+      // si el evento es del mismo shipment, refrescamos la vista
+      if (String(evt.shipment_id) === String(id)) {
+        await load();
+      }
+    }
+  });
 
   async function doAssign() {
     if (!courierId) return;
@@ -71,6 +83,7 @@ export default function ShipmentDetailPage() {
           <button disabled={busy || !courierId} onClick={doAssign} className="px-3 py-2 rounded-md text-white bg-primary-600 hover:bg-primary-700 disabled:opacity-50">Asignar</button>
           <button disabled={busy} onClick={doRegenOtp} className="px-3 py-2 rounded-md border border-gray-300 hover:bg-gray-50 disabled:opacity-50">Regenerar OTP</button>
           <button onClick={copyTracking} className="px-3 py-2 rounded-md border border-gray-300 hover:bg-gray-50">Copiar link tracking</button>
+          <ProofButton shipmentId={id} onCreated={() => { void load(); }} />
         </div>
         {msg && <p className="text-blue-700">{msg}</p>}
       </div>
@@ -86,6 +99,11 @@ export default function ShipmentDetailPage() {
           )) : <li className="text-gray-500">Sin eventos</li>}
         </ul>
       </div>
+      <ShipmentMap
+        shipmentLocation={{ lat: -34.6037, lon: -58.3816 }}
+        geofenceRadiusM={150}
+        podLocation={undefined}
+      />
     </div>
   );
 }

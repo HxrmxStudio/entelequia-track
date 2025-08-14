@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import maplibregl from "maplibre-gl";
 import { fetchPublicTrack } from "@/services/track/actionService";
 import type { PublicTrack } from "@/services/track/types";
-import { useMapLibre } from "@/app/lib/useMapLibre";
+import { useMapLibre } from "../../../../hooks/useMapLibre";
 
 type PublicTrackPageProps = { params: Promise<{ code: string }> };
 

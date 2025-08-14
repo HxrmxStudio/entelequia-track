@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Fira_Code } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner";
+import AppShell from "@/components/AppShell";
 
 const inter = Inter({
   variable: "--font-geist-sans",
@@ -26,8 +28,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${firaMono.variable} antialiased bg-white text-gray-900`}>
-        {children}
+      <body className={`${inter.variable} ${firaMono.variable} antialiased bg-gray-50 text-gray-900`}>
+        <AppShell>
+          {children}
+        </AppShell>
+        <Toaster position="top-right" richColors closeButton />
       </body>
     </html>
   );
