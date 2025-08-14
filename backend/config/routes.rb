@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   resources :orders, only: [:index, :show, :create, :update]
 
   resources :locations, only: [:create]
+  resources :couriers
   get "/realtime/stream", to: "realtime#stream"
 
   resources :shipments, only: [:index, :show, :create, :update] do
