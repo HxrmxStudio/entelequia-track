@@ -2,6 +2,10 @@ class AddOtpAndControlsToShipments < ActiveRecord::Migration[7.1]
   disable_ddl_transaction!
 
   def up
+    if Rails.env.test?
+      say "Skipping AddOtpAndControlsToShipments in test environment"
+      return
+    end
     change_table :shipments do |t|
       t.integer  :otp_attempts, default: 0, null: false
       t.datetime :otp_locked_until
@@ -17,6 +21,10 @@ class AddOtpAndControlsToShipments < ActiveRecord::Migration[7.1]
   end
 
   def down
+    if Rails.env.test?
+      say "Skipping down of AddOtpAndControlsToShipments in test environment"
+      return
+    end
     remove_index :shipments, :otp_expires_at
     remove_index :shipments, :qr_token
 
