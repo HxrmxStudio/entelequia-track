@@ -51,7 +51,7 @@ class CouriersController < ApplicationController
     end
   
     def courier_params
-      params.require(:courier).permit(:name, :email, :phone, :active, :vehicle, :notes)
+      params.require(:courier).permit(:code, :name, :email, :phone, :active, :vehicle, :notes)
     end
   
     def serialize(c)

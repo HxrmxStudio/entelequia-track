@@ -4,12 +4,24 @@
   - default
   - mailers
   - active_storage
+  - monitoring
   - [critical, 3]
   - [default, 2]
   - [low, 1]
 
 :max_retries: 3
 :retry_interval: 5
+
+:cron:
+  gps_offline_check:
+    cron: "* * * * *"     # every minute
+    class: "GpsOfflineCheckWorker"
+    queue: monitoring
+  shipment_delay_check:
+    cron: "* * * * *"
+    class: "ShipmentDelayCheckWorker"
+    queue: monitoring
+
 
 :redis:
   url: <%= ENV.fetch("REDIS_URL") { "redis://localhost:6379/0" } %>

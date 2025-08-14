@@ -47,6 +47,12 @@ class ShipmentsController < ApplicationController
     def update
       s = Shipment.find(params[:id])
       s.update!(shipment_params)
+    # Auto-resolve ETA delay if shipment delivered through this flow
+    if s.status == "delivered"
+      Alerts::AutoResolver.resolve_shipment_delay(s.id)
+    end
+    # Publish public update for status/eta changes
+    RealtimePublisher.public_shipment_update(shipment: s)
       render json: s
     end
   

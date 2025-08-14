@@ -3,7 +3,7 @@ class User < ApplicationRecord
   enum :role, { admin: "admin", ops: "ops", courier: "courier" }
   has_one :courier
 
-  validates :email, presence: true, uniqueness: true
+  validates :email, presence: true, uniqueness: { case_sensitive: false }, length: { maximum: 255 }, format: { with: /\A[^@\s]+@[^@\s]+\.[^@\s]+\z/ }
   validates :role, inclusion: { in: roles.keys }
 
   before_validation :normalize_email

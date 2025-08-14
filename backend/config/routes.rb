@@ -28,6 +28,13 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
+      # Alerts top-level API
+      resources :alerts, only: [:index, :show] do
+        member do
+          post :resolve
+        end
+      end
+
       resources :routes, only: [:index, :show, :create, :update, :destroy] do
         member do
           patch :assign_courier   # { courier_id }
@@ -37,6 +44,11 @@ Rails.application.routes.draw do
         resources :stops, only: [:index, :show, :create, :update, :destroy] do
           collection do
             patch :resequence     # { order: [stop_id,...] }
+          end
+          resources :alerts, only: [:index, :update] do
+            member do
+              post :resolve # alternativa a PATCH status
+            end
           end
           member do
             patch :complete       # marcar stop completada (ej. delivered)

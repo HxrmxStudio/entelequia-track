@@ -106,6 +106,10 @@ module Shipments
         occurred_at: Time.current
       )
       @shipment.update!(status: :delivered, delivered_at: Time.current)
+      # Auto-resolve shipment delay alerts on delivery
+      Alerts::AutoResolver.resolve_shipment_delay(@shipment.id)
+      # Publish public shipment update (status/eta)
+      RealtimePublisher.public_shipment_update(shipment: @shipment)
 
       RealtimePublisher.proof_created(shipment: @shipment, proof: p)
 

@@ -7,5 +7,7 @@ class Proof < ApplicationRecord
 
   validates :captured_at, presence: true
   validates :photo_key, presence: true, if: -> { photo? || qr? }
+  validates :method, inclusion: { in: methods.keys }
+  validates :storage_provider, inclusion: { in: storage_providers.keys }
 end
   

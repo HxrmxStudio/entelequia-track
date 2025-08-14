@@ -22,5 +22,8 @@ class Shipment < ApplicationRecord
   
     validates :status, inclusion: { in: statuses.keys }
     validates :delivery_method, inclusion: { in: delivery_methods.keys }
+    validates :qr_token, uniqueness: true, allow_nil: true
+    validates :geofence_radius_m, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
+    validates :otp_attempts, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   end
   

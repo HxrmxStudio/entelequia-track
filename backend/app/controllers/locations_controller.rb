@@ -22,10 +22,19 @@ class LocationsController < ApplicationController
         battery_pct: params[:battery],
         app_version: params[:app_version]
       )
-      loc.save!
+    loc.save!
   
-      # (Opcional) Publicar a SSE/WebSocket aquí
-      RealtimeBus.publish("courier.location", { courier_id:, ts:, lat:, lon: })
+    # Publish realtime and auto-resolve gps_offline alert if exists
+    RealtimeBus.publish("courier.location", { courier_id:, ts:, lat:, lon: })
+    Alerts::AutoResolver.resolve_gps_offline_for_courier(courier_id)
+
+    # Public live location for all active shipments of this courier (by public code)
+    Shipment.where(assigned_courier_id: courier_id)
+            .where.not(status: ["delivered", "canceled"]) 
+            .find_each do |s|
+      RealtimePublisher.public_location_ping(shipment: s, location: loc)
+    end
+    # Auto-resolve handled by Alerts::AutoResolver
   
       render json: { ok: true }, status: :created
     rescue ActionController::ParameterMissing

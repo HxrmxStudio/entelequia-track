@@ -24,7 +24,47 @@ class RealtimePublisher
       RealtimeBus.publish("shipment.updated", { id: shipment.id, status: shipment.status })
     end
 
+    # Public tracking updates (for /t/:code)
+    # Publishes live courier location and shipment status/ETA updates on a per-public-code stream
+    def public_location_ping(shipment:, location:)
+      code = public_code_for(shipment)
+      return unless code
+      payload = {
+        type: "public.location",
+        data: {
+          code: code,
+          lat: extract_lat_from_location(location),
+          lon: extract_lon_from_location(location),
+          recorded_at: location.recorded_at&.iso8601
+        }
+      }
+      ActionCable.server.broadcast(public_stream(code), payload)
+    end
+
+    def public_shipment_update(shipment:)
+      code = public_code_for(shipment)
+      return unless code
+      payload = {
+        type: "public.shipment",
+        data: {
+          code: code,
+          status: shipment.status,
+          eta: shipment.eta&.iso8601
+        }
+      }
+      ActionCable.server.broadcast(public_stream(code), payload)
+    end
+
     private
+
+    def public_code_for(shipment)
+      # Using qr_token as public code; change here if your schema uses another column
+      shipment.qr_token.presence
+    end
+
+    def public_stream(code)
+      "public:track:#{code}"
+    end
 
     def extract_lat(proof)
       if proof.respond_to?(:lat) && proof.lat
@@ -48,6 +88,19 @@ class RealtimePublisher
     def extract_delivered_at(shipment)
       if shipment.respond_to?(:delivered_at)
         shipment.delivered_at&.iso8601
+      end
+    end
+
+    def extract_lat_from_location(location)
+      if location.respond_to?(:geom) && location.geom.present?
+        location.geom.to_s.split.last.to_f rescue nil
+      end
+    end
+
+    def extract_lon_from_location(location)
+      if location.respond_to?(:geom) && location.geom.present?
+        coords = location.geom.to_s.gsub("POINT(", "").gsub(")", "").split(" ")
+        coords[0].to_f rescue nil
       end
     end
   end
