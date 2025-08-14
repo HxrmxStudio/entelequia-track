@@ -17,22 +17,35 @@ module Shipments
       lon = params[:lon]&.to_f
       ts  = Time.parse(params[:captured_at] || Time.current.iso8601)
 
-      # Combined validation: photo required and geostamp within allowed radius
-      return render(json: { error: "Photo is required" }, status: :unprocessable_entity) if params[:photo].blank?
-      return render(json: { error: "Outside delivery radius" }, status: :unprocessable_entity) if lat.nil? || lon.nil?
+      # Determine source based on role
+      user_role = @current_user&.role.to_s
+      source = %w[admin ops].include?(user_role) ? "panel_manual" : "courier_app"
 
-      geo = GeofenceService.check!(shipment: s, lat: lat, lon: lon)
-      unless geo.inside
-        return render(json: { error: "Outside delivery radius", distance_m: geo.distance_m, radius_m: geo.radius_m }, status: :unprocessable_entity)
+      # Photo is always required
+      return render(json: { error: "Photo is required" }, status: :unprocessable_entity) if params[:photo].blank?
+
+      # Geostamp required and validated only for courier_app
+      warning = nil
+      if source == "courier_app"
+        return render(json: { error: "Geostamp is required (lat, lon)" }, status: :unprocessable_entity) if lat.nil? || lon.nil?
+        geo = GeofenceService.check!(shipment: s, lat: lat, lon: lon)
+        unless geo.inside
+          return render(json: { error: "Outside delivery radius", distance_m: geo.distance_m, radius_m: geo.radius_m }, status: :unprocessable_entity)
+        end
+      else
+        # panel_manual: locations not mandatory; warn if provided (manual input)
+        warning = "Ubicación ingresada manualmente por operador" if lat && lon
       end
 
       p = Proof.new(
         shipment_id: s.id,
         method: method,
-        geom: "POINT(#{lon} #{lat})",
+        geom: (lat && lon) ? "POINT(#{lon} #{lat})" : nil,
         captured_at: ts,
         device_hash: current_device_hash
       )
+      # Mark source and optional warning in metadata
+      p.metadata = (p.metadata.presence || {}).merge({ "source" => source }.tap { |h| h["warning"] = warning if warning })
 
       case method
       when "otp"
@@ -61,8 +74,9 @@ module Shipments
 
       # Photo upload (required at this point)
       begin
-        url = PodUploader.new.upload!(params[:photo])
-        p.photo_url = url
+      url = PodUploader.new.upload!(params[:photo])
+      p.photo_url = url
+      p.photo_key = url # legacy controller still stores direct URL; downstream can migrate to key if needed
       rescue => e
         Rails.logger.error("pod upload failed: #{e.class}: #{e.message}")
         return render(json: { error: "proof_creation_failed" }, status: :unprocessable_entity)
@@ -80,7 +94,8 @@ module Shipments
       end
 
       # Auto-mark delivered when proof via OTP/QR with valid geostamp
-      s.update!(status: "delivered", eta: nil) if %w[otp qr].include?(method)
+      # Mark delivered for successful POD. Photo from panel or courier counts as POD.
+      s.update!(status: "delivered", eta: nil) if (%w[otp qr photo].include?(method))
 
       Event.create!(
         type_key: "pod.created",
@@ -90,9 +105,13 @@ module Shipments
         payload: { method:, photo_url: p.photo_url, lat:, lon: },
         occurred_at: Time.current
       )
-      RealtimeBus.publish("shipment.updated", { id: s.id, status: s.status })
+      @shipment.update!(status: :delivered, delivered_at: Time.current)
 
-      render json: { ok: true, proof_id: p.id, photo_url: p.photo_url }, status: :created
+      RealtimePublisher.proof_created(shipment: @shipment, proof: p)
+
+      response_payload = { ok: true, proof_id: p.id, photo_url: p.photo_url }
+      response_payload[:warning] = warning if warning
+      render json: response_payload, status: :created
     rescue ActiveRecord::RecordNotFound
       render json: { error: "shipment_not_found" }, status: :not_found
     rescue => e
