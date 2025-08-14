@@ -25,4 +25,29 @@ Rails.application.routes.draw do
     get "track/:code", to: "track#show"
   end
 
+  namespace :api do
+    namespace :v1 do
+      resources :routes, only: [:index, :show, :create, :update, :destroy] do
+        member do
+          patch :assign_courier   # { courier_id }
+          patch :start            # opcional: marcar en curso
+          patch :complete         # opcional: marcar finalizada
+        end
+        resources :stops, only: [:index, :show, :create, :update, :destroy] do
+          collection do
+            patch :resequence     # { order: [stop_id,...] }
+          end
+          member do
+            patch :complete       # marcar stop completada (ej. delivered)
+            patch :fail           # marcar stop fallida (ej. attempt)
+          end
+        end
+      end
+
+      post "/proofs/presign", to: "proofs#presign"
+      post "/proofs", to: "proofs#create"
+      get "/proofs/:id/signed_url", to: "proofs#signed_url"
+    end
+  end
+
 end
