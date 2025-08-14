@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { ShipmentsFilter } from "@/services/shipments/types";
+import type { ShipmentsFilter, ShipmentStatus, DeliveryMethod } from "@/services/shipments/types";
 import { CalendarDays, Filter, Truck, Search } from "lucide-react";
 
 type Props = {
@@ -17,6 +17,7 @@ export default function ShipmentFilters({ filters, onChange, onRefresh, loading,
   const [status, setStatus] = useState(filters.status ?? "");
   const [courierId, setCourierId] = useState(filters.courier_id ?? "");
   const [date, setDate] = useState<string>(filters.date ?? "");
+  const [method, setMethod] = useState<DeliveryMethod | "">((filters as { delivery_method?: DeliveryMethod }).delivery_method ?? "");
 
   useEffect(() => { setStatus(filters.status ?? ""); }, [filters.status]);
   useEffect(() => { setCourierId(filters.courier_id ?? ""); }, [filters.courier_id]);
@@ -30,13 +31,23 @@ export default function ShipmentFilters({ filters, onChange, onRefresh, loading,
       </div>
       <div className="md:col-span-1">
         <label className="text-xs text-gray-600 flex items-center gap-1"><Filter className="w-3.5 h-3.5"/> Status</label>
-        <select className="border border-gray-300 bg-white rounded-md px-3 py-2 text-sm w-full" value={status} onChange={e=>setStatus(e.target.value)}>
+        <select className="border border-gray-300 bg-white rounded-md px-3 py-2 text-sm w-full" value={status} onChange={e=>setStatus(e.target.value as ShipmentStatus | "") }>
           <option value="">All Statuses</option>
           <option value="queued">Queued</option>
           <option value="out_for_delivery">In Transit</option>
           <option value="delivered">Delivered</option>
           <option value="failed">Failed</option>
           <option value="canceled">Canceled</option>
+        </select>
+      </div>
+      <div className="md:col-span-1">
+        <label className="text-xs text-gray-600 flex items-center gap-1"><Truck className="w-3.5 h-3.5"/> Method</label>
+        <select className="border border-gray-300 bg-white rounded-md px-3 py-2 text-sm w-full" value={method} onChange={e=>setMethod(e.target.value as DeliveryMethod | "") }>
+          <option value="">All Methods</option>
+          <option value="courier">courier</option>
+          <option value="pickup">pickup</option>
+          <option value="carrier">carrier</option>
+          <option value="other">other</option>
         </select>
       </div>
       <div className="md:col-span-1">
@@ -48,7 +59,7 @@ export default function ShipmentFilters({ filters, onChange, onRefresh, loading,
       </div>
       <div className="md:col-span-1 flex gap-2">
         <button
-          onClick={() => onChange({ status: status || undefined, courier_id: courierId || undefined, date: (date || undefined) as unknown as "today" | undefined })}
+          onClick={() => onChange({ status: (status || undefined) as ShipmentStatus | undefined, courier_id: courierId || undefined, date: (date || undefined) as unknown as "today" | undefined, ...(method ? { delivery_method: method } : {}) })}
           className="px-3 py-2 rounded-md text-white bg-primary-600 hover:bg-primary-700"
         >Apply</button>
         <button onClick={onRefresh} className="px-3 py-2 rounded-md border border-gray-300 hover:bg-gray-50">{loading ? "Loading..." : "Refresh"}</button>

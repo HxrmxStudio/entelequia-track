@@ -117,9 +117,9 @@ function Filters({ filters, onChange, onRefresh, loading }: { filters: RoutesFil
       </div>
       <div className="flex flex-col">
         <label className="text-xs text-gray-600">Estado</label>
-        <select className="border border-gray-300 bg-white rounded-md px-3 py-2 text-sm" value={status} onChange={e=>setStatus(e.target.value)}>
+          <select className="border border-gray-300 bg-white rounded-md px-3 py-2 text-sm" value={status} onChange={e=>setStatus(e.target.value)}>
           <option value="">(todos)</option>
-          <option value="pending">pending</option>
+          <option value="planned">planned</option>
           <option value="in_progress">in_progress</option>
           <option value="completed">completed</option>
         </select>

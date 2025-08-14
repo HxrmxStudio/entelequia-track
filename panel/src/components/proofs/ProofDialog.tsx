@@ -59,6 +59,67 @@ export default function ProofDialog({ open, onOpenChange, shipmentId, defaultKin
     onSelectFiles(dt.files);
   }, [onSelectFiles]);
 
+  // Helper function to get captured_at timestamp following TypeScript best practices
+  const getCapturedAt = useCallback((): string => {
+    // If we have a geostamp with timestamp, use it
+    if (geostamp?.taken_at) {
+      return geostamp.taken_at;
+    }
+    
+    // Otherwise, use current timestamp (panel manual mode)
+    return new Date().toISOString();
+  }, [geostamp?.taken_at]);
+
+  // Helper function to get optional OTP value
+  const getOtpValue = useCallback((): string | undefined => {
+    const trimmed = otp.trim();
+    return trimmed.length > 0 ? trimmed : undefined;
+  }, [otp]);
+
+  // Helper function to get optional signature SVG
+  const getSignatureSvg = useCallback(async (): Promise<string | undefined> => {
+    if (!signature) return undefined;
+    try {
+      return await signature.text();
+    } catch {
+      return undefined;
+    }
+  }, [signature]);
+
+  // Helper function to get geolocation coordinates
+  const getGeolocationData = useCallback((): { lat?: number; lon?: number } => {
+    if (!geostamp?.lat || !geostamp?.lon) {
+      return {};
+    }
+    return {
+      lat: geostamp.lat,
+      lon: geostamp.lon
+    };
+  }, [geostamp?.lat, geostamp?.lon]);
+
+  // Type-safe payload builder for proof creation
+  const buildProofPayload = useCallback(async (): Promise<{
+    method: ProofMethod;
+    photo: File;
+    key: string;
+    lat?: number;
+    lon?: number;
+    captured_at: string;
+    otp?: string;
+    signature_svg?: string;
+  }> => {
+    return {
+      method: kind,
+      photo: photos[0],
+      key: "", // service presigns and sets real key
+      ...getGeolocationData(),
+      captured_at: getCapturedAt(),
+      otp: getOtpValue(),
+      signature_svg: await getSignatureSvg()
+    };
+  }, [kind, photos, getGeolocationData, getCapturedAt, getOtpValue, getSignatureSvg]);
+  
+
   const onSubmit = useCallback(async () => {
     if (photos.length === 0) {
       setError("Debes adjuntar al menos una foto");
@@ -69,17 +130,7 @@ export default function ProofDialog({ open, onOpenChange, shipmentId, defaultKin
     setOkMessage(null);
 
     try {
-      const resp = await postProof(shipmentId, {
-        method: kind,
-        photo: photos[0],
-        key: "", // service presigns and sets real key
-        // Panel: geostamp opcional. Solo enviamos si existe
-        lat: geostamp?.lat,
-        lon: geostamp?.lon,
-        captured_at: geostamp?.taken_at,
-        otp: otp.trim() || undefined,
-        signature_svg: signature ? await signature.text() : undefined
-      });
+      const resp = await postProof(shipmentId, await buildProofPayload());
       try {
         setProofId(resp.proof_id);
         const url = await getProofSignedUrl(resp.proof_id);
@@ -108,7 +159,7 @@ export default function ProofDialog({ open, onOpenChange, shipmentId, defaultKin
     } finally {
       setSubmitting(false);
     }
-  }, [shipmentId, kind, otp, signature, photos, geostamp, onSuccess, onOpenChange, resetGeo]);
+  }, [shipmentId, buildProofPayload, onSuccess, onOpenChange, resetGeo, photos.length]);
 
   if (!open) return null;
 

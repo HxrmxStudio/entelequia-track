@@ -7,6 +7,7 @@ export async function listShipments(params: ShipmentsFilter = {}): Promise<Shipm
   if (params.status) sp.set("status", params.status);
   if (params.courier_id) sp.set("courier_id", params.courier_id);
   if (params.date) sp.set("date", params.date);
+  if (params.delivery_method) sp.set("delivery_method", params.delivery_method);
   return apiFetch<Shipment[]>(shipmentsEndpoints.list(sp.toString()));
 }
 

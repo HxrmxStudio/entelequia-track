@@ -1,4 +1,4 @@
-export type RouteStatus = "pending" | "in_progress" | "completed";
+export type RouteStatus = "planned" | "in_progress" | "completed";
 
 export interface RouteCourier {
   id: string;

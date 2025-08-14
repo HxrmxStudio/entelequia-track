@@ -1,11 +1,19 @@
 import { apiFetch } from "@/app/lib/api";
 import { proofEndpoints } from "./endpoints";
-import type { ProofCreatePayload, ProofResponse, PresignUploadResponse } from "./types";
+import type { ProofCreatePayload, ProofResponse, PresignUploadResponse, StorageProvider } from "./types";
 
 export async function postProof(
   shipmentId: string,
   payload: ProofCreatePayload
 ): Promise<ProofResponse> {
+  // Validate required fields per stricter backend
+  if (!payload || !payload.method) {
+    throw new Error("method is required");
+  }
+  if (!payload.captured_at) {
+    throw new Error("captured_at is required (ISO8601)");
+  }
+
   // 1) Presign upload on backend
   const presign = await apiFetch<PresignUploadResponse>(proofEndpoints.presign(), {
     method: "POST",
@@ -24,6 +32,7 @@ export async function postProof(
   });
 
   // 3) Create proof record in backend (JSON)
+  const storage_provider: StorageProvider = payload.storage_provider ?? "supabase";
   const body = {
     shipment_id: shipmentId,
     key: presign.key,
@@ -33,8 +42,14 @@ export async function postProof(
     captured_at: payload.captured_at,
     otp: payload.otp,
     qr_payload: payload.qr_payload,
-    signature_svg: payload.signature_svg
+    signature_svg: payload.signature_svg,
+    storage_provider
   };
+
+  // Conditionally required photo key when method is photo or qr
+  if ((payload.method === "photo" || payload.method === "qr") && !presign.key) {
+    throw new Error("photo_key is required for method=photo|qr");
+  }
 
   return apiFetch<ProofResponse>(proofEndpoints.create(), {
     method: "POST",

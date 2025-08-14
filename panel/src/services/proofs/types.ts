@@ -1,16 +1,26 @@
 export type ProofMethod = "otp" | "qr" | "photo" | "signature";
+export type StorageProvider = "supabase" | "s3";
 
 export interface ProofCreatePayload {
   method: ProofMethod;
   photo: File;
-  key: string; // storage key after presign
+  // storage key after presign
+  key?: string;
   // Optional geostamp for panel (manual). Required when used by courier-app
   lat?: number;
   lon?: number;
-  captured_at?: string; // ISO8601
-  otp?: string; // when method = "otp"
-  qr_payload?: string; // when method = "qr"
-  signature_svg?: string; // when method = "signature"
+  // required by backend stricter validation
+  captured_at: string; // ISO8601
+  // when method = "otp"
+  otp?: string;
+  // when method = "qr"
+  qr_payload?: string;
+  // when method = "signature"
+  signature_svg?: string;
+  // default to supabase unless explicitly s3
+  storage_provider?: StorageProvider;
+  // require when method in ["photo","qr"]; service ensures this using `key`
+  photo_key?: string;
 }
 
 export interface ProofResponse {

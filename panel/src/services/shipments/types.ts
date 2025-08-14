@@ -1,8 +1,8 @@
 export interface Shipment {
   id: string;
   order_id: string;
-  status: string;
-  delivery_method: string;
+  status: ShipmentStatus;
+  delivery_method: DeliveryMethod;
   qr_token: string;
   eta?: string | null;
 }
@@ -20,13 +20,28 @@ export interface ShipmentWithEvents extends Shipment {
 }
 
 export interface ShipmentsFilter {
-  status?: string;
+  status?: ShipmentStatus;
   courier_id?: string;
   date?: "today";
+  delivery_method?: DeliveryMethod;
 }
 
 export interface ListResponse<T> {
   data: T[];
   meta?: Record<string, unknown>;
+}
+
+export type ShipmentStatus = "queued" | "out_for_delivery" | "delivered" | "failed" | "canceled";
+
+export type DeliveryMethod = "courier" | "pickup" | "carrier" | "other";
+
+export interface UpdateShipmentPayload {
+  shipment: {
+    status?: ShipmentStatus;
+    delivery_method?: DeliveryMethod;
+    eta?: string | null;
+    geofence_radius_m?: number; // > 0 if provided
+    // Intentionally NO otp_attempts here (server-managed)
+  };
 }
   

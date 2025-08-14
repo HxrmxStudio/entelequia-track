@@ -1,4 +1,4 @@
-export type StopStatus = "pending" | "in_progress" | "completed" | "failed" | string;
+export type StopStatus = "pending" | "arrived" | "completed" | "failed" | "skipped" | string;
 
 export interface StopItem {
   id: string;
@@ -31,7 +31,7 @@ export interface UpdateStopPayload {
 }
 
 export interface ResequencePayload {
-  order: string[]; // array of stop ids in desired order
+  order: string[]; // array of stop ids in desired order (must be all of route's stops, unique)
 }
 
 export interface FailStopPayload {

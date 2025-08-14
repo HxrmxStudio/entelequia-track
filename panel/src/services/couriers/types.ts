@@ -8,5 +8,5 @@ export type Courier = {
     notes?: string;
   };
   
-  export type CourierInput = Omit<Courier, 'id'>;
+  export type CourierInput = Omit<Courier, "id">;
   

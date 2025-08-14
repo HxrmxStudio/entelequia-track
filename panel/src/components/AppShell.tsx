@@ -2,13 +2,16 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Package, Truck, Upload, BarChart3, Settings, LogOut } from "lucide-react";
+import { LayoutDashboard, Package, Upload, BarChart3, Settings, LogOut, Truck, Bike,Route } from "lucide-react";
 import { PropsWithChildren } from "react";
+import AlertsBadge from "@/components/alerts/AlertsBadge";
 
 export default function AppShell({ children }: PropsWithChildren) {
   const pathname = usePathname();
   const nav = [
     { href: "/dashboard", label: "Dashboard", icon: <LayoutDashboard className="w-4 h-4" /> },
+    { href: "/couriers", label: "Couriers", icon: <Bike className="w-4 h-4" /> },
+    { href: "/routes", label: "Routes", icon: <Route className="w-4 h-4" /> },
     { href: "/orders", label: "Orders", icon: <Package className="w-4 h-4" /> },
     { href: "/shipments", label: "Shipments", icon: <Truck className="w-4 h-4" /> },
     { href: "/import", label: "Import", icon: <Upload className="w-4 h-4" /> },
@@ -19,10 +22,13 @@ export default function AppShell({ children }: PropsWithChildren) {
   return (
     <div className="min-h-screen grid grid-cols-1 md:grid-cols-[260px_minmax(0,1fr)]">
       <aside className="border-r bg-white">
-        <div className="h-14 flex items-center px-4 border-b">
+        <div className="h-14 flex items-center justify-between px-4 border-b gap-3">
           <div>
             <div className="text-lg font-semibold leading-tight">Entelequia</div>
             <div className="text-xs text-gray-500">entelequia-track</div>
+          </div>
+          <div className="ml-auto">
+            <AlertsBadge />
           </div>
         </div>
         <nav className="p-3 space-y-1">
