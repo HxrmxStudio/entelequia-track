@@ -1,17 +1,11 @@
 import { API_URL } from "@/app/lib/api";
 import { authEndpoints } from "./endpoints";
-
-export interface LoginRequest { email: string; password: string }
-export interface LoginResponse {
-  token: string;
-  exp: number;
-  token_type: "Bearer";
-  user: { id: string; email: string };
-}
+import { LoginRequest, LoginResponse } from "./types";
 
 export async function postLogin(payload: LoginRequest): Promise<LoginResponse> {
   const res = await fetch(`${API_URL}${authEndpoints.login()}`, {
     method: "POST",
+    credentials: "include",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload)
   });

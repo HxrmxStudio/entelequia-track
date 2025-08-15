@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef } from "react";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { useMapLibre } from "../../../hooks/useMapLibre";
+import { useMapLibre } from "../../hooks/useMapLibre";
 import { subscribeRealtime } from "@/app/lib/cable";
 
 export type LiveMapEvent =

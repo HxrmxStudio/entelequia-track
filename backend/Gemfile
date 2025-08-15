@@ -63,6 +63,9 @@ group :development, :test do
   # RSpec testing framework for Rails
   gem "rspec-rails", "~> 6.0"
 
+  # FactoryBot for creating test data
+  gem "factory_bot_rails", "~> 6.4"
+
   # Load environment variables from .env file
   gem "dotenv-rails"
 end

@@ -1,12 +1,13 @@
 "use client";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { isAuthenticated } from "../utils/auth-utils";
 
 export function useRequireAuth() {
   const router = useRouter();
+  
   useEffect(() => {
-    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-    if (!token) {
+    if (!isAuthenticated()) {
       router.replace("/login");
     }
   }, [router]);

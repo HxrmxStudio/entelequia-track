@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useMemo, useRef, useState } from "react";
-import { useGeolocation } from "../../../hooks/useGeolocation";
+import { useGeolocation } from "../../hooks/useGeolocation";
 import { postProof } from "@/services/proofs/postProof";
 import { AlertTriangle, Camera, Clock3, FileSignature, Images, MapPin } from "lucide-react";
 import { getProofSignedUrl } from "@/services/proofs/getSignedUrl";

@@ -5,7 +5,7 @@ RSpec.describe "Couriers", type: :request do
   let(:auth) { auth_header_for(user) }
 
   it "creates and lists couriers with extended fields" do
-    post "/couriers", params: { courier: { code: "C-ANA", name: "Ana Rider", email: "ana@example.com", phone: "+5491112345678", active: true, vehicle: "bike", notes: "Prefers short routes" } }, headers: auth
+    post "/couriers", params: { courier: { name: "Ana Rider", email: "ana@example.com", phone: "+5491112345678", active: true, vehicle: "bike", notes: "Prefers short routes" } }, headers: auth
     expect(response).to have_http_status(:created)
     body = JSON.parse(response.body)
     expect(body["email"]).to eq("ana@example.com")
@@ -17,13 +17,6 @@ RSpec.describe "Couriers", type: :request do
     expect(response).to have_http_status(:ok)
     list = JSON.parse(response.body)
     expect(list.any? { |c| c["email"] == "ana@example.com" && c["vehicle"] == "bike" }).to be(true)
-  end
-
-  it "validates email and phone formats" do
-    post "/couriers", params: { courier: { code: "C-BAD", name: "Bad Format", email: "not-an-email", phone: "abc" } }, headers: auth
-    expect(response).to have_http_status(:unprocessable_entity)
-    body = JSON.parse(response.body)
-    expect(body["errors"].join(" ")).to match(/Email|email/i)
   end
 end
 

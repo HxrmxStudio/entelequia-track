@@ -1,44 +1,127 @@
 class AuthController < ApplicationController
-  # CSRF is not applicable for stateless JSON login
-  skip_before_action :verify_authenticity_token, only: :login if respond_to?(:verify_authenticity_token)
+  skip_before_action :authenticate_user!, only: [:login, :register, :refresh, :logout]
 
   def login
-    email = normalized_email
-    password = auth_params[:password]
-
-    unless email.present? && password.present?
-      render json: { error: "missing_parameters" }, status: :unprocessable_entity and return
+    if auth_params[:email].blank? || auth_params[:password].blank?
+      render json: { error: "missing_parameters" }, status: :unprocessable_entity
+      return
     end
 
-    user = User.find_by(email: email)
+    user = Auth::AuthService.authenticate_user(
+      email: auth_params[:email], 
+      password: auth_params[:password]
+    )
 
-    if user&.authenticate(password)
-      token_data = JwtService.encode(sub: user.id)
+    if user
+      session_data = Auth::AuthService.create_user_session(
+        user, 
+        client: auth_params[:client], 
+        device: auth_params[:device]
+      )
+      
+      # Set refresh token cookie
+      Auth::TokenService.set_refresh_token_cookie(cookies, session_data[:refresh_token])
+      
       render json: {
-        token: token_data[:token],
-        exp: token_data[:exp],
+        access_token: session_data[:access_token],
+        exp: session_data[:exp],
         token_type: "Bearer",
-        user: { id: user.id, email: user.email }
+        user: session_data[:user]
       }
     else
-      # TODO: hook rate limiter / lockout strategy
       render json: { error: "Invalid credentials" }, status: :unauthorized
+    end
+  end
+
+  def refresh
+    refresh_token = Auth::TokenService.extract_refresh_token(request, cookies)
+    
+    if refresh_token.blank?
+      render json: { error: "missing_refresh_token" }, status: :unauthorized
+      return
+    end
+
+    session_data = Auth::AuthService.refresh_user_session(
+      refresh_token, 
+      client: auth_params[:client], 
+      device: auth_params[:device]
+    )
+
+    if session_data
+      # Set new refresh token cookie
+      Auth::TokenService.set_refresh_token_cookie(cookies, session_data[:refresh_token])
+      
+      render json: {
+        access_token: session_data[:access_token],
+        exp: session_data[:exp],
+        token_type: "Bearer",
+        user: session_data[:user]
+      }
+    else
+      render json: { error: "invalid_refresh_token" }, status: :unauthorized
+    end
+  end
+
+  def logout
+    refresh_token = Auth::TokenService.extract_refresh_token(request, cookies)
+    
+    if refresh_token.present?
+      Auth::AuthService.revoke_user_session(refresh_token)
+    end
+    
+    # Clear the refresh token cookie
+    Auth::TokenService.clear_refresh_token_cookie(cookies)
+    
+    head :no_content
+  end
+
+  def register
+    if auth_params[:email].blank? || auth_params[:password].blank?
+      render json: { error: "missing_parameters" }, status: :unprocessable_entity
+      return
+    end
+
+    normalized_email = Auth::AuthService.normalize_email(auth_params[:email])
+    
+    if User.exists?(email: normalized_email)
+      render json: { error: "email_already_taken" }, status: :unprocessable_entity
+      return
+    end
+
+    user = User.new(
+      email: normalized_email,
+      password: auth_params[:password],
+      name: auth_params[:name]
+    )
+
+    if user.save
+      session_data = Auth::AuthService.create_user_session(
+        user, 
+        client: auth_params[:client], 
+        device: auth_params[:device]
+      )
+      
+      # Set refresh token cookie
+      Auth::TokenService.set_refresh_token_cookie(cookies, session_data[:refresh_token])
+      
+      render json: {
+        access_token: session_data[:access_token],
+        exp: session_data[:exp],
+        token_type: "Bearer",
+        user: session_data[:user]
+      }, status: :created
+    else
+      render json: { 
+        error: "validation_failed", 
+        details: user.errors.full_messages 
+      }, status: :unprocessable_entity
     end
   end
 
   private
 
   def auth_params
-    if params[:auth].is_a?(ActionController::Parameters)
-      params.require(:auth).permit(:email, :password)
-    else
-      params.permit(:email, :password)
-    end
-  end
-
-  def normalized_email
-    raw = auth_params[:email]
-    raw.is_a?(String) ? raw.strip.downcase : nil
+    params.permit(:email, :password, :name, :client, :device)
   end
 end
   

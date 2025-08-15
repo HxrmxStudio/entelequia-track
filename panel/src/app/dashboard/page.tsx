@@ -1,12 +1,11 @@
 "use client";
 import { useCallback, useState } from "react";
-import { useRequireAuth } from "../../../hooks/useRequireAuth";
+import AuthGuard from "@/components/AuthGuard";
 import LiveMap, { type LiveMapEvent } from "@/components/dashboard/LiveMap";
 import StatusSidebar from "@/components/dashboard/StatusSidebar";
 import AlertsPanel from "@/components/dashboard/AlertsPanel";
 
 export default function DashboardLive() {
-  useRequireAuth();
   const [gpsOffline, setGpsOffline] = useState(0);
   const [outForDelivery, setOutForDelivery] = useState(0);
   const [deliveredToday, setDeliveredToday] = useState(0);
@@ -27,17 +26,19 @@ export default function DashboardLive() {
   }, []);
 
   return (
-    <div className="p-6 space-y-4">
-      <h1 className="text-2xl font-semibold tracking-tight">Dashboard</h1>
-      <div className="grid grid-cols-1 xl:grid-cols-4 gap-4">
-        <div className="xl:col-span-3">
-          <LiveMap onEvent={onEvent} />
-        </div>
-        <div className="xl:col-span-1 space-y-4">
-          <StatusSidebar gpsOffline={gpsOffline} outForDelivery={outForDelivery} deliveredToday={deliveredToday} />
-          <AlertsPanel alerts={alerts} />
+    <AuthGuard>
+      <div className="p-6 space-y-4">
+        <h1 className="text-2xl font-semibold tracking-tight">Dashboard</h1>
+        <div className="grid grid-cols-1 xl:grid-cols-4 gap-4">
+          <div className="xl:col-span-3">
+            <LiveMap onEvent={onEvent} />
+          </div>
+          <div className="xl:col-span-1 space-y-4">
+            <StatusSidebar gpsOffline={gpsOffline} outForDelivery={outForDelivery} deliveredToday={deliveredToday} />
+            <AlertsPanel alerts={alerts} />
+          </div>
         </div>
       </div>
-    </div>
+    </AuthGuard>
   );
 }

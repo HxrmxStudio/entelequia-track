@@ -10,48 +10,6 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: tiger; Type: SCHEMA; Schema: -; Owner: -
---
-
-CREATE SCHEMA tiger;
-
-
---
--- Name: tiger_data; Type: SCHEMA; Schema: -; Owner: -
---
-
-CREATE SCHEMA tiger_data;
-
-
---
--- Name: topology; Type: SCHEMA; Schema: -; Owner: -
---
-
-CREATE SCHEMA topology;
-
-
---
--- Name: SCHEMA topology; Type: COMMENT; Schema: -; Owner: -
---
-
-COMMENT ON SCHEMA topology IS 'PostGIS Topology schema';
-
-
---
--- Name: fuzzystrmatch; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS fuzzystrmatch WITH SCHEMA public;
-
-
---
--- Name: EXTENSION fuzzystrmatch; Type: COMMENT; Schema: -; Owner: -
---
-
-COMMENT ON EXTENSION fuzzystrmatch IS 'determine similarities and distance between strings';
-
-
---
 -- Name: pgcrypto; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -77,34 +35,6 @@ CREATE EXTENSION IF NOT EXISTS postgis WITH SCHEMA public;
 --
 
 COMMENT ON EXTENSION postgis IS 'PostGIS geometry and geography spatial types and functions';
-
-
---
--- Name: postgis_tiger_geocoder; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS postgis_tiger_geocoder WITH SCHEMA tiger;
-
-
---
--- Name: EXTENSION postgis_tiger_geocoder; Type: COMMENT; Schema: -; Owner: -
---
-
-COMMENT ON EXTENSION postgis_tiger_geocoder IS 'PostGIS tiger geocoder and reverse geocoder';
-
-
---
--- Name: postgis_topology; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS postgis_topology WITH SCHEMA topology;
-
-
---
--- Name: EXTENSION postgis_topology; Type: COMMENT; Schema: -; Owner: -
---
-
-COMMENT ON EXTENSION postgis_topology IS 'PostGIS topology spatial types and functions';
 
 
 --
@@ -259,8 +189,7 @@ CREATE TABLE public.locations (
     battery_pct integer,
     app_version character varying,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL,
-    CONSTRAINT locations_battery_pct_range CHECK (((battery_pct IS NULL) OR ((battery_pct >= 0) AND (battery_pct <= 100))))
+    updated_at timestamp(6) without time zone NOT NULL
 );
 
 
@@ -280,8 +209,7 @@ CREATE TABLE public.orders (
     delivery_window tstzrange,
     metadata jsonb DEFAULT '{}'::jsonb,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL,
-    CONSTRAINT orders_amount_cents_nonnegative CHECK ((amount_cents >= 0))
+    updated_at timestamp(6) without time zone NOT NULL
 );
 
 
@@ -307,6 +235,23 @@ CREATE TABLE public.proofs (
     photo_key character varying,
     storage_provider character varying DEFAULT 'supabase'::character varying NOT NULL,
     photo_meta jsonb DEFAULT '{}'::jsonb NOT NULL
+);
+
+
+--
+-- Name: refresh_tokens; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.refresh_tokens (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    user_id uuid NOT NULL,
+    token_digest character varying,
+    expires_at timestamp(6) without time zone,
+    revoked_at timestamp(6) without time zone,
+    client character varying,
+    device character varying,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
 );
 
 
@@ -353,8 +298,8 @@ CREATE TABLE public.shipments (
     otp_attempts integer DEFAULT 0 NOT NULL,
     otp_locked_until timestamp(6) without time zone,
     geofence_radius_m integer DEFAULT 100 NOT NULL,
-    CONSTRAINT shipments_geofence_radius_positive CHECK ((geofence_radius_m > 0)),
-    CONSTRAINT shipments_otp_attempts_nonnegative CHECK ((otp_attempts >= 0))
+    otp_generated_at timestamp(6) without time zone,
+    otp_expires_at timestamp(6) without time zone
 );
 
 
@@ -373,8 +318,7 @@ CREATE TABLE public.stops (
     completed_at timestamp(6) without time zone,
     notes jsonb DEFAULT '{}'::jsonb,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL,
-    CONSTRAINT stops_sequence_nonnegative CHECK ((sequence >= 0))
+    updated_at timestamp(6) without time zone NOT NULL
 );
 
 
@@ -451,11 +395,27 @@ ALTER TABLE ONLY public.imports
 
 
 --
+-- Name: locations locations_battery_pct_range; Type: CHECK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE public.locations
+    ADD CONSTRAINT locations_battery_pct_range CHECK (((battery_pct IS NULL) OR ((battery_pct >= 0) AND (battery_pct <= 100)))) NOT VALID;
+
+
+--
 -- Name: locations locations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.locations
     ADD CONSTRAINT locations_pkey PRIMARY KEY (courier_id, recorded_at);
+
+
+--
+-- Name: orders orders_amount_cents_nonnegative; Type: CHECK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE public.orders
+    ADD CONSTRAINT orders_amount_cents_nonnegative CHECK ((amount_cents >= 0)) NOT VALID;
 
 
 --
@@ -475,6 +435,14 @@ ALTER TABLE ONLY public.proofs
 
 
 --
+-- Name: refresh_tokens refresh_tokens_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.refresh_tokens
+    ADD CONSTRAINT refresh_tokens_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: routes routes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -491,6 +459,22 @@ ALTER TABLE ONLY public.schema_migrations
 
 
 --
+-- Name: shipments shipments_geofence_radius_positive; Type: CHECK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE public.shipments
+    ADD CONSTRAINT shipments_geofence_radius_positive CHECK ((geofence_radius_m > 0)) NOT VALID;
+
+
+--
+-- Name: shipments shipments_otp_attempts_nonnegative; Type: CHECK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE public.shipments
+    ADD CONSTRAINT shipments_otp_attempts_nonnegative CHECK ((otp_attempts >= 0)) NOT VALID;
+
+
+--
 -- Name: shipments shipments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -504,6 +488,14 @@ ALTER TABLE ONLY public.shipments
 
 ALTER TABLE ONLY public.stops
     ADD CONSTRAINT stops_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: stops stops_sequence_nonnegative; Type: CHECK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE public.stops
+    ADD CONSTRAINT stops_sequence_nonnegative CHECK ((sequence >= 0)) NOT VALID;
 
 
 --
@@ -711,6 +703,20 @@ CREATE INDEX index_proofs_on_storage_provider ON public.proofs USING btree (stor
 
 
 --
+-- Name: index_refresh_tokens_on_token_digest; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_refresh_tokens_on_token_digest ON public.refresh_tokens USING btree (token_digest);
+
+
+--
+-- Name: index_refresh_tokens_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_refresh_tokens_on_user_id ON public.refresh_tokens USING btree (user_id);
+
+
+--
 -- Name: index_routes_on_courier_id_and_service_date; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -820,7 +826,7 @@ CREATE INDEX index_users_on_role ON public.users USING btree (role);
 --
 
 ALTER TABLE ONLY public.proofs
-    ADD CONSTRAINT fk_rails_02f7d83363 FOREIGN KEY (shipment_id) REFERENCES public.shipments(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_02f7d83363 FOREIGN KEY (shipment_id) REFERENCES public.shipments(id) ON DELETE CASCADE NOT VALID;
 
 
 --
@@ -828,7 +834,7 @@ ALTER TABLE ONLY public.proofs
 --
 
 ALTER TABLE ONLY public.stops
-    ADD CONSTRAINT fk_rails_090814b07b FOREIGN KEY (shipment_id) REFERENCES public.shipments(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_090814b07b FOREIGN KEY (shipment_id) REFERENCES public.shipments(id) ON DELETE CASCADE NOT VALID;
 
 
 --
@@ -836,7 +842,15 @@ ALTER TABLE ONLY public.stops
 --
 
 ALTER TABLE ONLY public.locations
-    ADD CONSTRAINT fk_rails_16900aa8e3 FOREIGN KEY (courier_id) REFERENCES public.couriers(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_16900aa8e3 FOREIGN KEY (courier_id) REFERENCES public.couriers(id) ON DELETE CASCADE NOT VALID;
+
+
+--
+-- Name: refresh_tokens fk_rails_279e9a0091; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.refresh_tokens
+    ADD CONSTRAINT fk_rails_279e9a0091 FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
 --
@@ -844,7 +858,7 @@ ALTER TABLE ONLY public.locations
 --
 
 ALTER TABLE ONLY public.alerts
-    ADD CONSTRAINT fk_rails_3b6f751b9f FOREIGN KEY (shipment_id) REFERENCES public.shipments(id) ON DELETE SET NULL;
+    ADD CONSTRAINT fk_rails_3b6f751b9f FOREIGN KEY (shipment_id) REFERENCES public.shipments(id) ON DELETE SET NULL NOT VALID;
 
 
 --
@@ -852,7 +866,7 @@ ALTER TABLE ONLY public.alerts
 --
 
 ALTER TABLE ONLY public.orders
-    ADD CONSTRAINT fk_rails_3dad120da9 FOREIGN KEY (customer_id) REFERENCES public.customers(id) ON DELETE SET NULL;
+    ADD CONSTRAINT fk_rails_3dad120da9 FOREIGN KEY (customer_id) REFERENCES public.customers(id) ON DELETE SET NULL NOT VALID;
 
 
 --
@@ -860,7 +874,7 @@ ALTER TABLE ONLY public.orders
 --
 
 ALTER TABLE ONLY public.orders
-    ADD CONSTRAINT fk_rails_774ef80392 FOREIGN KEY (address_id) REFERENCES public.addresses(id) ON DELETE SET NULL;
+    ADD CONSTRAINT fk_rails_774ef80392 FOREIGN KEY (address_id) REFERENCES public.addresses(id) ON DELETE SET NULL NOT VALID;
 
 
 --
@@ -868,7 +882,7 @@ ALTER TABLE ONLY public.orders
 --
 
 ALTER TABLE ONLY public.shipments
-    ADD CONSTRAINT fk_rails_806fcbd553 FOREIGN KEY (assigned_courier_id) REFERENCES public.couriers(id) ON DELETE SET NULL;
+    ADD CONSTRAINT fk_rails_806fcbd553 FOREIGN KEY (assigned_courier_id) REFERENCES public.couriers(id) ON DELETE SET NULL NOT VALID;
 
 
 --
@@ -876,7 +890,7 @@ ALTER TABLE ONLY public.shipments
 --
 
 ALTER TABLE ONLY public.stops
-    ADD CONSTRAINT fk_rails_9068ac2767 FOREIGN KEY (route_id) REFERENCES public.routes(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_9068ac2767 FOREIGN KEY (route_id) REFERENCES public.routes(id) ON DELETE CASCADE NOT VALID;
 
 
 --
@@ -884,7 +898,7 @@ ALTER TABLE ONLY public.stops
 --
 
 ALTER TABLE ONLY public.shipments
-    ADD CONSTRAINT fk_rails_9892d6a938 FOREIGN KEY (order_id) REFERENCES public.orders(id) ON DELETE RESTRICT;
+    ADD CONSTRAINT fk_rails_9892d6a938 FOREIGN KEY (order_id) REFERENCES public.orders(id) ON DELETE RESTRICT NOT VALID;
 
 
 --
@@ -892,7 +906,7 @@ ALTER TABLE ONLY public.shipments
 --
 
 ALTER TABLE ONLY public.alerts
-    ADD CONSTRAINT fk_rails_c870d97f79 FOREIGN KEY (route_id) REFERENCES public.routes(id) ON DELETE SET NULL;
+    ADD CONSTRAINT fk_rails_c870d97f79 FOREIGN KEY (route_id) REFERENCES public.routes(id) ON DELETE SET NULL NOT VALID;
 
 
 --
@@ -900,7 +914,7 @@ ALTER TABLE ONLY public.alerts
 --
 
 ALTER TABLE ONLY public.couriers
-    ADD CONSTRAINT fk_rails_e99d87c839 FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE SET NULL;
+    ADD CONSTRAINT fk_rails_e99d87c839 FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE SET NULL NOT VALID;
 
 
 --
@@ -908,7 +922,7 @@ ALTER TABLE ONLY public.couriers
 --
 
 ALTER TABLE ONLY public.alerts
-    ADD CONSTRAINT fk_rails_fc688a1a5a FOREIGN KEY (courier_id) REFERENCES public.couriers(id) ON DELETE SET NULL;
+    ADD CONSTRAINT fk_rails_fc688a1a5a FOREIGN KEY (courier_id) REFERENCES public.couriers(id) ON DELETE SET NULL NOT VALID;
 
 
 --
@@ -916,16 +930,17 @@ ALTER TABLE ONLY public.alerts
 --
 
 ALTER TABLE ONLY public.routes
-    ADD CONSTRAINT fk_rails_fea896ef6f FOREIGN KEY (courier_id) REFERENCES public.couriers(id) ON DELETE RESTRICT;
+    ADD CONSTRAINT fk_rails_fea896ef6f FOREIGN KEY (courier_id) REFERENCES public.couriers(id) ON DELETE RESTRICT NOT VALID;
 
 
 --
 -- PostgreSQL database dump complete
 --
 
-SET search_path TO "$user", public, topology, tiger;
+SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250815103907'),
 ('20250814150500'),
 ('20250814150000'),
 ('20250814140500'),

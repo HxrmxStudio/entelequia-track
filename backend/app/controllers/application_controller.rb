@@ -1,29 +1,34 @@
 class ApplicationController < ActionController::API
+  include ActionController::Cookies
+  
   before_action :set_current_user
+  before_action :authenticate_user!
 
   private
 
   def set_current_user
-    authorization_header = request.headers["Authorization"].to_s
-    token = authorization_header.split(" ").last
-    return unless token.present?
+    auth_header = request.headers["Authorization"]
+    return unless auth_header&.start_with?("Bearer ")
 
-    begin
-      payload, = JWT.decode(token, JwtService.secret, true, algorithm: JwtService.algorithm)
-      @current_user = User.find_by(id: payload["sub"]) if payload
-    rescue JWT::DecodeError, JWT::ExpiredSignature
-      @current_user = nil
-    end
+    token = auth_header.split(" ").last
+    payload = Auth::TokenService.validate_access_token(token)
+    return unless payload
+
+    user_id = payload["sub"]
+    @current_user = User.find_by(id: user_id)
   end
 
   def authenticate_user!
-    render json: { error: "unauthorized" }, status: :unauthorized unless @current_user
+    unless @current_user
+      render json: { error: "unauthorized" }, status: :unauthorized
+    end
   end
 
   def require_role!(*roles)
-    unless @current_user && roles.include?(@current_user.role)
-      render json: { error: "forbidden" }, status: :forbidden
-    end
+    authenticate_user!
+    return if @current_user && roles.include?(@current_user.role.to_sym)
+    
+    render json: { error: "forbidden" }, status: :forbidden
   end
 end
   

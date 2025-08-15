@@ -12,7 +12,7 @@ require 'rspec/rails'
 # run as spec files by default. This means that files in spec/support that end
 # in _spec.rb will both be required and run as specs, causing the specs to be
 # run twice. It is recommended that you do not name files matching this glob to
-# end with _spec.rb. You can configure this pattern with the --pattern
+# end in _spec.rb. You can configure this pattern with the --pattern
 # option on the command line or in ~/.rspec, .rspec or `.rspec-local`.
 #
 # The following line is provided for convenience purposes. It has the downside
@@ -29,10 +29,18 @@ begin
 rescue ActiveRecord::PendingMigrationError => e
   abort e.to_s.strip
 end
+
 RSpec.configure do |config|
   # Include helpers for building Authorization headers with JWT
   Dir[Rails.root.join("spec/support/**/*.rb")].sort.each { |f| require f }
   config.include AuthHelpers
+  
+  # Include FactoryBot methods
+  config.include FactoryBot::Syntax::Methods
+  
+  # Include time helpers for freeze_time, travel_to, etc.
+  config.include ActiveSupport::Testing::TimeHelpers
+  
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_paths = [
     Rails.root.join('spec/fixtures')
@@ -54,8 +62,9 @@ RSpec.configure do |config|
   # explicitly tag your specs with their type, e.g.:
   #
   #     RSpec.describe UsersController, type: :controller do
-  #       # ...
-  #     end
+  #     #
+  #     # ...
+  #     # end
   #
   # The different available types are documented in the features, such as in
   # https://rspec.info/features/6-0/rspec-rails

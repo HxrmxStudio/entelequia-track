@@ -6,9 +6,9 @@ import { postRegenOtp } from "@/services/shipments/postRegenOtp";
 import { useParams } from "next/navigation";
 import type { ShipmentWithEvents } from "@/services/shipments/types";
 import { useRequireAuth } from "../../../../hooks/useRequireAuth";
-import ProofButton from "./ProofButton";
+import ProofButton from "../../../components/proofs/ProofButton";
 import ShipmentMap from "@/components/shipments/ShipmentMap";
-import { useShipmentRealtime, type ProofCreated } from "../../../../hooks/useShipmentRealtime";
+import { useShipmentRealtime, type ProofCreated } from "../../../hooks/useShipmentRealtime";
 
 export default function ShipmentDetailPage() {
   useRequireAuth();

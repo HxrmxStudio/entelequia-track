@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import maplibregl from "maplibre-gl";
 import { fetchPublicTrack } from "@/services/track/actionService";
 import type { PublicTrack } from "@/services/track/types";
-import { useMapLibre } from "../../../../hooks/useMapLibre";
+import { useMapLibre } from "../../../hooks/useMapLibre";
 import { subscribeRealtime } from "@/app/lib/cable";
 import * as turf from "@turf/turf";
 

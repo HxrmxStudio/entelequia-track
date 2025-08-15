@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 import type { ShipmentsFilter, ShipmentStatus, DeliveryMethod } from "@/services/shipments/types";
-import { CalendarDays, Filter, Truck, Search } from "lucide-react";
+import { CalendarDays, Filter, Truck, Search, X } from "lucide-react";
+import { Card } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
 
 type Props = {
   filters: ShipmentsFilter;
@@ -23,49 +25,194 @@ export default function ShipmentFilters({ filters, onChange, onRefresh, loading,
   useEffect(() => { setCourierId(filters.courier_id ?? ""); }, [filters.courier_id]);
   useEffect(() => { setDate(filters.date ?? ""); }, [filters.date]);
 
+  const handleApplyFilters = () => {
+    onChange({ 
+      status: (status || undefined) as ShipmentStatus | undefined, 
+      courier_id: courierId || undefined, 
+      date: (date || undefined) as unknown as "today" | undefined, 
+      ...(method ? { delivery_method: method } : {}) 
+    });
+  };
+
+  const handleClearFilters = () => {
+    setStatus("");
+    setCourierId("");
+    setDate("");
+    setMethod("");
+    onSearchChange("");
+    onChange({});
+  };
+
+  const handleSearchChange = (value: string) => {
+    // Ensure we're always passing a string
+    const safeValue = value || "";
+    onSearchChange(safeValue);
+  };
+
+  const hasActiveFilters = status || courierId || date || method || search;
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-3 items-end">
-      <div className="md:col-span-1">
-        <label className="text-xs text-gray-600 flex items-center gap-1"><Search className="w-3.5 h-3.5"/> Search by tracking ID</label>
-        <input className="border border-gray-300 bg-white rounded-md px-3 py-2 text-sm w-full" placeholder="ETQ-… / UUID" value={search} onChange={e=>onSearchChange(e.target.value)} />
+    <Card className="p-4">
+      <div className="flex flex-col md:flex-row gap-4">
+        {/* Search Input */}
+        <div className="flex-1 relative">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <Search size={18} className="text-gray-400" />
+          </div>
+          <input 
+            type="text" 
+            placeholder="Search by tracking ID, customer name or address..." 
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm" 
+            value={search || ""} 
+            onChange={e => handleSearchChange(e.target.value)} 
+          />
+        </div>
+
+        {/* Filter Controls */}
+        <div className="flex gap-4">
+          <div className="w-full md:w-48">
+            <label htmlFor="status-filter" className="block text-sm font-medium text-gray-700 mb-1">
+              Status
+            </label>
+            <select 
+              id="status-filter" 
+              className="w-full border border-gray-300 rounded-md py-2 pl-3 pr-10 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm" 
+              value={status || ""} 
+              onChange={e => setStatus(e.target.value as ShipmentStatus | "")}
+            >
+              <option value="">All Statuses</option>
+              <option value="queued">Queued</option>
+              <option value="out_for_delivery">In Transit</option>
+              <option value="delivered">Delivered</option>
+              <option value="failed">Failed</option>
+              <option value="canceled">Canceled</option>
+            </select>
+          </div>
+
+          <div className="w-full md:w-48">
+            <label htmlFor="method-filter" className="block text-sm font-medium text-gray-700 mb-1">
+              Method
+            </label>
+            <select 
+              id="method-filter" 
+              className="w-full border border-gray-300 rounded-md py-2 pl-3 pr-10 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm" 
+              value={method || ""} 
+              onChange={e => setMethod(e.target.value as DeliveryMethod | "")}
+            >
+              <option value="">All Methods</option>
+              <option value="courier">Courier</option>
+              <option value="pickup">Pickup</option>
+              <option value="carrier">Carrier</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div className="w-full md:w-48">
+            <label htmlFor="date-filter" className="block text-sm font-medium text-gray-700 mb-1">
+              Date Range
+            </label>
+            <select 
+              id="date-filter" 
+              className="w-full border border-gray-300 rounded-md py-2 pl-3 pr-10 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm" 
+              value={date || ""} 
+              onChange={e => setDate(e.target.value)}
+            >
+              <option value="">All Time</option>
+              <option value="today">Today</option>
+            </select>
+          </div>
+
+          <button 
+            className="hidden md:flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors"
+            onClick={() => {}} // TODO: Implement more filters
+          >
+            <Filter size={18} />
+            <span>More Filters</span>
+          </button>
+        </div>
       </div>
-      <div className="md:col-span-1">
-        <label className="text-xs text-gray-600 flex items-center gap-1"><Filter className="w-3.5 h-3.5"/> Status</label>
-        <select className="border border-gray-300 bg-white rounded-md px-3 py-2 text-sm w-full" value={status} onChange={e=>setStatus(e.target.value as ShipmentStatus | "") }>
-          <option value="">All Statuses</option>
-          <option value="queued">Queued</option>
-          <option value="out_for_delivery">In Transit</option>
-          <option value="delivered">Delivered</option>
-          <option value="failed">Failed</option>
-          <option value="canceled">Canceled</option>
-        </select>
+
+      {/* Action Buttons */}
+      <div className="mt-4 flex flex-wrap items-center gap-3">
+        <Button
+          onClick={handleApplyFilters}
+          variant="primary"
+        >
+          Apply Filters
+        </Button>
+        
+        <Button 
+          onClick={onRefresh} 
+          variant="outline"
+          loading={loading}
+        >
+          {loading ? "Loading..." : "Refresh"}
+        </Button>
+
+        {hasActiveFilters && (
+          <Button 
+            onClick={handleClearFilters}
+            variant="ghost"
+            size="sm"
+          >
+            Clear all filters
+          </Button>
+        )}
       </div>
-      <div className="md:col-span-1">
-        <label className="text-xs text-gray-600 flex items-center gap-1"><Truck className="w-3.5 h-3.5"/> Method</label>
-        <select className="border border-gray-300 bg-white rounded-md px-3 py-2 text-sm w-full" value={method} onChange={e=>setMethod(e.target.value as DeliveryMethod | "") }>
-          <option value="">All Methods</option>
-          <option value="courier">courier</option>
-          <option value="pickup">pickup</option>
-          <option value="carrier">carrier</option>
-          <option value="other">other</option>
-        </select>
-      </div>
-      <div className="md:col-span-1">
-        <label className="text-xs text-gray-600 flex items-center gap-1"><CalendarDays className="w-3.5 h-3.5"/> Date Range</label>
-        <select className="border border-gray-300 bg-white rounded-md px-3 py-2 text-sm w-full" value={date} onChange={e=>setDate(e.target.value)}>
-          <option value="">All Time</option>
-          <option value="today">Today</option>
-        </select>
-      </div>
-      <div className="md:col-span-1 flex gap-2">
-        <button
-          onClick={() => onChange({ status: (status || undefined) as ShipmentStatus | undefined, courier_id: courierId || undefined, date: (date || undefined) as unknown as "today" | undefined, ...(method ? { delivery_method: method } : {}) })}
-          className="px-3 py-2 rounded-md text-white bg-primary-600 hover:bg-primary-700"
-        >Apply</button>
-        <button onClick={onRefresh} className="px-3 py-2 rounded-md border border-gray-300 hover:bg-gray-50">{loading ? "Loading..." : "Refresh"}</button>
-        <button type="button" className="px-3 py-2 rounded-md border border-gray-300 hover:bg-gray-50 hidden md:inline-flex"><Truck className="w-4 h-4 mr-2"/>More Filters</button>
-      </div>
-    </div>
+
+      {/* Active Filter Tags */}
+      {hasActiveFilters && (
+        <div className="mt-3 flex flex-wrap gap-2">
+          {status && (
+            <div className="bg-primary-50 text-primary-700 px-3 py-1 rounded-full text-sm flex items-center gap-2">
+              Status: {status}
+              <button 
+                className="text-primary-500 hover:text-primary-700" 
+                onClick={() => setStatus("")}
+              >
+                <X size={14} />
+              </button>
+            </div>
+          )}
+          
+          {method && (
+            <div className="bg-primary-50 text-primary-700 px-3 py-1 rounded-full text-sm flex items-center gap-2">
+              Method: {method}
+              <button 
+                className="text-primary-500 hover:text-primary-700" 
+                onClick={() => setMethod("")}
+              >
+                <X size={14} />
+              </button>
+            </div>
+          )}
+          
+          {date && (
+            <div className="bg-primary-50 text-primary-700 px-3 py-1 rounded-full text-sm flex items-center gap-2">
+              Date: {date}
+              <button 
+                className="text-primary-500 hover:text-primary-700" 
+                onClick={() => setDate("")}
+              >
+                <X size={14} />
+              </button>
+            </div>
+          )}
+          
+          {search && (
+            <div className="bg-primary-50 text-primary-700 px-3 py-1 rounded-full text-sm flex items-center gap-2">
+              Search: "{search}"
+              <button 
+                className="text-primary-500 hover:text-primary-700" 
+                onClick={() => handleSearchChange("")}
+              >
+                <X size={14} />
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+    </Card>
   );
 }
 

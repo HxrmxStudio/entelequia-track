@@ -5,9 +5,13 @@ import { usePathname } from "next/navigation";
 import { LayoutDashboard, Package, Upload, BarChart3, Settings, LogOut, Truck, Bike,Route } from "lucide-react";
 import { PropsWithChildren } from "react";
 import AlertsBadge from "@/components/alerts/AlertsBadge";
+import { logout } from "@/services/auth/logout";
+import { getCurrentUser } from "../../utils/auth-utils";
 
 export default function AppShell({ children }: PropsWithChildren) {
   const pathname = usePathname();
+  const currentUser = getCurrentUser();
+  
   const nav = [
     { href: "/dashboard", label: "Dashboard", icon: <LayoutDashboard className="w-4 h-4" /> },
     { href: "/couriers", label: "Couriers", icon: <Bike className="w-4 h-4" /> },
@@ -18,6 +22,11 @@ export default function AppShell({ children }: PropsWithChildren) {
     { href: "/analytics", label: "Analytics", icon: <BarChart3 className="w-4 h-4" /> },
     { href: "/settings", label: "Settings", icon: <Settings className="w-4 h-4" /> }
   ];
+
+  const handleLogout = (e: React.MouseEvent) => {
+    e.preventDefault();
+    logout();
+  };
 
   return (
     <div className="min-h-screen grid grid-cols-1 md:grid-cols-[260px_minmax(0,1fr)]">
@@ -31,6 +40,17 @@ export default function AppShell({ children }: PropsWithChildren) {
             <AlertsBadge />
           </div>
         </div>
+        
+        {/* User Info */}
+        {currentUser && (
+          <div className="px-4 py-3 border-b bg-gray-50">
+            <div className="text-sm text-gray-600">
+              <div className="font-medium">{currentUser.email}</div>
+              <div className="text-xs text-gray-500 capitalize">{currentUser.role}</div>
+            </div>
+          </div>
+        )}
+        
         <nav className="p-3 space-y-1">
           {nav.map(item => {
             const active = pathname?.startsWith(item.href);
@@ -44,10 +64,14 @@ export default function AppShell({ children }: PropsWithChildren) {
             );
           })}
         </nav>
+        
         <div className="mt-auto p-3 hidden md:block">
-          <a href="/logout" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 text-sm px-3 py-2 rounded-md">
+          <button 
+            onClick={handleLogout}
+            className="flex items-center gap-2 text-gray-600 hover:text-gray-900 text-sm px-3 py-2 rounded-md w-full hover:bg-gray-100 transition-colors"
+          >
             <LogOut className="w-4 h-4" /> Logout
-          </a>
+          </button>
         </div>
       </aside>
       <section className="min-h-screen bg-gray-50">
