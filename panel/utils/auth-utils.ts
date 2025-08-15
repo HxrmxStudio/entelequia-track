@@ -2,21 +2,30 @@ import { useAuthStore } from "@/stores/auth";
 
 // Function to check if user is authenticated
 export function isAuthenticated(): boolean {
-  const { accessToken, isAuthenticated: storeAuth, tokenExpiration } = useAuthStore.getState();
-  
-  // Check store state first
-  if (!storeAuth || !accessToken) {
+  try {
+    const { accessToken, isAuthenticated: storeAuth, tokenExpiration } = useAuthStore.getState();
+    
+    console.log("Auth check:", { accessToken: !!accessToken, storeAuth, tokenExpiration });
+    
+    // Check store state first
+    if (!storeAuth || !accessToken) {
+      console.log("Auth failed: missing store state or token");
+      return false;
+    }
+    
+    // Check if token is expired
+    if (tokenExpiration && isTokenExpired(tokenExpiration)) {
+      console.log("Token is expired, clearing auth state");
+      useAuthStore.getState().clearAuth();
+      return false;
+    }
+    
+    console.log("Auth successful");
+    return true;
+  } catch (error) {
+    console.error("Error checking authentication:", error);
     return false;
   }
-  
-  // Check if token is expired
-  if (tokenExpiration && isTokenExpired(tokenExpiration)) {
-    console.log("Token is expired, clearing auth state");
-    useAuthStore.getState().clearAuth();
-    return false;
-  }
-  
-  return true;
 }
 
 // Function to get current user data from store

@@ -76,22 +76,28 @@ export const useAuthStore = create<AuthState>()(
       },
 
       initializeAuth: () => {
+        // This function is called after hydration to ensure persisted state is properly loaded
+        // The persist middleware handles the restoration, so we just need to verify the state
         const { accessToken, tokenExpiration, isAuthenticated } = get();
         
-        if (isAuthenticated && accessToken && tokenExpiration) {
-          // Initialize token manager for existing session
+        // Only initialize token manager if we have valid persisted data
+        if (isAuthenticated && accessToken && tokenExpiration && !get().isTokenExpired()) {
           tokenManager.initialize();
+        } else if (accessToken && tokenExpiration && get().isTokenExpired()) {
+          // Token is expired, clear the auth state
+          get().clearAuth();
         }
       },
     }),
     {
       name: "auth-storage",
       partialize: (state) => ({ 
+        accessToken: state.accessToken,
         user: state.user,
         isAuthenticated: state.isAuthenticated,
         tokenExpiration: state.tokenExpiration,
       }),
-      // Only persist user info and expiration, not the access token
+      // Persist all auth data including access token
     }
   )
 );
