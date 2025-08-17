@@ -1,8 +1,14 @@
 import { API_URL } from "@/app/lib/api";
 import { authEndpoints } from "./endpoints";
-import { LoginRequest, LoginResponse } from "./types";
+import { LoginRequest, LoginResponse, ServerLoginResponse } from "./types";
 import { useAuthStore } from "@/stores/auth";
 
+/**
+ * Client-side login function
+ * Handles authentication via HttpOnly cookies - no client-side token storage
+ * @param payload Login credentials
+ * @returns Promise containing only user data (access tokens handled server-side)
+ */
 export async function postLogin(payload: LoginRequest): Promise<LoginResponse> {
   const res = await fetch(`${API_URL}${authEndpoints.login()}`, {
     method: "POST",
@@ -14,12 +20,14 @@ export async function postLogin(payload: LoginRequest): Promise<LoginResponse> {
   const text = await res.text();
   if (!res.ok) throw new Error(text || `Request failed ${res.status}`);
   
-  const loginResponse = JSON.parse(text) as LoginResponse;
+  // Backend returns full response with access_token, but client only needs user data
+  const serverResponse = JSON.parse(text) as ServerLoginResponse;
   
-  // Update auth store with user data (no token storage needed)
-  useAuthStore.getState().setAuth(loginResponse.user);
+  // Update auth store with user data (access tokens handled server-side via cookies)
+  useAuthStore.getState().setAuth(serverResponse.user);
   
-  return loginResponse;
+  // Return client-safe response without tokens
+  return { user: serverResponse.user };
 }
 
 

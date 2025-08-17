@@ -1,12 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// Simple in-memory cache to prevent concurrent refresh requests
+/**
+ * Simple in-memory cache to prevent concurrent refresh requests
+ * Maps cookie header to refresh promise to avoid duplicate token refreshes
+ */
 const refreshCache = new Map<string, Promise<{ 
   access_token: string; 
   exp: number; 
   cookies?: string[];
 } | null>>();
 
+/**
+ * Refreshes access token using HttpOnly refresh cookie (SERVER-SIDE ONLY)
+ * 
+ * This function handles token refresh entirely on the server to maintain security.
+ * Access tokens are ephemeral and never exposed to the client.
+ * 
+ * @param request NextRequest containing HttpOnly refresh cookie
+ * @returns Promise with ephemeral access token for immediate server use, or null if refresh fails
+ */
 async function refreshAccessToken(request: NextRequest): Promise<{ 
   access_token: string; 
   exp: number; 
@@ -33,6 +45,13 @@ async function refreshAccessToken(request: NextRequest): Promise<{
   return refreshPromise;
 }
 
+/**
+ * Performs the actual token refresh request to the backend (SERVER-SIDE ONLY)
+ * 
+ * @param request NextRequest for error context
+ * @param cookieHeader Cookie header to forward to backend
+ * @returns Promise with fresh access token and updated cookies, or null if refresh fails
+ */
 async function performRefresh(request: NextRequest, cookieHeader: string): Promise<{ 
   access_token: string; 
   exp: number; 
@@ -85,6 +104,18 @@ async function performRefresh(request: NextRequest, cookieHeader: string): Promi
   }
 }
 
+/**
+ * Makes an authenticated request to the backend using ephemeral access token (SERVER-SIDE ONLY)
+ * 
+ * Access tokens are used immediately and never stored or exposed to clients.
+ * This function acts as a secure proxy between client and backend.
+ * 
+ * @param path API path to call on backend
+ * @param accessToken Ephemeral access token (server-side only, never exposed to client)
+ * @param request Original NextRequest for header forwarding
+ * @param requestBody Optional request body to forward
+ * @returns Promise with backend response
+ */
 async function makeAuthenticatedRequest(
   path: string, 
   accessToken: string, 
@@ -145,6 +176,19 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
   return handleRequest(request, resolvedParams);
 }
 
+/**
+ * Main proxy handler for authenticated API requests (SERVER-SIDE ONLY)
+ * 
+ * This function implements the secure token flow:
+ * 1. Refreshes access token using HttpOnly cookie
+ * 2. Uses ephemeral access token for backend request
+ * 3. Forwards response and any new cookies to client
+ * 4. Access tokens never reach the client browser
+ * 
+ * @param request NextRequest with HttpOnly refresh cookie
+ * @param path API path segments to proxy
+ * @returns NextResponse with backend data and updated cookies
+ */
 async function handleRequest(request: NextRequest, { path }: { path: string[] }) {
   try {
     const fullPath = `/${path.join("/")}`;

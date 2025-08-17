@@ -141,7 +141,15 @@ class AuthController < ApplicationController
   private
 
   def auth_params
-    params.permit(:email, :password, :name, :client, :device)
+    # Handle both flat and nested parameter structures
+    # This eliminates the "Unpermitted parameter: :auth" warnings
+    if params[:auth].present?
+      # If nested structure exists, use it
+      params.require(:auth).permit(:email, :password, :name, :client, :device)
+    else
+      # Otherwise use flat structure (current behavior)
+      params.permit(:email, :password, :name, :client, :device)
+    end
   end
 end
   

@@ -1,8 +1,14 @@
 import { API_URL } from "@/app/lib/api";
 import { authEndpoints } from "./endpoints";
-import type { RegisterRequest, RegisterResponse } from "./types";
+import type { RegisterRequest, RegisterResponse, ServerLoginResponse } from "./types";
 import { useAuthStore } from "@/stores/auth";
 
+/**
+ * Client-side registration function
+ * Handles authentication via HttpOnly cookies - no client-side token storage
+ * @param payload Registration data
+ * @returns Promise containing only user data (access tokens handled server-side)
+ */
 export async function postRegister(payload: RegisterRequest): Promise<RegisterResponse> {
   const res = await fetch(`${API_URL}${authEndpoints.register()}`, {
     method: "POST",
@@ -14,10 +20,12 @@ export async function postRegister(payload: RegisterRequest): Promise<RegisterRe
   const text = await res.text();
   if (!res.ok) throw new Error(text || `Request failed ${res.status}`);
   
-  const registerResponse = JSON.parse(text) as RegisterResponse;
+  // Backend returns full response with access_token, but client only needs user data
+  const serverResponse = JSON.parse(text) as ServerLoginResponse;
   
-  // Update auth store with user data (no token storage needed)
-  useAuthStore.getState().setAuth(registerResponse.user);
+  // Update auth store with user data (access tokens handled server-side via cookies)
+  useAuthStore.getState().setAuth(serverResponse.user);
   
-  return registerResponse;
+  // Return client-safe response without tokens
+  return { user: serverResponse.user };
 }

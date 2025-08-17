@@ -2,9 +2,14 @@ import { API_URL } from "@/app/lib/api";
 import { authEndpoints } from "./endpoints";
 import { useAuthStore } from "@/stores/auth";
 
+/**
+ * Client-side logout function
+ * Cookie clearing is handled entirely server-side via the logout endpoint
+ * This ensures secure removal of HttpOnly refresh tokens
+ */
 export async function logout(): Promise<void> {
   try {
-    // Call backend logout endpoint
+    // Call backend logout endpoint - this handles all cookie clearing server-side
     const res = await fetch(`${API_URL}${authEndpoints.logout()}`, {
       method: "POST",
       credentials: "include",
@@ -21,12 +26,8 @@ export async function logout(): Promise<void> {
     // Always clear local auth state, even if backend call fails
     useAuthStore.getState().clearAuth();
     
-    // Clear all cookies by setting them to expire in the past
-    document.cookie.split(";").forEach(cookie => {
-      const eqPos = cookie.indexOf("=");
-      const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-      document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
-    });
+    // Server handles all cookie clearing - no client-side manipulation needed
+    // This is more secure for HttpOnly cookies which can't be accessed via JS anyway
     
     // Redirect to login page
     window.location.href = "/login";

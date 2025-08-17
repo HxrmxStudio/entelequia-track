@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter, Fira_Code } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
-import ConditionalAppShell from "@/components/ConditionalAppShell";
 
 const inter = Inter({
   variable: "--font-geist-sans",
@@ -35,9 +34,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} ${firaMono.variable} antialiased bg-gray-50 text-gray-900`}>
-        <ConditionalAppShell>
-          {children}
-        </ConditionalAppShell>
+        {children}
         <Toaster position="top-right" richColors closeButton />
       </body>
     </html>

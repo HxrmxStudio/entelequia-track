@@ -156,3 +156,49 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* Clean, simple sidebar transitions */
+.sidebar-transition {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Subtle icon hover effect - no rotation, just gentle scale */
+.icon-hover {
+  transition: transform 0.15s ease-out;
+}
+
+.icon-hover:hover {
+  transform: scale(1.05);
+}
+
+/* Simple tooltip animation */
+.tooltip-enter {
+  animation: fadeIn 0.15s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Gradient animation for logo - subtle and smooth */
+.gradient-animate {
+  background-size: 200% 200%;
+  animation: gradientShift 4s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+

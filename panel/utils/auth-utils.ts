@@ -1,6 +1,13 @@
 import { useAuthStore } from "@/stores/auth";
 
-// Function to check if user is authenticated (client-side only)
+/**
+ * Checks if user is authenticated (CLIENT-SIDE ONLY)
+ * 
+ * This function only checks local authentication state, not actual token validity.
+ * Real authentication is handled server-side via HttpOnly cookies.
+ * 
+ * @returns boolean indicating if user appears authenticated locally
+ */
 export function isAuthenticated(): boolean {
   try {
     const { isAuthenticated: storeAuth, isLoading } = useAuthStore.getState();
@@ -29,8 +36,14 @@ export function isAuthLoading(): boolean {
   return isLoading;
 }
 
-// Function to get auth headers for API calls
-// Note: This now uses server-side refresh tokens, so no Authorization header needed for most calls
+/**
+ * Gets headers for API calls (NO AUTHORIZATION TOKENS)
+ * 
+ * Returns basic headers without authorization since authentication
+ * is handled server-side via HttpOnly cookies and the proxy layer.
+ * 
+ * @returns Basic headers object without any authorization tokens
+ */
 export function getAuthHeaders(): Record<string, string> {
   return {
     "Content-Type": "application/json"

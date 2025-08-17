@@ -11,6 +11,15 @@ interface SessionResponse {
   isAuthenticated: boolean;
 }
 
+/**
+ * Server-side session validation endpoint (SERVER-SIDE ONLY)
+ * 
+ * Validates user session using HttpOnly refresh cookie without exposing tokens.
+ * Returns only user data and authentication status to the client.
+ * 
+ * @param request NextRequest containing HttpOnly refresh cookie
+ * @returns NextResponse with user data and authentication status (no tokens)
+ */
 export async function GET(request: NextRequest): Promise<NextResponse<SessionResponse>> {
   try {
     const { apiUrl } = getServerConfig();
