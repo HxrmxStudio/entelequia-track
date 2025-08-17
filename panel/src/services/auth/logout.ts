@@ -19,7 +19,16 @@ export async function logout(): Promise<void> {
     console.error("Error during logout:", error);
   } finally {
     // Always clear local auth state, even if backend call fails
-    // This will also clean up the token manager
     useAuthStore.getState().clearAuth();
+    
+    // Clear all cookies by setting them to expire in the past
+    document.cookie.split(";").forEach(cookie => {
+      const eqPos = cookie.indexOf("=");
+      const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+      document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+    });
+    
+    // Redirect to login page
+    window.location.href = "/login";
   }
 }

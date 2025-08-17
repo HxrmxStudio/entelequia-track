@@ -1,6 +1,4 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import { tokenManager } from "@/services/auth/token-manager";
 
 interface User {
   id: string;
@@ -10,94 +8,75 @@ interface User {
 }
 
 interface AuthState {
-  accessToken: string | null;
   user: User | null;
   isAuthenticated: boolean;
-  tokenExpiration: number | null; // JWT expiration timestamp
-  setAuth: (accessToken: string, user: User, exp?: number) => void;
+  isLoading: boolean;
+  setAuth: (user: User) => void;
   clearAuth: () => void;
-  updateAccessToken: (accessToken: string, exp?: number) => void;
-  isTokenExpired: () => boolean;
-  initializeAuth: () => void;
+  setLoading: (loading: boolean) => void;
+  initializeAuth: () => Promise<void>;
 }
 
-export const useAuthStore = create<AuthState>()(
-  persist(
-    (set, get) => ({
-      accessToken: null,
+export const useAuthStore = create<AuthState>()((set) => ({
+  user: null,
+  isAuthenticated: false,
+  isLoading: true,
+  
+  setAuth: (user: User) => {
+    set({
+      user,
+      isAuthenticated: true,
+      isLoading: false,
+    });
+  },
+  
+  clearAuth: () => {
+    set({
       user: null,
       isAuthenticated: false,
-      tokenExpiration: null,
-      
-      setAuth: (accessToken: string, user: User, exp?: number) => {
-        set({
-          accessToken,
-          user,
-          isAuthenticated: true,
-          tokenExpiration: exp || null,
-        });
-        
-        // Initialize token manager for auto-refresh
-        if (exp) {
-          tokenManager.initialize();
-        }
-      },
-      
-      clearAuth: () => {
-        // Clean up token manager
-        tokenManager.cleanup();
-        
-        set({
-          accessToken: null,
-          user: null,
-          isAuthenticated: false,
-          tokenExpiration: null,
-        });
-      },
-      
-      updateAccessToken: (accessToken: string, exp?: number) => {
-        set({ 
-          accessToken,
-          tokenExpiration: exp || null,
-        });
-        
-        // Re-initialize token manager with new expiration
-        if (exp) {
-          tokenManager.initialize();
-        }
-      },
-      
-      isTokenExpired: () => {
-        const { tokenExpiration } = get();
-        if (!tokenExpiration) return true;
-        
-        const currentTime = Math.floor(Date.now() / 1000);
-        return currentTime >= tokenExpiration;
-      },
+      isLoading: false,
+    });
+  },
+  
+  setLoading: (loading: boolean) => {
+    set({ isLoading: loading });
+  },
 
-      initializeAuth: () => {
-        // This function is called after hydration to ensure persisted state is properly loaded
-        // The persist middleware handles the restoration, so we just need to verify the state
-        const { accessToken, tokenExpiration, isAuthenticated } = get();
-        
-        // Only initialize token manager if we have valid persisted data
-        if (isAuthenticated && accessToken && tokenExpiration && !get().isTokenExpired()) {
-          tokenManager.initialize();
-        } else if (accessToken && tokenExpiration && get().isTokenExpired()) {
-          // Token is expired, clear the auth state
-          get().clearAuth();
+  initializeAuth: async () => {
+    set({ isLoading: true });
+    
+    try {
+      // Check session with backend via cookie
+      const response = await fetch("/api/auth/session", {
+        method: "GET",
+        credentials: "include",
+      });
+      
+      if (response.ok) {
+        const sessionData = await response.json();
+        if (sessionData.isAuthenticated && sessionData.user) {
+          set({
+            user: sessionData.user,
+            isAuthenticated: true,
+            isLoading: false,
+          });
+          return;
         }
-      },
-    }),
-    {
-      name: "auth-storage",
-      partialize: (state) => ({ 
-        accessToken: state.accessToken,
-        user: state.user,
-        isAuthenticated: state.isAuthenticated,
-        tokenExpiration: state.tokenExpiration,
-      }),
-      // Persist all auth data including access token
+      }
+      
+      // If session check fails, clear auth state
+      set({
+        user: null,
+        isAuthenticated: false,
+        isLoading: false,
+      });
+    } catch (error) {
+      console.error("Error initializing auth:", error);
+      set({
+        user: null,
+        isAuthenticated: false,
+        isLoading: false,
+      });
     }
-  )
-);
+  },
+}));

@@ -19,13 +19,13 @@ module Auth
           httponly: true,
           secure: Rails.env.production?,
           same_site: :lax,
-          path: "/api/v1/auth/refresh",
+          path: "/",
           expires: ENV.fetch("REFRESH_TOKEN_TTL_DAYS", "30").to_i.days.from_now
         }
       end
 
       def clear_refresh_token_cookie(cookies)
-        cookies.delete :rt, path: "/api/v1/auth/refresh"
+        cookies.delete :rt, path: "/"
       end
 
       def validate_access_token(token)

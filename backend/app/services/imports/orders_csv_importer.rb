@@ -1,7 +1,7 @@
 require "csv"
 
 module Imports
-  class OrdersCsvImporter
+  class OrdersImporter
     Result = Struct.new(:rows_total, :rows_valid, :rows_invalid, :errors, keyword_init: true)
 
     REQUIRED = %i[external_ref amount_cents].freeze
@@ -9,6 +9,7 @@ module Imports
     def initialize(io:, format:, creator_id:, dry_run: true)
       @io = io
       @format = format.to_sym
+      @parser = Imports::FileParserFactory.create(io: io, format: format)
       @mapper = Imports::OrderRowMapper.new(format: @format)
       @creator_id = creator_id
       @dry_run = dry_run
@@ -19,17 +20,16 @@ module Imports
     end
 
     def run!
-      csv = CSV.new(@io, headers: true, return_headers: false)
       ActiveRecord::Base.transaction do
-        csv.each_with_index do |row, idx|
+        @parser.each_row do |row, row_number|
           @total += 1
-          mapped = @mapper.call(row.to_h)
+          mapped = @mapper.call(row)
           if valid_row?(mapped)
             @valid += 1
             persist_row(mapped) unless @dry_run
           else
             @invalid += 1
-            @errors << { row_number: idx + 2, message: "Campos requeridos faltantes o inválidos" }
+            @errors << { row_number: row_number, message: "Campos requeridos faltantes o inválidos" }
           end
         end
         raise ActiveRecord::Rollback if @dry_run
@@ -56,8 +56,8 @@ module Imports
       order.assign_attributes(
         customer: customer,
         address: address,
-        channel: (m[:external_channel] || "web"),
-        status: (m[:status] || "received"),
+        channel: m[:channel] || "web",
+        status: m[:status] || "received",
         amount_cents: m[:amount_cents],
         currency: "ARS",
         metadata: { imported_at: Time.current, source: @format.to_s }

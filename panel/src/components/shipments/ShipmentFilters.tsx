@@ -2,9 +2,12 @@
 
 import { useEffect, useState } from "react";
 import type { ShipmentsFilter, ShipmentStatus, DeliveryMethod } from "@/services/shipments/types";
-import { CalendarDays, Filter, Truck, Search, X } from "lucide-react";
+import type { Courier } from "@/services/couriers/types";
+import { isShipmentStatus, isDeliveryMethod } from "@/lib/typeGuards";
+import { Filter, Search, X } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
+import { listCouriers } from "@/services/couriers/listCouriers";
 
 type Props = {
   filters: ShipmentsFilter;
@@ -20,17 +23,31 @@ export default function ShipmentFilters({ filters, onChange, onRefresh, loading,
   const [courierId, setCourierId] = useState(filters.courier_id ?? "");
   const [date, setDate] = useState<string>(filters.date ?? "");
   const [method, setMethod] = useState<DeliveryMethod | "">((filters as { delivery_method?: DeliveryMethod }).delivery_method ?? "");
+  const [couriers, setCouriers] = useState<Courier[]>([]);
 
   useEffect(() => { setStatus(filters.status ?? ""); }, [filters.status]);
   useEffect(() => { setCourierId(filters.courier_id ?? ""); }, [filters.courier_id]);
   useEffect(() => { setDate(filters.date ?? ""); }, [filters.date]);
 
+  // Load couriers for filter dropdown
+  useEffect(() => {
+    const loadCouriers = async () => {
+      try {
+        const data = await listCouriers({ active: true });
+        setCouriers(data);
+      } catch (err) {
+        console.error("Failed to load couriers:", err);
+      }
+    };
+    loadCouriers();
+  }, []);
+
   const handleApplyFilters = () => {
     onChange({ 
-      status: (status || undefined) as ShipmentStatus | undefined, 
+      status: status && isShipmentStatus(status) ? status : undefined, 
       courier_id: courierId || undefined, 
-      date: (date || undefined) as unknown as "today" | undefined, 
-      ...(method ? { delivery_method: method } : {}) 
+      date: date === "today" ? "today" : undefined, 
+      ...(method && isDeliveryMethod(method) ? { delivery_method: method } : {}) 
     });
   };
 
@@ -104,6 +121,25 @@ export default function ShipmentFilters({ filters, onChange, onRefresh, loading,
               <option value="pickup">Pickup</option>
               <option value="carrier">Carrier</option>
               <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div className="w-full md:w-48">
+            <label htmlFor="courier-filter" className="block text-sm font-medium text-gray-700 mb-1">
+              Courier
+            </label>
+            <select 
+              id="courier-filter" 
+              className="w-full border border-gray-300 rounded-md py-2 pl-3 pr-10 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm" 
+              value={courierId || ""} 
+              onChange={e => setCourierId(e.target.value)}
+            >
+              <option value="">All Couriers</option>
+              {couriers.map(courier => (
+                <option key={courier.id} value={courier.id}>
+                  {courier.name} {courier.email ? `(${courier.email})` : ''}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -199,9 +235,21 @@ export default function ShipmentFilters({ filters, onChange, onRefresh, loading,
             </div>
           )}
           
+          {courierId && (
+            <div className="bg-primary-50 text-primary-700 px-3 py-1 rounded-full text-sm flex items-center gap-2">
+              Courier: {couriers.find(c => c.id === courierId)?.name || courierId}
+              <button 
+                className="text-primary-500 hover:text-primary-700" 
+                onClick={() => setCourierId("")}
+              >
+                <X size={14} />
+              </button>
+            </div>
+          )}
+          
           {search && (
             <div className="bg-primary-50 text-primary-700 px-3 py-1 rounded-full text-sm flex items-center gap-2">
-              Search: "{search}"
+              Search: &ldquo;{search}&rdquo;
               <button 
                 className="text-primary-500 hover:text-primary-700" 
                 onClick={() => handleSearchChange("")}

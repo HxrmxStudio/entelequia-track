@@ -1,14 +1,13 @@
 import { apiFetch } from "@/app/lib/api";
+import { buildQueryString } from "@/lib/queryBuilder";
 import { shipmentsEndpoints } from "./endpoints";
 import type { Shipment, ShipmentsFilter } from "./types";
 
 export async function listShipments(params: ShipmentsFilter = {}): Promise<Shipment[]> {
-  const sp = new URLSearchParams();
-  if (params.status) sp.set("status", params.status);
-  if (params.courier_id) sp.set("courier_id", params.courier_id);
-  if (params.date) sp.set("date", params.date);
-  if (params.delivery_method) sp.set("delivery_method", params.delivery_method);
-  return apiFetch<Shipment[]>(shipmentsEndpoints.list(sp.toString()));
+  // Cast to compatible type for query builder
+  const queryParams = params as Record<string, string | number | boolean | null | undefined>;
+  const queryString = buildQueryString(queryParams);
+  return apiFetch<Shipment[]>(shipmentsEndpoints.list(queryString));
 }
 
 

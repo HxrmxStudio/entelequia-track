@@ -11,7 +11,7 @@ export type ProofCreated = {
 
 type Handler = {
   onProofCreated?: (evt: ProofCreated) => void;
-  onOtherEvent?: (raw: any) => void; // opcional
+  onOtherEvent?: (raw: unknown) => void; // opcional
 };
 
 export function useShipmentRealtime(shipmentId: string | number, handlers: Handler) {
@@ -21,11 +21,12 @@ export function useShipmentRealtime(shipmentId: string | number, handlers: Handl
     const topic = `shipments:${shipmentId}`;
     const unsub: RealtimeUnsub = subscribeRealtime({
       topics: [topic],
-      onMessage: (msg: any) => {
+      onMessage: (msg: unknown) => {
         // Esperamos { type, payload }
-        if (!msg) return;
-        if (msg.type === 'proof.created' && handlers.onProofCreated) {
-          handlers.onProofCreated(msg.payload as ProofCreated);
+        if (!msg || typeof msg !== 'object') return;
+        const message = msg as { type?: string; payload?: unknown };
+        if (message.type === 'proof.created' && handlers.onProofCreated) {
+          handlers.onProofCreated(message.payload as ProofCreated);
           return;
         }
         handlers.onOtherEvent?.(msg);

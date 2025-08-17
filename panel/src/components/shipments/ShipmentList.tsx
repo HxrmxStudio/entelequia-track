@@ -2,7 +2,7 @@
 
 import type { Shipment } from "@/services/shipments/types";
 import ShipmentCard from "./ShipmentCard";
-import { Package, Search } from "lucide-react";
+import { Package } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 
 type Props = {
@@ -45,7 +45,7 @@ export default function ShipmentList({ items, loading = false }: Props) {
           </div>
           <div className="text-gray-500 mb-2">No shipments found</div>
           <p className="text-sm text-gray-400 max-w-md">
-            Try adjusting your filters or search term. If you're expecting shipments, they may not have been created yet.
+            Try adjusting your filters or search term. If you&rsquo;re expecting shipments, they may not have been created yet.
           </p>
         </div>
       </Card>

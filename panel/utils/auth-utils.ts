@@ -1,27 +1,16 @@
 import { useAuthStore } from "@/stores/auth";
 
-// Function to check if user is authenticated
+// Function to check if user is authenticated (client-side only)
 export function isAuthenticated(): boolean {
   try {
-    const { accessToken, isAuthenticated: storeAuth, tokenExpiration } = useAuthStore.getState();
+    const { isAuthenticated: storeAuth, isLoading } = useAuthStore.getState();
     
-    console.log("Auth check:", { accessToken: !!accessToken, storeAuth, tokenExpiration });
-    
-    // Check store state first
-    if (!storeAuth || !accessToken) {
-      console.log("Auth failed: missing store state or token");
+    // If still loading, consider not authenticated for safety
+    if (isLoading) {
       return false;
     }
     
-    // Check if token is expired
-    if (tokenExpiration && isTokenExpired(tokenExpiration)) {
-      console.log("Token is expired, clearing auth state");
-      useAuthStore.getState().clearAuth();
-      return false;
-    }
-    
-    console.log("Auth successful");
-    return true;
+    return storeAuth;
   } catch (error) {
     console.error("Error checking authentication:", error);
     return false;
@@ -34,48 +23,31 @@ export function getCurrentUser() {
   return user;
 }
 
-// Function to check if token is expired (if we have expiration time)
-export function isTokenExpired(exp?: number): boolean {
-  if (!exp) return false;
-  
-  const currentTime = Math.floor(Date.now() / 1000);
-  return currentTime >= exp;
+// Function to check if auth is still loading
+export function isAuthLoading(): boolean {
+  const { isLoading } = useAuthStore.getState();
+  return isLoading;
 }
 
 // Function to get auth headers for API calls
+// Note: This now uses server-side refresh tokens, so no Authorization header needed for most calls
 export function getAuthHeaders(): Record<string, string> {
-  const { accessToken } = useAuthStore.getState();
-  
-  if (!accessToken) {
-    return {};
-  }
-  
   return {
-    "Authorization": `Bearer ${accessToken}`,
     "Content-Type": "application/json"
   };
 }
 
-// Function to get time until token expires (in seconds)
-export function getTimeUntilExpiration(): number | null {
-  const { tokenExpiration } = useAuthStore.getState();
-  
-  if (!tokenExpiration) {
-    return null;
-  }
-  
-  const currentTime = Math.floor(Date.now() / 1000);
-  return Math.max(0, tokenExpiration - currentTime);
+// Legacy function - kept for compatibility but always returns false since we use cookies
+export function isTokenExpired(): boolean {
+  return false;
 }
 
-// Function to check if token needs refresh soon (within 5 minutes)
+// Legacy function - kept for compatibility but always returns null since we use cookies
+export function getTimeUntilExpiration(): number | null {
+  return null;
+}
+
+// Legacy function - kept for compatibility but always returns false since we use cookies
 export function shouldRefreshToken(): boolean {
-  const timeUntilExpiration = getTimeUntilExpiration();
-  
-  if (timeUntilExpiration === null) {
-    return false;
-  }
-  
-  // Refresh if token expires within 5 minutes
-  return timeUntilExpiration <= 300; // 5 minutes = 300 seconds
+  return false;
 }

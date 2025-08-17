@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { isAuthenticated } from "../../utils/auth-utils";
 import { useAuthStore } from "@/stores/auth";
@@ -7,28 +7,22 @@ import { useAuthStore } from "@/stores/auth";
 export function useRequireAuth() {
   const router = useRouter();
   const initializeAuth = useAuthStore((state) => state.initializeAuth);
-  const [isInitialized, setIsInitialized] = useState(false);
+  const isLoading = useAuthStore((state) => state.isLoading);
   
   useEffect(() => {
-    // Initialize auth state from localStorage first
+    // Initialize auth state from session endpoint
     initializeAuth();
-    
-    // Small delay to ensure store is properly hydrated
-    const timer = setTimeout(() => {
-      setIsInitialized(true);
-    }, 100);
-    
-    return () => clearTimeout(timer);
   }, [initializeAuth]);
   
   useEffect(() => {
-    if (!isInitialized) return;
+    // Don't redirect while still loading
+    if (isLoading) return;
     
-    // Then check if authenticated
+    // Check if authenticated
     if (!isAuthenticated()) {
       router.replace("/login");
     }
-  }, [isInitialized, router]);
+  }, [isLoading, router]);
 }
 
 

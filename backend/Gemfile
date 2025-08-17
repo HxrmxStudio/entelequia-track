@@ -18,6 +18,8 @@ gem "bcrypt", "~> 3.1"  # password hashing for has_secure_password
 gem "jwt", "~> 2.8"      # JSON Web Tokens for stateless auth
 # Ruby 3.4+: csv moved out of default gems
 gem "csv"
+# Excel file parsing support
+gem "roo", "~> 2.10"
 # composite_primary_keys is not compatible with Rails 8 yet; fallback approach will be used
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"

@@ -5,6 +5,12 @@ export interface Shipment {
   delivery_method: DeliveryMethod;
   qr_token: string;
   eta?: string | null;
+  assigned_courier?: {
+    id: string;
+    name: string;
+    email?: string;
+    phone?: string;
+  } | null;
 }
 
 export interface ShipmentEvent {

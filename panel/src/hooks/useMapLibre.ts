@@ -21,7 +21,7 @@ export function useMapLibre({ containerRef, center, zoom, styleUrl = "https://de
 
     const map = new maplibregl.Map({
       container: containerRef.current,
-      style: (style as any) ?? styleUrl,
+      style: (style as string) ?? styleUrl,
       center,
       zoom
     });

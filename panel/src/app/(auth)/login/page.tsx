@@ -28,7 +28,7 @@ export default function LoginPage() {
       const response = await postLogin({ email, password });
       
       // Use the new auth store instead of localStorage
-      setAuth(response.access_token, response.user, response.exp);
+      setAuth(response.user);
       
       window.location.replace("/dashboard");
     } catch {

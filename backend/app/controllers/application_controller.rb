@@ -26,7 +26,9 @@ class ApplicationController < ActionController::API
 
   def require_role!(*roles)
     authenticate_user!
-    return if @current_user && roles.include?(@current_user.role.to_sym)
+    # Convert input roles to symbols to match enum values
+    role_symbols = roles.map(&:to_sym)
+    return if @current_user && role_symbols.include?(@current_user.role.to_sym)
     
     render json: { error: "forbidden" }, status: :forbidden
   end

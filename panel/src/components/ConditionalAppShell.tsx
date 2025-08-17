@@ -1,23 +1,16 @@
 "use client";
 
-import { usePathname } from "next/navigation";
-import AppShell from "@/components/AppShell";
-import { useRequireAuth } from "../../hooks/useRequireAuth";
+import { useAuthStore } from "@/stores/auth";
+import { useEffect } from "react";
 
 export default function ConditionalAppShell({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-  const isAuthRoute = pathname?.startsWith('/login') || 
-                     pathname?.startsWith('/register') || 
-                     pathname?.startsWith('/forgot-password') || 
-                     pathname?.startsWith('/reset-password') || 
-                     pathname?.startsWith('/create-password');
+  const initializeAuth = useAuthStore((state) => state.initializeAuth);
+  
+  // Initialize auth system on app start
+  useEffect(() => {
+    initializeAuth();
+  }, [initializeAuth]);
 
-  // Initialize auth system (runs on every route change)
-  useRequireAuth();
-
-  if (isAuthRoute) {
-    return <>{children}</>;
-  }
-
-  return <AppShell>{children}</AppShell>;
+  // Auth routes are handled by their own layout - just pass through children
+  return <>{children}</>;
 }

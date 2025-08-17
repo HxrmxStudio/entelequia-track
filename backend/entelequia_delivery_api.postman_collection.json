@@ -177,40 +177,148 @@
         ]
       },
       {
-        "name": "Imports (CSV)",
+        "name": "Imports (CSV/Excel)",
+        "description": "Import orders from CSV or Excel files. File type is automatically detected.",
         "item": [
           {
-            "name": "Dry Run (csv_exact)",
+            "name": "Dry Run (exact)",
             "request": {
               "method": "POST",
-              "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-              "url": { "raw": "{{base_url}}/imports/orders/dry_run", "host": ["{{base_url}}"], "path": ["imports", "orders", "dry_run"] },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{auth_token}}",
+                  "type": "text"
+                }
+              ],
               "body": {
                 "mode": "formdata",
                 "formdata": [
-                  { "key": "format", "type": "text", "value": "csv_exact" },
-                  { "key": "file", "type": "file", "src": [] }
+                  {
+                    "key": "format",
+                    "value": "exact",
+                    "type": "text",
+                    "description": "Use original headers from file"
+                  },
+                  {
+                    "key": "file",
+                    "type": "file",
+                    "src": [],
+                    "description": "CSV or Excel file (automatically detected)"
+                  }
                 ]
               },
-              "description": "Adjuntá un CSV con encabezados: Pedido #, Cliente, Fecha, Monto, Entrega, Estado."
-            },
-            "response": []
+              "url": {
+                "raw": "{{base_url}}/imports/orders/dry_run",
+                "host": ["{{base_url}}"],
+                "path": ["imports", "orders", "dry_run"]
+              }
+            }
           },
           {
-            "name": "Commit (csv_exact)",
+            "name": "Dry Run (normalized)",
             "request": {
               "method": "POST",
-              "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-              "url": { "raw": "{{base_url}}/imports/orders/commit", "host": ["{{base_url}}"], "path": ["imports", "orders", "commit"] },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{auth_token}}",
+                  "type": "text"
+                }
+              ],
               "body": {
                 "mode": "formdata",
                 "formdata": [
-                  { "key": "format", "type": "text", "value": "csv_exact" },
-                  { "key": "file", "type": "file", "src": [] }
+                  {
+                    "key": "format",
+                    "value": "normalized",
+                    "type": "text",
+                    "description": "Use normalized headers (recommended)"
+                  },
+                  {
+                    "key": "file",
+                    "type": "file",
+                    "src": [],
+                    "description": "CSV or Excel file (automatically detected)"
+                  }
                 ]
+              },
+              "url": {
+                "raw": "{{base_url}}/imports/orders/dry_run",
+                "host": ["{{base_url}}"],
+                "path": ["imports", "orders", "dry_run"]
               }
-            },
-            "response": []
+            }
+          },
+          {
+            "name": "Commit (exact)",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{auth_token}}",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "formdata",
+                "formdata": [
+                  {
+                    "key": "format",
+                    "value": "exact",
+                    "type": "text",
+                    "description": "Use original headers from file"
+                  },
+                  {
+                    "key": "file",
+                    "type": "file",
+                    "src": [],
+                    "description": "CSV or Excel file (automatically detected)"
+                  }
+                ]
+              },
+              "url": {
+                "raw": "{{base_url}}/imports/orders/commit",
+                "host": ["{{base_url}}"],
+                "path": ["imports", "orders", "commit"]
+              }
+            }
+          },
+          {
+            "name": "Commit (normalized)",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{auth_token}}",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "formdata",
+                "formdata": [
+                  {
+                    "key": "format",
+                    "value": "normalized",
+                    "type": "text",
+                    "description": "Use normalized headers (recommended)"
+                  },
+                  {
+                    "key": "file",
+                    "type": "file",
+                    "src": [],
+                    "description": "CSV or Excel file (automatically detected)"
+                  }
+                ]
+              },
+              "url": {
+                "raw": "{{base_url}}/imports/orders/commit",
+                "host": ["{{base_url}}"],
+                "path": ["imports", "orders", "commit"]
+              }
+            }
           }
         ]
       },

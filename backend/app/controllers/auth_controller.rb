@@ -1,5 +1,5 @@
 class AuthController < ApplicationController
-  skip_before_action :authenticate_user!, only: [:login, :register, :refresh, :logout]
+  skip_before_action :authenticate_user!, only: [:login, :register, :refresh, :logout, :session]
 
   def login
     if auth_params[:email].blank? || auth_params[:password].blank?
@@ -115,6 +115,26 @@ class AuthController < ApplicationController
         error: "validation_failed", 
         details: user.errors.full_messages 
       }, status: :unprocessable_entity
+    end
+  end
+
+  def session
+    refresh_token = Auth::TokenService.extract_refresh_token(request, cookies)
+    
+    if refresh_token.blank?
+      render json: { error: "no_session" }, status: :unauthorized
+      return
+    end
+
+    # Try to get user from refresh token
+    refresh_token_record = RefreshToken.find_by_token(refresh_token)
+    if refresh_token_record&.active?
+      user = refresh_token_record.user
+      render json: {
+        user: UserSerializer.new(user).as_json
+      }
+    else
+      render json: { error: "invalid_session" }, status: :unauthorized
     end
   end
 

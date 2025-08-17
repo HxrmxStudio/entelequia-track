@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  get "users/index"
+  get "users/show"
+  get "users/create"
+  get "users/update"
+  get "users/destroy"
   # Comment out ActionCable for now to avoid test environment issues
   mount ActionCable.server => "/cable"
 
@@ -6,6 +11,7 @@ Rails.application.routes.draw do
   post "/auth/refresh", to: "auth#refresh"
   post "/auth/logout", to: "auth#logout"
   post "/auth/register", to: "auth#register"
+  get "/auth/session", to: "auth#session"
   get "/health", to: "health#show"
 
   post "/imports/orders/dry_run", to: "imports#dry_run"
@@ -15,6 +21,7 @@ Rails.application.routes.draw do
 
   resources :locations, only: [:create]
   resources :couriers
+  resources :users, only: [:index, :show, :create, :update, :destroy]
   get "/realtime/stream", to: "realtime#stream"
 
   resources :shipments, only: [:index, :show, :create, :update] do

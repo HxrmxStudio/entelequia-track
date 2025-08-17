@@ -56,7 +56,7 @@ export default function RegisterPage() {
       });
       
       // Use the new auth store instead of localStorage
-      setAuth(response.access_token, response.user, response.exp);
+      setAuth(response.user);
       
       setSuccess(true);
       
@@ -65,10 +65,11 @@ export default function RegisterPage() {
         window.location.replace("/dashboard");
       }, 1500);
       
-    } catch (err: any) {
-      if (err.message.includes("email_already_taken")) {
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      if (errorMessage.includes("email_already_taken")) {
         setError("Este email ya está registrado");
-      } else if (err.message.includes("validation_failed")) {
+      } else if (errorMessage.includes("validation_failed")) {
         setError("Datos de entrada inválidos");
       } else {
         setError("Error al crear la cuenta. Intenta nuevamente.");

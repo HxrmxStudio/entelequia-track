@@ -1,14 +1,9 @@
+import { buildUrlWithQuery } from "@/lib/queryBuilder";
+
 export type ListCouriersQuery = { query?: string; active?: boolean };
 
 export const couriersEndpoints = {
-  list: (q?: ListCouriersQuery) => {
-    if (!q) return `/couriers`;
-    const sp = new URLSearchParams();
-    if (typeof q.query === "string" && q.query.length > 0) sp.set("query", q.query);
-    if (typeof q.active === "boolean") sp.set("active", String(q.active));
-    const qs = sp.toString();
-    return qs.length ? `/couriers?${qs}` : `/couriers`;
-  },
+  list: (q?: ListCouriersQuery) => buildUrlWithQuery("/couriers", q as Record<string, string | number | boolean | null | undefined>),
   detail: (id: string) => `/couriers/${id}`,
   create: () => `/couriers`,
   update: (id: string) => `/couriers/${id}`,

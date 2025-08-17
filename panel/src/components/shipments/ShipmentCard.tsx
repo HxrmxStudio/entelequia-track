@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import type { Shipment } from "@/services/shipments/types";
-import { Package, Clock, Navigation, CheckCircle, Truck, AlertCircle, XCircle, MapPin, Calendar, User } from "lucide-react";
+import { Package, Clock, Navigation, CheckCircle, Truck, AlertCircle, XCircle, Calendar, User } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 
 export default function ShipmentCard({ s }: { s: Shipment }) {
@@ -54,26 +54,21 @@ export default function ShipmentCard({ s }: { s: Shipment }) {
     label: s.status || 'Unknown'
   };
   
-  // Safe string slicing with comprehensive null checks
-  const safeSlice = (str: any, start: number, end: number, fallback: string = 'N/A') => {
+  // Safe string handling with fallbacks
+  const safeString = (str: unknown, fallback: string = 'N/A') => {
     if (!str || typeof str !== 'string') return fallback;
-    try {
-      return str.slice(start, end) + '…';
-    } catch (error) {
-      console.error('Error slicing string:', str, error);
-      return fallback;
-    }
+    return str;
   };
 
-  const trackingId = safeSlice(s.id, 0, 8, 'N/A');
-  const orderId = safeSlice(s.order_id, 0, 8, 'N/A');
-  const qrToken = safeSlice(s.qr_token, 0, 6, 'N/A');
+  const trackingId = safeString(s.id, 'N/A');
+  const orderId = safeString(s.order_id, 'N/A');
+  const qrToken = safeString(s.qr_token, 'N/A');
 
   // Safe date formatting
-  const formatDate = (dateString: any) => {
+  const formatDate = (dateString: unknown) => {
     if (!dateString) return 'Not set';
     try {
-      return new Date(dateString).toLocaleDateString();
+      return new Date(dateString as string | number | Date).toLocaleDateString();
     } catch (error) {
       console.error('Error formatting date:', dateString, error);
       return 'Invalid date';
@@ -98,20 +93,33 @@ export default function ShipmentCard({ s }: { s: Shipment }) {
 
             {/* Tracking ID */}
             <h3 className="text-lg font-medium mb-1">
-              Tracking ID: {trackingId}
+              Tracking ID: <span className="font-mono text-primary-600">{trackingId}</span>
             </h3>
 
             {/* Order ID and Method */}
             <div className="flex flex-col sm:flex-row sm:items-center gap-4 mt-2">
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <Package size={16} className="text-gray-400" />
-                <span>Order: {orderId}</span>
+                <span>Order: <span className="font-mono text-gray-700">{orderId}</span></span>
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <Navigation size={16} className="text-gray-400" />
                 <span className="capitalize">{s.delivery_method || 'N/A'}</span>
               </div>
             </div>
+
+            {/* Courier Information - More Prominent */}
+            {s.assigned_courier && (
+              <div className="flex items-center gap-2 text-sm mt-2">
+                <User size={16} className="text-green-500" />
+                <span className="text-green-600 font-medium">
+                  Assigned to: {s.assigned_courier.name}
+                  {s.assigned_courier.email && (
+                    <span className="text-gray-500 ml-1">({s.assigned_courier.email})</span>
+                  )}
+                </span>
+              </div>
+            )}
           </div>
 
           {/* Right Side Info */}
@@ -130,7 +138,7 @@ export default function ShipmentCard({ s }: { s: Shipment }) {
               <div className="text-xs text-gray-500">QR Token</div>
               <div className="flex items-center gap-1 mt-1">
                 <Package size={14} className="text-gray-400" />
-                <span className="text-sm font-mono text-xs">
+                <span className="text-sm font-mono text-gray-700 break-all">
                   {qrToken}
                 </span>
               </div>

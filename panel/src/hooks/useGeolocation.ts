@@ -61,7 +61,7 @@ export function useGeolocation() {
       setGeostamp(next);
       try { localStorage.setItem(CACHE_KEY, JSON.stringify({ geostamp: next, ts: Date.now() })); } catch {}
       setLoading(false);
-      console.log("[geo] success", { lat, lon, accuracy: (pos.coords as any).accuracy, tookMs: Date.now() - start });
+      console.log("[geo] success", { lat, lon, accuracy: pos.coords.accuracy, tookMs: Date.now() - start });
       if (watchId.current !== null) {
         navigator.geolocation.clearWatch(watchId.current);
         watchId.current = null;

@@ -2,6 +2,7 @@
 
 import type { BackendError } from "../types/backend" 
 import { useAuthStore } from "@/stores/auth";
+import { getClientConfig } from "@/lib/config";
 
 export class ApiError extends Error {
   status: number
@@ -14,14 +15,14 @@ export class ApiError extends Error {
   }
 }
 
-export const API_URL: string = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"
+const { apiUrl: API_URL } = getClientConfig();
+
+// Export API_URL for direct usage in auth services
+export { API_URL };
 
 export function authHeaders(base?: HeadersInit): Headers {
   const headers = new Headers(base || {})
-  const accessToken = useAuthStore.getState().accessToken
-  if (accessToken && !headers.has("Authorization")) {
-    headers.set("Authorization", `Bearer ${accessToken}`)
-  }
+  // No need to add Authorization header since we use cookies for auth
   return headers
 }
 
@@ -39,52 +40,6 @@ async function handleResponse<T>(res: Response): Promise<T> {
   return (text ? (JSON.parse(text) as T) : ({} as T))
 }
 
-// Refresh token interceptor
-let isRefreshing = false;
-let failedQueue: Array<{
-  resolve: (value: any) => void;
-  reject: (error: any) => void;
-}> = [];
-
-const processQueue = (error: any, token: string | null = null) => {
-  failedQueue.forEach(({ resolve, reject }) => {
-    if (error) {
-      reject(error);
-    } else {
-      resolve(token);
-    }
-  });
-  
-  failedQueue = [];
-};
-
-async function refreshAccessToken(): Promise<string | null> {
-  try {
-    const response = await fetch(`${API_URL}/auth/refresh`, {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" }
-    });
-    
-    if (response.ok) {
-      const data = await response.json();
-      useAuthStore.getState().updateAccessToken(data.access_token, data.exp);
-      return data.access_token;
-    }
-    
-    // If refresh fails, clear auth state
-    if (response.status === 401) {
-      console.warn("Refresh token invalid, clearing auth state");
-      useAuthStore.getState().clearAuth();
-    }
-    
-    return null;
-  } catch (error) {
-    console.error("Error refreshing token:", error);
-    return null;
-  }
-}
-
 export async function apiFetch<T>(path: string, opts: RequestInit & { timeoutMs?: number } = {}): Promise<T> {
   const headers = authHeaders(opts.headers)
   const timeoutMs = typeof opts.timeoutMs === "number" ? opts.timeoutMs : 15000
@@ -92,36 +47,44 @@ export async function apiFetch<T>(path: string, opts: RequestInit & { timeoutMs?
   const timer = controller ? setTimeout(() => controller.abort(), timeoutMs) : undefined
   
   try {
-    const res = await fetch(`${API_URL}${path}`, { ...opts, headers, signal: opts.signal ?? controller?.signal })
-    
-    // Handle 401 Unauthorized with refresh token logic
-    if (res.status === 401 && !path.includes("/auth/refresh")) {
-      if (isRefreshing) {
-        // Wait for the current refresh to complete
-        return new Promise((resolve, reject) => {
-          failedQueue.push({ resolve, reject });
-        }).then(() => {
-          // Retry the original request
-          return apiFetch<T>(path, opts);
-        });
-      }
+    // For auth endpoints, use direct API calls
+    if (path.startsWith("/auth/")) {
+      const res = await fetch(`${API_URL}${path}`, { 
+        ...opts, 
+        headers, 
+        credentials: "include", // Include cookies for auth
+        signal: opts.signal ?? controller?.signal 
+      })
       
-      isRefreshing = true;
-      
-      try {
-        const newToken = await refreshAccessToken();
-        if (newToken) {
-          processQueue(null, newToken);
-          // Retry the original request
-          return apiFetch<T>(path, opts);
-        } else {
-          processQueue(new Error("Failed to refresh token"));
-          useAuthStore.getState().clearAuth();
-          throw new ApiError("Authentication failed", 401);
+      // Handle 401 Unauthorized by clearing auth state and redirecting
+      if (res.status === 401 && !path.includes("/auth/refresh")) {
+        useAuthStore.getState().clearAuth();
+        // Redirect to login page
+        if (typeof window !== "undefined" && !window.location.pathname.includes("/login")) {
+          window.location.href = "/login";
         }
-      } finally {
-        isRefreshing = false;
+        throw new ApiError("Authentication failed", 401);
       }
+      
+      return await handleResponse<T>(res)
+    }
+    
+    // For other endpoints, use the proxy that handles authentication
+    const res = await fetch(`/api/proxy${path}`, { 
+      ...opts, 
+      headers, 
+      credentials: "include", // Include cookies for auth
+      signal: opts.signal ?? controller?.signal 
+    })
+    
+    // Handle 401 Unauthorized by clearing auth state and redirecting
+    if (res.status === 401) {
+      useAuthStore.getState().clearAuth();
+      // Redirect to login page
+      if (typeof window !== "undefined" && !window.location.pathname.includes("/login")) {
+        window.location.href = "/login";
+      }
+      throw new ApiError("Authentication failed", 401);
     }
     
     return await handleResponse<T>(res)
@@ -137,36 +100,50 @@ export async function apiForm<T>(path: string, formData: FormData, opts: Request
   const timer = controller ? setTimeout(() => controller.abort(), timeoutMs) : undefined
   
   try {
-    const res = await fetch(`${API_URL}${path}`, { method: "POST", ...opts, headers, body: formData, signal: opts.signal ?? controller?.signal })
-    
-    // Handle 401 Unauthorized with refresh token logic
-    if (res.status === 401 && !path.includes("/auth/refresh")) {
-      if (isRefreshing) {
-        // Wait for the current refresh to complete
-        return new Promise((resolve, reject) => {
-          failedQueue.push({ resolve, reject });
-        }).then(() => {
-          // Retry the original request
-          return apiForm<T>(path, formData, opts);
-        });
-      }
+    // For auth endpoints, use direct API calls
+    if (path.startsWith("/auth/")) {
+      const res = await fetch(`${API_URL}${path}`, { 
+        method: "POST", 
+        ...opts, 
+        headers, 
+        body: formData, 
+        credentials: "include", // Include cookies for auth
+        signal: opts.signal ?? controller?.signal 
+      })
       
-      isRefreshing = true;
-      
-      try {
-        const newToken = await refreshAccessToken();
-        if (newToken) {
-          processQueue(null, newToken);
-          // Retry the original request
-          return apiForm<T>(path, formData, opts);
-        } else {
-          processQueue(new Error("Failed to refresh token"));
-          useAuthStore.getState().clearAuth();
-          throw new ApiError("Authentication failed", 401);
+      // Handle 401 Unauthorized by clearing auth state and redirecting
+      if (res.status === 401 && !path.includes("/auth/refresh")) {
+        useAuthStore.getState().clearAuth();
+        // Redirect to login page
+        if (typeof window !== "undefined" && !window.location.pathname.includes("/login")) {
+          window.location.href = "/login";
         }
-      } finally {
-        isRefreshing = false;
+        throw new ApiError("Authentication failed", 401);
       }
+      
+      return await handleResponse<T>(res)
+    }
+    
+    // For other endpoints, use the proxy that handles authentication
+    // Note: For FormData, we don't set Content-Type header, let the browser set it
+    const formHeaders = new Headers(opts.headers || {})
+    const res = await fetch(`/api/proxy${path}`, { 
+      method: "POST", 
+      ...opts, 
+      headers: formHeaders, 
+      body: formData, 
+      credentials: "include", // Include cookies for auth
+      signal: opts.signal ?? controller?.signal 
+    })
+    
+    // Handle 401 Unauthorized by clearing auth state and redirecting
+    if (res.status === 401) {
+      useAuthStore.getState().clearAuth();
+      // Redirect to login page
+      if (typeof window !== "undefined" && !window.location.pathname.includes("/login")) {
+        window.location.href = "/login";
+      }
+      throw new ApiError("Authentication failed", 401);
     }
     
     return await handleResponse<T>(res)

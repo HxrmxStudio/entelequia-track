@@ -115,7 +115,7 @@ paths:
 
   /imports/orders/dry_run:
     post:
-      summary: Importar CSV (prueba)
+      summary: Importar CSV/Excel (prueba)
       requestBody:
         required: true
         content:
@@ -129,18 +129,54 @@ paths:
                   format: binary
                 format:
                   type: string
-                  enum: [csv_exact, csv_normalized]
+                  enum: [exact, normalized]
+                  description: "Parsing strategy - exact uses original headers, normalized uses standardized headers"
+                  default: exact
       responses:
         "200":
-          description: Reporte de validación
+          description: "Dry run completed successfully"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ImportDryRunResult"
+                type: object
+                properties:
+                  rows_total:
+                    type: integer
+                    description: "Total number of rows processed"
+                  rows_valid:
+                    type: integer
+                    description: "Number of rows that are valid and will be imported"
+                  rows_invalid:
+                    type: integer
+                    description: "Number of rows with critical errors that cannot be imported"
+                  warnings:
+                    type: array
+                    description: "Rows with warnings (will be imported with defaults)"
+                    items:
+                      type: object
+                      properties:
+                        row_number:
+                          type: integer
+                          description: "Row number in the file"
+                        message:
+                          type: string
+                          description: "Warning message"
+                  errors:
+                    type: array
+                    description: "Rows with critical errors that cannot be imported"
+                    items:
+                      type: object
+                      properties:
+                        row_number:
+                          type: integer
+                          description: "Row number in the file"
+                        message:
+                          type: string
+                          description: "Error message"
 
   /imports/orders/commit:
     post:
-      summary: Importar CSV (commit)
+      summary: Importar CSV/Excel (commit)
       requestBody:
         required: true
         content:
@@ -150,7 +186,7 @@ paths:
               required: [file, format]
               properties:
                 file: { type: string, format: binary }
-                format: { type: string, enum: [csv_exact, csv_normalized] }
+                format: { type: string, enum: [csv_exact, csv_normalized, xlsx_exact, xlsx_normalized] }
       responses: { "202": { description: Lote aceptado } }
 
   /locations:
