@@ -13,8 +13,12 @@ import { resequenceStops } from "@/services/stops/resequenceStops";
 import { completeStop } from "@/services/stops/completeStop";
 import { failStop } from "@/services/stops/failStop";
 import type { StopItem } from "@/services/stops/types";
-import ShipmentMap from "@/components/shipments/ShipmentMap";
 import { listCouriers } from "@/services/couriers/listCouriers";
+import { RouteHeader } from "@/components/routes/id/RouteHeader";
+import { RouteMap } from "@/components/routes/id/RouteMap";
+import { RouteInfo } from "@/components/routes/id/RouteInfo";
+import { RouteActions } from "@/components/routes/id/RouteActions";
+import { StopsTable } from "@/components/routes/id/StopsTable";
 
 export default function RouteDetailPage() {
   // No need for useRequireAuth() - already protected by (protected)/layout.tsx
@@ -90,81 +94,32 @@ export default function RouteDetailPage() {
 
   return (
     <div className="p-6 space-y-6 max-w-6xl mx-auto">
-      <h1 className="text-2xl font-semibold tracking-tight">Ruta</h1>
+      <RouteHeader title="Ruta" />
 
-      {(() => {
-        const firstWithCoords = orderedStops.find(s => typeof s.lat === "number" && typeof s.lon === "number");
-        if (!firstWithCoords || firstWithCoords.lat == null || firstWithCoords.lon == null) return null;
-        return (
-          <div className="border border-gray-200 rounded-lg p-4 bg-white shadow-sm">
-            <ShipmentMap shipmentLocation={{ lat: firstWithCoords.lat, lon: firstWithCoords.lon }} geofenceRadiusM={150} />
-          </div>
-        );
-      })()}
+      <RouteMap stops={orderedStops} />
 
-      <div className="border border-gray-200 rounded-lg p-4 text-sm space-y-1 bg-white shadow-sm text-gray-800">
-        <div><b>ID:</b> {route.id}</div>
-        <div><b>Nombre:</b> {route.name ?? "-"}</div>
-        <div><b>Fecha:</b> {route.scheduled_date ?? "-"}</div>
-        <div><b>Estado:</b> {route.status}</div>
-        <div><b>Courier:</b> {route.courier?.name ?? "-"}</div>
-        <div><b>Inició:</b> {route.started_at ? new Date(route.started_at).toLocaleString() : "-"}</div>
-        <div><b>Completó:</b> {route.completed_at ? new Date(route.completed_at).toLocaleString() : "-"}</div>
-      </div>
+      <RouteInfo route={route} />
 
-      <div className="border border-gray-200 rounded-lg p-4 text-sm space-y-3 bg-white shadow-sm text-gray-800">
-        <h2 className="font-semibold">Acciones</h2>
-        <div className="flex flex-wrap gap-2 items-center">
-          <select className="border border-gray-300 rounded-md px-3 py-2" value={courierId} onChange={e=>setCourierId(e.target.value)}>
-            <option value="">Selecciona courier…</option>
-            {couriers.map(c => (<option key={c.id} value={c.id}>{c.name}</option>))}
-          </select>
-          <button disabled={busy || !courierId} onClick={doAssignCourier} className="px-3 py-2 rounded-md text-white bg-primary-600 hover:bg-primary-700 disabled:opacity-50">Asignar courier</button>
-          <button disabled={busy} onClick={doStart} className="px-3 py-2 rounded-md border border-gray-300 hover:bg-gray-50 disabled:opacity-50">Iniciar</button>
-          <button disabled={busy} onClick={doComplete} className="px-3 py-2 rounded-md border border-gray-300 hover:bg-gray-50 disabled:opacity-50">Completar</button>
-        </div>
-        {msg && <p className="text-blue-700">{msg}</p>}
-      </div>
+      <RouteActions
+        courierId={courierId}
+        setCourierId={setCourierId}
+        couriers={couriers}
+        onAssignCourier={doAssignCourier}
+        onStart={doStart}
+        onComplete={doComplete}
+        busy={busy}
+        message={msg}
+      />
 
-      <div className="border border-gray-200 rounded-lg p-4 text-sm bg-white shadow-sm text-gray-800">
-        <h2 className="font-semibold mb-2">Paradas</h2>
-        <div className="overflow-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-gray-50/80">
-              <tr>
-                <th className="text-left p-2">#</th>
-                <th className="text-left p-2">Estado</th>
-                <th className="text-left p-2">ETA</th>
-                <th className="text-left p-2">Dirección</th>
-                <th className="text-left p-2">Lat</th>
-                <th className="text-left p-2">Lon</th>
-                <th className="text-left p-2">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {orderedStops.map(s => (
-                <tr key={s.id}
-                    draggable
-                    onDragStart={(e)=>onDragStart(e, s.id)}
-                    onDragOver={onDragOver}
-                    onDrop={(e)=>onDrop(e, s.id)}
-                    className="border-t border-gray-100 hover:bg-gray-50">
-                  <td className="p-2">{s.sequence}</td>
-                  <td className="p-2 capitalize">{s.status}</td>
-                  <td className="p-2">{s.eta ? new Date(s.eta).toLocaleString() : "-"}</td>
-                  <td className="p-2">{s.address ?? "-"}</td>
-                  <td className="p-2">{s.lat ?? "-"}</td>
-                  <td className="p-2">{s.lon ?? "-"}</td>
-                  <td className="p-2 space-x-2">
-                    <button disabled={busy} onClick={()=>markStopCompleted(s.id)} className="px-2 py-1 rounded-md border border-gray-300 hover:bg-gray-50 disabled:opacity-50">Completar</button>
-                    <button disabled={busy} onClick={()=>markStopFailed(s.id)} className="px-2 py-1 rounded-md border border-red-300 text-red-700 hover:bg-red-50 disabled:opacity-50">Fallar</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <StopsTable
+        stops={orderedStops}
+        onDragStart={onDragStart}
+        onDragOver={onDragOver}
+        onDrop={onDrop}
+        onComplete={markStopCompleted}
+        onFail={markStopFailed}
+        busy={busy}
+      />
     </div>
   );
 }

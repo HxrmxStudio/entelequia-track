@@ -2,7 +2,7 @@
 
 import { PropsWithChildren } from "react";
 import { getCurrentUser } from "../../../utils/auth-utils";
-import Sidebar from "@/components/layout/Sidebar";
+import Sidebar from "@/components/sidebar/Sidebar";
 import { useSidebar } from "@/hooks/useSidebar";
 
 export default function ProtectedLayout({ children }: PropsWithChildren) {
