@@ -22,7 +22,8 @@ module Backend
   class Application < Rails::Application
     config.load_defaults 7.1
     config.time_zone = "America/Argentina/Buenos_Aires"
-    config.active_record.schema_format = :sql
+    config.active_record.schema_format = :ruby
+    
     config.generators do |g|
       g.orm :active_record, primary_key_type: :uuid
       g.test_framework :rspec

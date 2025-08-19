@@ -1,0 +1,6524 @@
+--- !ruby/object:ActiveRecord::ConnectionAdapters::SchemaCache
+columns:
+  addr:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial: true
+    identity:
+    generated: ''
+    name: gid
+    sql_type_metadata: &3 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: integer
+        type: :integer
+        limit: 4
+        precision:
+        scale:
+      oid: 23
+      fmod: -1
+    'null': false
+    default:
+    default_function: nextval('addr_gid_seq'::regclass)
+    collation:
+    comment:
+  - &7 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: tlid
+    sql_type_metadata: &23 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: bigint
+        type: :integer
+        limit: 8
+        precision:
+        scale:
+      oid: 20
+      fmod: -1
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: fromhn
+    sql_type_metadata: &1 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: character varying(12)
+        type: :string
+        limit: 12
+        precision:
+        scale:
+      oid: 1043
+      fmod: 16
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: tohn
+    sql_type_metadata: *1
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: side
+    sql_type_metadata: &2 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: character varying(1)
+        type: :string
+        limit: 1
+        precision:
+        scale:
+      oid: 1043
+      fmod: 5
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: zip
+    sql_type_metadata: &4 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: character varying(5)
+        type: :string
+        limit: 5
+        precision:
+        scale:
+      oid: 1043
+      fmod: 9
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: plus4
+    sql_type_metadata: &10 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: character varying(4)
+        type: :string
+        limit: 4
+        precision:
+        scale:
+      oid: 1043
+      fmod: 8
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: fromtyp
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: totyp
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: fromarmid
+    sql_type_metadata: *3
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: toarmid
+    sql_type_metadata: *3
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: arid
+    sql_type_metadata: &9 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: character varying(22)
+        type: :string
+        limit: 22
+        precision:
+        scale:
+      oid: 1043
+      fmod: 26
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &16 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: mtfcc
+    sql_type_metadata: *4
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &15 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: statefp
+    sql_type_metadata: &8 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: character varying(2)
+        type: :string
+        limit: 2
+        precision:
+        scale:
+      oid: 1043
+      fmod: 6
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  addresses:
+  - &11 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: id
+    sql_type_metadata: &12 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: uuid
+        type: :uuid
+        limit:
+        precision:
+        scale:
+      oid: 2950
+      fmod: -1
+    'null': false
+    default:
+    default_function: gen_random_uuid()
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: line1
+    sql_type_metadata: &5 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: character varying
+        type: :string
+        limit:
+        precision:
+        scale:
+      oid: 1043
+      fmod: -1
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: line2
+    sql_type_metadata: *5
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: city
+    sql_type_metadata: *5
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: province_state
+    sql_type_metadata: *5
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: country
+    sql_type_metadata: *5
+    'null': false
+    default: AR
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: postal_code
+    sql_type_metadata: *5
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &82 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: geom
+    sql_type_metadata: &74 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: geography(Point,4326)
+        type: :geography
+        limit:
+        precision:
+        scale:
+      oid: 18755
+      fmod: 1107460
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &13 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: created_at
+    sql_type_metadata: &6 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: timestamp(6) without time zone
+        type: :datetime
+        limit:
+        precision: 6
+        scale:
+      oid: 1114
+      fmod: 6
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - &14 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: updated_at
+    sql_type_metadata: *6
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  addrfeat:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial: true
+    identity:
+    generated: ''
+    name: gid
+    sql_type_metadata: *3
+    'null': false
+    default:
+    default_function: nextval('addrfeat_gid_seq'::regclass)
+    collation:
+    comment:
+  - *7
+  - &88 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: statefp
+    sql_type_metadata: *8
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: aridl
+    sql_type_metadata: *9
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: aridr
+    sql_type_metadata: *9
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &61 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: linearid
+    sql_type_metadata: *9
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &43 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: fullname
+    sql_type_metadata: &20 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: character varying(100)
+        type: :string
+        limit: 100
+        precision:
+        scale:
+      oid: 1043
+      fmod: 104
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: lfromhn
+    sql_type_metadata: *1
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: ltohn
+    sql_type_metadata: *1
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: rfromhn
+    sql_type_metadata: *1
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: rtohn
+    sql_type_metadata: *1
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &44 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: zipl
+    sql_type_metadata: *4
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &45 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: zipr
+    sql_type_metadata: *4
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: edge_mtfcc
+    sql_type_metadata: *4
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: parityl
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: parityr
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: plus4l
+    sql_type_metadata: *10
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: plus4r
+    sql_type_metadata: *10
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: lfromtyp
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: ltotyp
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: rfromtyp
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: rtotyp
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &46 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: offsetl
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &47 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: offsetr
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &18 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: the_geom
+    sql_type_metadata: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: geometry
+        type: :geometry
+        limit:
+        precision:
+        scale:
+      oid: 18049
+      fmod: -1
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  alerts:
+  - *11
+  - &32 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: code
+    sql_type_metadata: *5
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: kind
+    sql_type_metadata: *5
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: severity
+    sql_type_metadata: *5
+    'null': false
+    default: warning
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: status
+    sql_type_metadata: *5
+    'null': false
+    default: open
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: message
+    sql_type_metadata: *5
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: courier_id
+    sql_type_metadata: *12
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: shipment_id
+    sql_type_metadata: *12
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: route_id
+    sql_type_metadata: *12
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: first_detected_at
+    sql_type_metadata: *6
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: last_detected_at
+    sql_type_metadata: *6
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: data
+    sql_type_metadata: &48 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: jsonb
+        type: :jsonb
+        limit:
+        precision:
+        scale:
+      oid: 3802
+      fmod: -1
+    'null': false
+    default: "{}"
+    default_function:
+    collation:
+    comment:
+  - *13
+  - *14
+  ar_internal_metadata:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: key
+    sql_type_metadata: *5
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: value
+    sql_type_metadata: *5
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *13
+  - *14
+  bg:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial: true
+    identity:
+    generated: ''
+    name: gid
+    sql_type_metadata: *3
+    'null': false
+    default:
+    default_function: nextval('bg_gid_seq'::regclass)
+    collation:
+    comment:
+  - *15
+  - &19 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: countyfp
+    sql_type_metadata: &21 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: character varying(3)
+        type: :string
+        limit: 3
+        precision:
+        scale:
+      oid: 1043
+      fmod: 7
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &50 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: tractce
+    sql_type_metadata: &49 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: character varying(6)
+        type: :string
+        limit: 6
+        precision:
+        scale:
+      oid: 1043
+      fmod: 10
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &51 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: blkgrpce
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: bg_id
+    sql_type_metadata: *1
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: namelsad
+    sql_type_metadata: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: character varying(13)
+        type: :string
+        limit: 13
+        precision:
+        scale:
+      oid: 1043
+      fmod: 17
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *16
+  - &22 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: funcstat
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &96 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: aland
+    sql_type_metadata: &17 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: double precision
+        type: :float
+        limit:
+        precision:
+        scale:
+      oid: 701
+      fmod: -1
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &24 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: awater
+    sql_type_metadata: *17
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &25 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: intptlat
+    sql_type_metadata: &100 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: character varying(11)
+        type: :string
+        limit: 11
+        precision:
+        scale:
+      oid: 1043
+      fmod: 15
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &26 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: intptlon
+    sql_type_metadata: *1
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *18
+  county:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial: true
+    identity:
+    generated: ''
+    name: gid
+    sql_type_metadata: *3
+    'null': false
+    default:
+    default_function: nextval('county_gid_seq'::regclass)
+    collation:
+    comment:
+  - *15
+  - *19
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: countyns
+    sql_type_metadata: &33 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: character varying(8)
+        type: :string
+        limit: 8
+        precision:
+        scale:
+      oid: 1043
+      fmod: 12
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: cntyidfp
+    sql_type_metadata: *4
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - &34 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: name
+    sql_type_metadata: *20
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &35 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: namelsad
+    sql_type_metadata: *20
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &36 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: lsad
+    sql_type_metadata: *8
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &37 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: classfp
+    sql_type_metadata: *8
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *16
+  - &53 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: csafp
+    sql_type_metadata: *21
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &54 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: cbsafp
+    sql_type_metadata: *4
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &55 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: metdivfp
+    sql_type_metadata: *4
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *22
+  - &81 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: aland
+    sql_type_metadata: *23
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *24
+  - *25
+  - *26
+  - *18
+  county_lookup:
+  - &27 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: st_code
+    sql_type_metadata: *3
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - &28 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: state
+    sql_type_metadata: *8
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &29 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: co_code
+    sql_type_metadata: *3
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - &31 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: name
+    sql_type_metadata: &30 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: character varying(90)
+        type: :string
+        limit: 90
+        precision:
+        scale:
+      oid: 1043
+      fmod: 94
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  countysub_lookup:
+  - *27
+  - *28
+  - *29
+  - &103 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: county
+    sql_type_metadata: *30
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: cs_code
+    sql_type_metadata: *3
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - *31
+  couriers:
+  - *11
+  - *32
+  - &39 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: name
+    sql_type_metadata: *5
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: user_id
+    sql_type_metadata: *12
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: active
+    sql_type_metadata: &73 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: boolean
+        type: :boolean
+        limit:
+        precision:
+        scale:
+      oid: 16
+      fmod: -1
+    'null': false
+    default: 'true'
+    default_function:
+    collation:
+    comment:
+  - *13
+  - *14
+  - &41 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: email
+    sql_type_metadata: *5
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &40 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: phone
+    sql_type_metadata: *5
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: vehicle
+    sql_type_metadata: *5
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: notes
+    sql_type_metadata: &62 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: text
+        type: :text
+        limit:
+        precision:
+        scale:
+      oid: 25
+      fmod: -1
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  cousub:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial: true
+    identity:
+    generated: ''
+    name: gid
+    sql_type_metadata: *3
+    'null': false
+    default:
+    default_function: nextval('cousub_gid_seq'::regclass)
+    collation:
+    comment:
+  - *15
+  - *19
+  - &52 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: cousubfp
+    sql_type_metadata: *4
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: cousubns
+    sql_type_metadata: *33
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: cosbidfp
+    sql_type_metadata: &97 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: character varying(10)
+        type: :string
+        limit: 10
+        precision:
+        scale:
+      oid: 1043
+      fmod: 14
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - *34
+  - *35
+  - *36
+  - *37
+  - *16
+  - &56 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: cnectafp
+    sql_type_metadata: *21
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &57 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: nectafp
+    sql_type_metadata: *4
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &58 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: nctadvfp
+    sql_type_metadata: *4
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *22
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: aland
+    sql_type_metadata: &38 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: numeric(14,0)
+        type: :decimal
+        limit:
+        precision: 14
+        scale:
+      oid: 1700
+      fmod: 917508
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: awater
+    sql_type_metadata: *38
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *25
+  - *26
+  - *18
+  customers:
+  - *11
+  - *39
+  - *40
+  - *41
+  - *13
+  - *14
+  direction_lookup:
+  - &85 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: name
+    sql_type_metadata: &94 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: character varying(20)
+        type: :string
+        limit: 20
+        precision:
+        scale:
+      oid: 1043
+      fmod: 24
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - &90 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: abbrev
+    sql_type_metadata: *21
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  edges:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial: true
+    identity:
+    generated: ''
+    name: gid
+    sql_type_metadata: *3
+    'null': false
+    default:
+    default_function: nextval('edges_gid_seq'::regclass)
+    collation:
+    comment:
+  - *15
+  - *19
+  - *7
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: tfidl
+    sql_type_metadata: &42 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: numeric(10,0)
+        type: :decimal
+        limit:
+        precision: 10
+        scale:
+      oid: 1700
+      fmod: 655364
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: tfidr
+    sql_type_metadata: *42
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *16
+  - *43
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: smid
+    sql_type_metadata: *9
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: lfromadd
+    sql_type_metadata: *1
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: ltoadd
+    sql_type_metadata: *1
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: rfromadd
+    sql_type_metadata: *1
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: rtoadd
+    sql_type_metadata: *1
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *44
+  - *45
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: featcat
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: hydroflg
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: railflg
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: roadflg
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: olfflg
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: passflg
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: divroad
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: exttyp
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: ttyp
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: deckedroad
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: artpath
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: persist
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: gcseflg
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *46
+  - *47
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: tnidf
+    sql_type_metadata: *42
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: tnidt
+    sql_type_metadata: *42
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *18
+  events:
+  - *11
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: type_key
+    sql_type_metadata: *5
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: subject_id
+    sql_type_metadata: *12
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: actor_kind
+    sql_type_metadata: *5
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: actor_id
+    sql_type_metadata: *12
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: payload
+    sql_type_metadata: *48
+    'null': true
+    default: "{}"
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: occurred_at
+    sql_type_metadata: *6
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - *13
+  - *14
+  faces:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial: true
+    identity:
+    generated: ''
+    name: gid
+    sql_type_metadata: *3
+    'null': false
+    default:
+    default_function: nextval('faces_gid_seq'::regclass)
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: tfid
+    sql_type_metadata: *42
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: statefp00
+    sql_type_metadata: *8
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: countyfp00
+    sql_type_metadata: *21
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: tractce00
+    sql_type_metadata: *49
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: blkgrpce00
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: blockce00
+    sql_type_metadata: *10
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: cousubfp00
+    sql_type_metadata: *4
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: submcdfp00
+    sql_type_metadata: *4
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: conctyfp00
+    sql_type_metadata: *4
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: placefp00
+    sql_type_metadata: *4
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: aiannhfp00
+    sql_type_metadata: *4
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: aiannhce00
+    sql_type_metadata: *10
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: comptyp00
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: trsubfp00
+    sql_type_metadata: *4
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: trsubce00
+    sql_type_metadata: *21
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: anrcfp00
+    sql_type_metadata: *4
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: elsdlea00
+    sql_type_metadata: *4
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: scsdlea00
+    sql_type_metadata: *4
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: unsdlea00
+    sql_type_metadata: *4
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: uace00
+    sql_type_metadata: *4
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: cd108fp
+    sql_type_metadata: *8
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: sldust00
+    sql_type_metadata: *21
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: sldlst00
+    sql_type_metadata: *21
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: vtdst00
+    sql_type_metadata: *49
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: zcta5ce00
+    sql_type_metadata: *4
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: tazce00
+    sql_type_metadata: *49
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: ugace00
+    sql_type_metadata: *4
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: puma5ce00
+    sql_type_metadata: *4
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *15
+  - *19
+  - *50
+  - *51
+  - &93 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: blockce
+    sql_type_metadata: *10
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *52
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: submcdfp
+    sql_type_metadata: *4
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: conctyfp
+    sql_type_metadata: *4
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &80 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: placefp
+    sql_type_metadata: *4
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: aiannhfp
+    sql_type_metadata: *4
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: aiannhce
+    sql_type_metadata: *10
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: comptyp
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: trsubfp
+    sql_type_metadata: *4
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: trsubce
+    sql_type_metadata: *21
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: anrcfp
+    sql_type_metadata: *4
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: ttractce
+    sql_type_metadata: *49
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: tblkgpce
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: elsdlea
+    sql_type_metadata: *4
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: scsdlea
+    sql_type_metadata: *4
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: unsdlea
+    sql_type_metadata: *4
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &95 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: uace
+    sql_type_metadata: *4
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: cd111fp
+    sql_type_metadata: *8
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: sldust
+    sql_type_metadata: *21
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: sldlst
+    sql_type_metadata: *21
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: vtdst
+    sql_type_metadata: *49
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: zcta5ce
+    sql_type_metadata: *4
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: tazce
+    sql_type_metadata: *49
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: ugace
+    sql_type_metadata: *4
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: puma5ce
+    sql_type_metadata: *4
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *53
+  - *54
+  - *55
+  - *56
+  - *57
+  - *58
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: lwflag
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: offset
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: atotal
+    sql_type_metadata: *17
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *25
+  - *26
+  - *18
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: tractce20
+    sql_type_metadata: *49
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: blkgrpce20
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: blockce20
+    sql_type_metadata: *10
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: countyfp20
+    sql_type_metadata: *21
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: statefp20
+    sql_type_metadata: *8
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  featnames:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial: true
+    identity:
+    generated: ''
+    name: gid
+    sql_type_metadata: *3
+    'null': false
+    default:
+    default_function: nextval('featnames_gid_seq'::regclass)
+    collation:
+    comment:
+  - *7
+  - *43
+  - *34
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: predirabrv
+    sql_type_metadata: &59 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: character varying(15)
+        type: :string
+        limit: 15
+        precision:
+        scale:
+      oid: 1043
+      fmod: 19
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: pretypabrv
+    sql_type_metadata: &60 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: character varying(50)
+        type: :string
+        limit: 50
+        precision:
+        scale:
+      oid: 1043
+      fmod: 54
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: prequalabr
+    sql_type_metadata: *59
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: sufdirabrv
+    sql_type_metadata: *59
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: suftypabrv
+    sql_type_metadata: *60
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: sufqualabr
+    sql_type_metadata: *59
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: predir
+    sql_type_metadata: *8
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: pretyp
+    sql_type_metadata: *21
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: prequal
+    sql_type_metadata: *8
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: sufdir
+    sql_type_metadata: *8
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: suftyp
+    sql_type_metadata: *21
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: sufqual
+    sql_type_metadata: *8
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *61
+  - *16
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: paflag
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *15
+  geocode_settings:
+  - &63 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: name
+    sql_type_metadata: *62
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - &64 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: setting
+    sql_type_metadata: *62
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &65 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: unit
+    sql_type_metadata: *62
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &66 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: category
+    sql_type_metadata: *62
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &67 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: short_desc
+    sql_type_metadata: *62
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  geocode_settings_default:
+  - *63
+  - *64
+  - *65
+  - *66
+  - *67
+  geography_columns:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: f_table_catalog
+    sql_type_metadata: &68 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: name
+        type: :string
+        limit:
+        precision:
+        scale:
+      oid: 19
+      fmod: -1
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &69 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: f_table_schema
+    sql_type_metadata: *68
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &70 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: f_table_name
+    sql_type_metadata: *68
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: f_geography_column
+    sql_type_metadata: *68
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &71 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: coord_dimension
+    sql_type_metadata: *3
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &72 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: srid
+    sql_type_metadata: *3
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: type
+    sql_type_metadata: *62
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  geometry_columns:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: f_table_catalog
+    sql_type_metadata: &86 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: character varying(256)
+        type: :string
+        limit: 256
+        precision:
+        scale:
+      oid: 1043
+      fmod: 260
+    'null': true
+    default:
+    default_function:
+    collation: C
+    comment:
+  - *69
+  - *70
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: f_geometry_column
+    sql_type_metadata: *68
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *71
+  - *72
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: type
+    sql_type_metadata: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: character varying(30)
+        type: :string
+        limit: 30
+        precision:
+        scale:
+      oid: 1043
+      fmod: 34
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  imports:
+  - *11
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: source
+    sql_type_metadata: *5
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - &92 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: status
+    sql_type_metadata: *5
+    'null': false
+    default: pending
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: created_by
+    sql_type_metadata: *12
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: rows_total
+    sql_type_metadata: *3
+    'null': true
+    default: '0'
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: rows_valid
+    sql_type_metadata: *3
+    'null': true
+    default: '0'
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: rows_invalid
+    sql_type_metadata: *3
+    'null': true
+    default: '0'
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: checksum
+    sql_type_metadata: *5
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: error_report_url
+    sql_type_metadata: *62
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *13
+  - *14
+  layer:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: topology_id
+    sql_type_metadata: *3
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: layer_id
+    sql_type_metadata: *3
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: schema_name
+    sql_type_metadata: *5
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: table_name
+    sql_type_metadata: *5
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: feature_column
+    sql_type_metadata: *5
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: feature_type
+    sql_type_metadata: *3
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: level
+    sql_type_metadata: *3
+    'null': false
+    default: '0'
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: child_id
+    sql_type_metadata: *3
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  loader_lookuptables:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: process_order
+    sql_type_metadata: *3
+    'null': false
+    default: '1000'
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: lookup_name
+    sql_type_metadata: *62
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment: This is the table name to inherit from and suffix of resulting output
+      table -- how the table will be named --  edges here would mean -- ma_edges ,
+      pa_edges etc. except in the case of national tables. national level tables have
+      no prefix
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: table_name
+    sql_type_metadata: *62
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment: 'suffix of the tables to load e.g.  edges would load all tables like
+      *edges.dbf(shp)  -- so tl_2010_42129_edges.dbf .  '
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: single_mode
+    sql_type_metadata: *73
+    'null': false
+    default: 'true'
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: load
+    sql_type_metadata: *73
+    'null': false
+    default: 'true'
+    default_function:
+    collation:
+    comment: Whether or not to load the table.  For states and zcta5 (you may just
+      want to download states10, zcta510 nationwide file manually) load your own into
+      a single table that inherits from tiger.states, tiger.zcta5.  You'll get improved
+      performance for some geocoding cases.
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: level_county
+    sql_type_metadata: *73
+    'null': false
+    default: 'false'
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: level_state
+    sql_type_metadata: *73
+    'null': false
+    default: 'false'
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: level_nation
+    sql_type_metadata: *73
+    'null': false
+    default: 'false'
+    default_function:
+    collation:
+    comment: These are tables that contain all data for the whole US so there is just
+      a single file
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: post_load_process
+    sql_type_metadata: *62
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: single_geom_mode
+    sql_type_metadata: *73
+    'null': true
+    default: 'false'
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: insert_mode
+    sql_type_metadata: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: character(1)
+        type: :string
+        limit: 1
+        precision:
+        scale:
+      oid: 1042
+      fmod: 5
+    'null': false
+    default: c
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: pre_load_process
+    sql_type_metadata: *62
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: columns_exclude
+    sql_type_metadata: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: text[]
+        type: :text
+        limit:
+        precision:
+        scale:
+      oid: 1009
+      fmod: -1
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment: List of columns to exclude as an array. This is excluded from both input
+      table and output table and rest of columns remaining are assumed to be in same
+      order in both tables. gid, geoid,cpi,suffix1ce are excluded if no columns are
+      specified.
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: website_root_override
+    sql_type_metadata: *62
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment: Path to use for wget instead of that specified in year table.  Needed
+      currently for zcta where they release that only for 2000 and 2010
+  loader_platform:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: os
+    sql_type_metadata: *60
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: declare_sect
+    sql_type_metadata: *62
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: pgbin
+    sql_type_metadata: *62
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: wget
+    sql_type_metadata: *62
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: unzip_command
+    sql_type_metadata: *62
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: psql
+    sql_type_metadata: *62
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: path_sep
+    sql_type_metadata: *62
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: loader
+    sql_type_metadata: *62
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: environ_set_command
+    sql_type_metadata: *62
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: county_process_command
+    sql_type_metadata: *62
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  loader_variables:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: tiger_year
+    sql_type_metadata: *10
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: website_root
+    sql_type_metadata: *62
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: staging_fold
+    sql_type_metadata: *62
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: data_schema
+    sql_type_metadata: *62
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: staging_schema
+    sql_type_metadata: *62
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  locations:
+  - &84 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: courier_id
+    sql_type_metadata: *12
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: recorded_at
+    sql_type_metadata: *6
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: geom
+    sql_type_metadata: *74
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: accuracy_m
+    sql_type_metadata: *17
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: speed_mps
+    sql_type_metadata: *17
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: battery_pct
+    sql_type_metadata: *3
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: app_version
+    sql_type_metadata: *5
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *13
+  - *14
+  orders:
+  - *11
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: external_ref
+    sql_type_metadata: *5
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: customer_id
+    sql_type_metadata: *12
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: address_id
+    sql_type_metadata: *12
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: channel
+    sql_type_metadata: *5
+    'null': false
+    default: web
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: status
+    sql_type_metadata: *5
+    'null': false
+    default: received
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: amount_cents
+    sql_type_metadata: *3
+    'null': false
+    default: '0'
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: currency
+    sql_type_metadata: *5
+    'null': false
+    default: ARS
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: delivery_window
+    sql_type_metadata: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: tstzrange
+        type: :tstzrange
+        limit:
+        precision:
+        scale:
+      oid: 3910
+      fmod: -1
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &83 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: metadata
+    sql_type_metadata: *48
+    'null': true
+    default: "{}"
+    default_function:
+    collation:
+    comment:
+  - *13
+  - *14
+  pagc_gaz:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial: true
+    identity:
+    generated: ''
+    name: id
+    sql_type_metadata: *3
+    'null': false
+    default:
+    default_function: nextval('pagc_gaz_id_seq'::regclass)
+    collation:
+    comment:
+  - &75 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: seq
+    sql_type_metadata: *3
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &76 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: word
+    sql_type_metadata: *62
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &77 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: stdword
+    sql_type_metadata: *62
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &78 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: token
+    sql_type_metadata: *3
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &79 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: is_custom
+    sql_type_metadata: *73
+    'null': false
+    default: 'true'
+    default_function:
+    collation:
+    comment:
+  pagc_lex:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial: true
+    identity:
+    generated: ''
+    name: id
+    sql_type_metadata: *3
+    'null': false
+    default:
+    default_function: nextval('pagc_lex_id_seq'::regclass)
+    collation:
+    comment:
+  - *75
+  - *76
+  - *77
+  - *78
+  - *79
+  pagc_rules:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial: true
+    identity:
+    generated: ''
+    name: id
+    sql_type_metadata: *3
+    'null': false
+    default:
+    default_function: nextval('pagc_rules_id_seq'::regclass)
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: rule
+    sql_type_metadata: *62
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: is_custom
+    sql_type_metadata: *73
+    'null': true
+    default: 'true'
+    default_function:
+    collation:
+    comment:
+  place:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial: true
+    identity:
+    generated: ''
+    name: gid
+    sql_type_metadata: *3
+    'null': false
+    default:
+    default_function: nextval('place_gid_seq'::regclass)
+    collation:
+    comment:
+  - *15
+  - *80
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: placens
+    sql_type_metadata: *33
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: plcidfp
+    sql_type_metadata: &101 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: character varying(7)
+        type: :string
+        limit: 7
+        precision:
+        scale:
+      oid: 1043
+      fmod: 11
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - *34
+  - *35
+  - *36
+  - *37
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: cpi
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: pcicbsa
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: pcinecta
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *16
+  - *22
+  - *81
+  - &89 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: awater
+    sql_type_metadata: *23
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *25
+  - *26
+  - *18
+  place_lookup:
+  - *27
+  - *28
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: pl_code
+    sql_type_metadata: *3
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - *31
+  proofs:
+  - *11
+  - &91 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: shipment_id
+    sql_type_metadata: *12
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: method
+    sql_type_metadata: *5
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: photo_url
+    sql_type_metadata: *5
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: signature_svg
+    sql_type_metadata: *62
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: otp_last4
+    sql_type_metadata: *5
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: qr_payload_hash
+    sql_type_metadata: *5
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *82
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: captured_at
+    sql_type_metadata: *6
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - &102 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: device_hash
+    sql_type_metadata: *5
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: hash_chain
+    sql_type_metadata: *5
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *83
+  - *13
+  - *14
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: photo_key
+    sql_type_metadata: *5
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: storage_provider
+    sql_type_metadata: *5
+    'null': false
+    default: supabase
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: photo_meta
+    sql_type_metadata: *48
+    'null': false
+    default: "{}"
+    default_function:
+    collation:
+    comment:
+  refresh_tokens:
+  - *11
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: user_id
+    sql_type_metadata: *12
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: token_digest
+    sql_type_metadata: *5
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: expires_at
+    sql_type_metadata: *6
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: revoked_at
+    sql_type_metadata: *6
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: client
+    sql_type_metadata: *5
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: device
+    sql_type_metadata: *5
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *13
+  - *14
+  routes:
+  - *11
+  - *84
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: service_date
+    sql_type_metadata: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: date
+        type: :date
+        limit:
+        precision:
+        scale:
+      oid: 1082
+      fmod: -1
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: status
+    sql_type_metadata: *5
+    'null': false
+    default: planned
+    default_function:
+    collation:
+    comment:
+  - *13
+  - *14
+  schema_migrations:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: version
+    sql_type_metadata: *5
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  secondary_unit_lookup:
+  - *85
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: abbrev
+    sql_type_metadata: *4
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  shipments:
+  - *11
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: order_id
+    sql_type_metadata: *12
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: assigned_courier_id
+    sql_type_metadata: *12
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: status
+    sql_type_metadata: *5
+    'null': false
+    default: queued
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: delivery_method
+    sql_type_metadata: *5
+    'null': false
+    default: courier
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: otp_code_hash
+    sql_type_metadata: *5
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: qr_token
+    sql_type_metadata: *5
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: eta
+    sql_type_metadata: *6
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: sla_due_at
+    sql_type_metadata: *6
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *83
+  - *13
+  - *14
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: otp_attempts
+    sql_type_metadata: *3
+    'null': false
+    default: '0'
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: otp_locked_until
+    sql_type_metadata: *6
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: geofence_radius_m
+    sql_type_metadata: *3
+    'null': false
+    default: '100'
+    default_function:
+    collation:
+    comment:
+  spatial_ref_sys:
+  - &99 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: srid
+    sql_type_metadata: *3
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: auth_name
+    sql_type_metadata: *86
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: auth_srid
+    sql_type_metadata: *3
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: srtext
+    sql_type_metadata: &87 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: character varying(2048)
+        type: :string
+        limit: 2048
+        precision:
+        scale:
+      oid: 1043
+      fmod: 2052
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: proj4text
+    sql_type_metadata: *87
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  state:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial: true
+    identity:
+    generated: ''
+    name: gid
+    sql_type_metadata: *3
+    'null': false
+    default:
+    default_function: nextval('state_gid_seq'::regclass)
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: region
+    sql_type_metadata: *8
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: division
+    sql_type_metadata: *8
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *88
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: statens
+    sql_type_metadata: *33
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &113 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: stusps
+    sql_type_metadata: *8
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - *34
+  - *36
+  - *16
+  - *22
+  - *81
+  - *89
+  - *25
+  - *26
+  - *18
+  state_lookup:
+  - *27
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: name
+    sql_type_metadata: &111 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: character varying(40)
+        type: :string
+        limit: 40
+        precision:
+        scale:
+      oid: 1043
+      fmod: 44
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *90
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: statefp
+    sql_type_metadata: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: character(2)
+        type: :string
+        limit: 2
+        precision:
+        scale:
+      oid: 1042
+      fmod: 6
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  stops:
+  - *11
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: route_id
+    sql_type_metadata: *12
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - *91
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: sequence
+    sql_type_metadata: *3
+    'null': false
+    default: '0'
+    default_function:
+    collation:
+    comment:
+  - *92
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: planned_at
+    sql_type_metadata: *6
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: arrived_at
+    sql_type_metadata: *6
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: completed_at
+    sql_type_metadata: *6
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: notes
+    sql_type_metadata: *48
+    'null': true
+    default: "{}"
+    default_function:
+    collation:
+    comment:
+  - *13
+  - *14
+  street_type_lookup:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: name
+    sql_type_metadata: *60
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: abbrev
+    sql_type_metadata: *60
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: is_hw
+    sql_type_metadata: *73
+    'null': false
+    default: 'false'
+    default_function:
+    collation:
+    comment:
+  tabblock:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial: true
+    identity:
+    generated: ''
+    name: gid
+    sql_type_metadata: *3
+    'null': false
+    default:
+    default_function: nextval('tabblock_gid_seq'::regclass)
+    collation:
+    comment:
+  - *15
+  - *19
+  - *50
+  - *93
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: tabblock_id
+    sql_type_metadata: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: character varying(16)
+        type: :string
+        limit: 16
+        precision:
+        scale:
+      oid: 1043
+      fmod: 20
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: name
+    sql_type_metadata: *94
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *16
+  - &98 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: ur
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *95
+  - *22
+  - *96
+  - *24
+  - *25
+  - *26
+  - *18
+  tabblock20:
+  - *15
+  - *19
+  - *50
+  - *93
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: geoid
+    sql_type_metadata: *59
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: name
+    sql_type_metadata: *97
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *16
+  - *98
+  - *95
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: uatype
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *22
+  - *96
+  - *24
+  - *25
+  - *26
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: the_geom
+    sql_type_metadata: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::TypeMetadata
+      delegate_dc_obj: !ruby/object:ActiveRecord::ConnectionAdapters::SqlTypeMetadata
+        sql_type: geometry(MultiPolygon,4269)
+        type: :geometry
+        limit:
+        precision:
+        scale:
+      oid: 18049
+      fmod: 1092888
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: housing
+    sql_type_metadata: *17
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: pop
+    sql_type_metadata: *17
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  topology:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial: true
+    identity:
+    generated: ''
+    name: id
+    sql_type_metadata: *3
+    'null': false
+    default:
+    default_function: nextval('topology_id_seq'::regclass)
+    collation:
+    comment:
+  - *39
+  - *99
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: precision
+    sql_type_metadata: *17
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: hasz
+    sql_type_metadata: *73
+    'null': false
+    default: 'false'
+    default_function:
+    collation:
+    comment:
+  tract:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial: true
+    identity:
+    generated: ''
+    name: gid
+    sql_type_metadata: *3
+    'null': false
+    default:
+    default_function: nextval('tract_gid_seq'::regclass)
+    collation:
+    comment:
+  - *15
+  - *19
+  - *50
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: tract_id
+    sql_type_metadata: *100
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: name
+    sql_type_metadata: *101
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: namelsad
+    sql_type_metadata: *94
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *16
+  - *22
+  - *96
+  - *24
+  - *25
+  - *26
+  - *18
+  users:
+  - *11
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: email
+    sql_type_metadata: *5
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: password_digest
+    sql_type_metadata: *5
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: role
+    sql_type_metadata: *5
+    'null': false
+    default: ops
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: name
+    sql_type_metadata: *5
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *102
+  - *13
+  - *14
+  zcta5:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial: true
+    identity:
+    generated: ''
+    name: gid
+    sql_type_metadata: *3
+    'null': false
+    default:
+    default_function: nextval('zcta5_gid_seq'::regclass)
+    collation:
+    comment:
+  - *88
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: zcta5ce
+    sql_type_metadata: *4
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - *37
+  - *16
+  - *22
+  - *96
+  - *24
+  - *25
+  - *26
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: partflg
+    sql_type_metadata: *2
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *18
+  zip_lookup:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: zip
+    sql_type_metadata: *3
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - &104 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: st_code
+    sql_type_metadata: *3
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *28
+  - &105 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: co_code
+    sql_type_metadata: *3
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *103
+  - &106 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: cs_code
+    sql_type_metadata: *3
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &107 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: cousub
+    sql_type_metadata: *30
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &108 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: pl_code
+    sql_type_metadata: *3
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &109 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: place
+    sql_type_metadata: *30
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - &110 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: cnt
+    sql_type_metadata: *3
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  zip_lookup_all:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: zip
+    sql_type_metadata: *3
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *104
+  - *28
+  - *105
+  - *103
+  - *106
+  - *107
+  - *108
+  - *109
+  - *110
+  zip_lookup_base:
+  - &112 !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: zip
+    sql_type_metadata: *4
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: state
+    sql_type_metadata: *111
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *103
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: city
+    sql_type_metadata: *30
+    'null': true
+    default:
+    default_function:
+    collation:
+    comment:
+  - *15
+  zip_state:
+  - *112
+  - *113
+  - *15
+  zip_state_loc:
+  - *112
+  - *113
+  - *15
+  - !ruby/object:ActiveRecord::ConnectionAdapters::PostGIS::SpatialColumn
+    serial:
+    identity:
+    generated: ''
+    name: place
+    sql_type_metadata: *20
+    'null': false
+    default:
+    default_function:
+    collation:
+    comment:
+primary_keys:
+  addr: gid
+  addresses: id
+  addrfeat: gid
+  alerts: id
+  ar_internal_metadata: key
+  bg: bg_id
+  county: cntyidfp
+  county_lookup:
+  - st_code
+  - co_code
+  countysub_lookup:
+  - st_code
+  - co_code
+  - cs_code
+  couriers: id
+  cousub: cosbidfp
+  customers: id
+  direction_lookup: name
+  edges: gid
+  events: id
+  faces: gid
+  featnames: gid
+  geocode_settings: name
+  geocode_settings_default: name
+  geography_columns:
+  geometry_columns:
+  imports: id
+  layer:
+  - topology_id
+  - layer_id
+  loader_lookuptables: lookup_name
+  loader_platform: os
+  loader_variables: tiger_year
+  locations:
+  - courier_id
+  - recorded_at
+  orders: id
+  pagc_gaz: id
+  pagc_lex: id
+  pagc_rules: id
+  place: plcidfp
+  place_lookup:
+  - st_code
+  - pl_code
+  proofs: id
+  refresh_tokens: id
+  routes: id
+  schema_migrations: version
+  secondary_unit_lookup: name
+  shipments: id
+  spatial_ref_sys: srid
+  state: statefp
+  state_lookup: st_code
+  stops: id
+  street_type_lookup: name
+  tabblock: tabblock_id
+  tabblock20: geoid
+  topology: id
+  tract: tract_id
+  users: id
+  zcta5:
+  - zcta5ce
+  - statefp
+  zip_lookup: zip
+  zip_lookup_all:
+  zip_lookup_base: zip
+  zip_state:
+  - zip
+  - stusps
+  zip_state_loc:
+  - zip
+  - stusps
+  - place
+data_sources:
+  addr: true
+  addresses: true
+  addrfeat: true
+  alerts: true
+  ar_internal_metadata: true
+  bg: true
+  county: true
+  county_lookup: true
+  countysub_lookup: true
+  couriers: true
+  cousub: true
+  customers: true
+  direction_lookup: true
+  edges: true
+  events: true
+  faces: true
+  featnames: true
+  geocode_settings: true
+  geocode_settings_default: true
+  geography_columns: true
+  geometry_columns: true
+  imports: true
+  layer: true
+  loader_lookuptables: true
+  loader_platform: true
+  loader_variables: true
+  locations: true
+  orders: true
+  pagc_gaz: true
+  pagc_lex: true
+  pagc_rules: true
+  place: true
+  place_lookup: true
+  proofs: true
+  refresh_tokens: true
+  routes: true
+  schema_migrations: true
+  secondary_unit_lookup: true
+  shipments: true
+  spatial_ref_sys: true
+  state: true
+  state_lookup: true
+  stops: true
+  street_type_lookup: true
+  tabblock: true
+  tabblock20: true
+  topology: true
+  tract: true
+  users: true
+  zcta5: true
+  zip_lookup: true
+  zip_lookup_all: true
+  zip_lookup_base: true
+  zip_state: true
+  zip_state_loc: true
+indexes:
+  addr:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: addr
+    name: idx_tiger_addr_tlid_statefp
+    unique: false
+    columns:
+    - tlid
+    - statefp
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: addr
+    name: idx_tiger_addr_zip
+    unique: false
+    columns:
+    - zip
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  addresses:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: addresses
+    name: index_addresses_on_geom
+    unique: false
+    columns:
+    - geom
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :gist
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  addrfeat:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: addrfeat
+    name: idx_addrfeat_geom_gist
+    unique: false
+    columns:
+    - the_geom
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :gist
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: addrfeat
+    name: idx_addrfeat_tlid
+    unique: false
+    columns:
+    - tlid
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: addrfeat
+    name: idx_addrfeat_zipl
+    unique: false
+    columns:
+    - zipl
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: addrfeat
+    name: idx_addrfeat_zipr
+    unique: false
+    columns:
+    - zipr
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  alerts:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: alerts
+    name: idx_unique_open_alerts_courier
+    unique: true
+    columns:
+    - code
+    - status
+    - courier_id
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where: "(((status)::text = 'open'::text) AND (courier_id IS NOT NULL))"
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: alerts
+    name: idx_unique_open_alerts_route
+    unique: true
+    columns:
+    - code
+    - status
+    - route_id
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where: "(((status)::text = 'open'::text) AND (route_id IS NOT NULL))"
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: alerts
+    name: idx_unique_open_alerts_shipment
+    unique: true
+    columns:
+    - code
+    - status
+    - shipment_id
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where: "(((status)::text = 'open'::text) AND (shipment_id IS NOT NULL))"
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: alerts
+    name: index_alerts_on_code_and_courier_id_and_shipment_id_and_status
+    unique: false
+    columns:
+    - code
+    - courier_id
+    - shipment_id
+    - status
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: alerts
+    name: index_alerts_on_last_detected_at
+    unique: false
+    columns:
+    - last_detected_at
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: alerts
+    name: index_alerts_on_status
+    unique: false
+    columns:
+    - status
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  ar_internal_metadata: []
+  bg: []
+  county:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: county
+    name: idx_tiger_county
+    unique: false
+    columns:
+    - countyfp
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: county
+    name: uidx_county_gid
+    unique: true
+    columns:
+    - gid
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  county_lookup:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: county_lookup
+    name: county_lookup_name_idx
+    unique: false
+    columns: soundex((name)::text)
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: county_lookup
+    name: county_lookup_state_idx
+    unique: false
+    columns:
+    - state
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  countysub_lookup:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: countysub_lookup
+    name: countysub_lookup_name_idx
+    unique: false
+    columns: soundex((name)::text)
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: countysub_lookup
+    name: countysub_lookup_state_idx
+    unique: false
+    columns:
+    - state
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  couriers:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: couriers
+    name: index_couriers_on_active
+    unique: false
+    columns:
+    - active
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: couriers
+    name: index_couriers_on_code
+    unique: true
+    columns:
+    - code
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: couriers
+    name: index_couriers_on_email
+    unique: false
+    columns:
+    - email
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: couriers
+    name: index_couriers_on_phone
+    unique: false
+    columns:
+    - phone
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: couriers
+    name: index_couriers_on_user_id
+    unique: false
+    columns:
+    - user_id
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  cousub:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: cousub
+    name: tige_cousub_the_geom_gist
+    unique: false
+    columns:
+    - the_geom
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :gist
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: cousub
+    name: uidx_cousub_gid
+    unique: true
+    columns:
+    - gid
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  customers:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: customers
+    name: index_customers_on_email
+    unique: false
+    columns:
+    - email
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  direction_lookup:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: direction_lookup
+    name: direction_lookup_abbrev_idx
+    unique: false
+    columns:
+    - abbrev
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  edges:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: edges
+    name: idx_edges_tlid
+    unique: false
+    columns:
+    - tlid
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: edges
+    name: idx_tiger_edges_countyfp
+    unique: false
+    columns:
+    - countyfp
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: edges
+    name: idx_tiger_edges_the_geom_gist
+    unique: false
+    columns:
+    - the_geom
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :gist
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  events:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: events
+    name: index_events_on_occurred_at
+    unique: false
+    columns:
+    - occurred_at
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: events
+    name: index_events_on_payload
+    unique: false
+    columns:
+    - payload
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :gin
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: events
+    name: index_events_on_subject_id
+    unique: false
+    columns:
+    - subject_id
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: events
+    name: index_events_on_type_key
+    unique: false
+    columns:
+    - type_key
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  faces:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: faces
+    name: idx_tiger_faces_countyfp
+    unique: false
+    columns:
+    - countyfp
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: faces
+    name: idx_tiger_faces_tfid
+    unique: false
+    columns:
+    - tfid
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: faces
+    name: tiger_faces_the_geom_gist
+    unique: false
+    columns:
+    - the_geom
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :gist
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  featnames:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: featnames
+    name: idx_tiger_featnames_lname
+    unique: false
+    columns: lower((name)::text)
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: featnames
+    name: idx_tiger_featnames_snd_name
+    unique: false
+    columns: soundex((name)::text)
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: featnames
+    name: idx_tiger_featnames_tlid_statefp
+    unique: false
+    columns:
+    - tlid
+    - statefp
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  geocode_settings: []
+  geocode_settings_default: []
+  geography_columns: []
+  geometry_columns: []
+  imports:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: imports
+    name: index_imports_on_checksum
+    unique: true
+    columns:
+    - checksum
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: imports
+    name: index_imports_on_status
+    unique: false
+    columns:
+    - status
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  layer:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: layer
+    name: layer_schema_name_table_name_feature_column_key
+    unique: true
+    columns:
+    - schema_name
+    - table_name
+    - feature_column
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  loader_lookuptables: []
+  loader_platform: []
+  loader_variables: []
+  locations:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: locations
+    name: index_locations_on_geom
+    unique: false
+    columns:
+    - geom
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :gist
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: locations
+    name: index_locations_on_recorded_at
+    unique: false
+    columns:
+    - recorded_at
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  orders:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: orders
+    name: index_orders_on_channel
+    unique: false
+    columns:
+    - channel
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: orders
+    name: index_orders_on_external_ref
+    unique: true
+    columns:
+    - external_ref
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: orders
+    name: index_orders_on_status
+    unique: false
+    columns:
+    - status
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  pagc_gaz: []
+  pagc_lex: []
+  pagc_rules: []
+  place:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: place
+    name: tiger_place_the_geom_gist
+    unique: false
+    columns:
+    - the_geom
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :gist
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: place
+    name: uidx_tiger_place_gid
+    unique: true
+    columns:
+    - gid
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  place_lookup:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: place_lookup
+    name: place_lookup_name_idx
+    unique: false
+    columns: soundex((name)::text)
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: place_lookup
+    name: place_lookup_state_idx
+    unique: false
+    columns:
+    - state
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  proofs:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: proofs
+    name: index_proofs_on_geom
+    unique: false
+    columns:
+    - geom
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :gist
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: proofs
+    name: index_proofs_on_method
+    unique: false
+    columns:
+    - method
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: proofs
+    name: index_proofs_on_shipment_id
+    unique: false
+    columns:
+    - shipment_id
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: proofs
+    name: index_proofs_on_storage_provider
+    unique: false
+    columns:
+    - storage_provider
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  refresh_tokens:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: refresh_tokens
+    name: index_refresh_tokens_on_token_digest
+    unique: true
+    columns:
+    - token_digest
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: refresh_tokens
+    name: index_refresh_tokens_on_user_id
+    unique: false
+    columns:
+    - user_id
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  routes:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: routes
+    name: index_routes_on_courier_id_and_service_date
+    unique: true
+    columns:
+    - courier_id
+    - service_date
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: routes
+    name: index_routes_on_service_date
+    unique: false
+    columns:
+    - service_date
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: routes
+    name: index_routes_on_status
+    unique: false
+    columns:
+    - status
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  schema_migrations: []
+  secondary_unit_lookup:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: secondary_unit_lookup
+    name: secondary_unit_lookup_abbrev_idx
+    unique: false
+    columns:
+    - abbrev
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  shipments:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: shipments
+    name: index_shipments_on_assigned_courier_id
+    unique: false
+    columns:
+    - assigned_courier_id
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: shipments
+    name: index_shipments_on_eta
+    unique: false
+    columns:
+    - eta
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: shipments
+    name: index_shipments_on_order_id
+    unique: false
+    columns:
+    - order_id
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: shipments
+    name: index_shipments_on_qr_token
+    unique: true
+    columns:
+    - qr_token
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: shipments
+    name: index_shipments_on_sla_due_at
+    unique: false
+    columns:
+    - sla_due_at
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: shipments
+    name: index_shipments_on_status
+    unique: false
+    columns:
+    - status
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  spatial_ref_sys: []
+  state:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: state
+    name: idx_tiger_state_the_geom_gist
+    unique: false
+    columns:
+    - the_geom
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :gist
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: state
+    name: uidx_tiger_state_gid
+    unique: true
+    columns:
+    - gid
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: state
+    name: uidx_tiger_state_stusps
+    unique: true
+    columns:
+    - stusps
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  state_lookup:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: state_lookup
+    name: state_lookup_abbrev_key
+    unique: true
+    columns:
+    - abbrev
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: state_lookup
+    name: state_lookup_name_key
+    unique: true
+    columns:
+    - name
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: state_lookup
+    name: state_lookup_statefp_key
+    unique: true
+    columns:
+    - statefp
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  stops:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: stops
+    name: index_stops_on_completed_at
+    unique: false
+    columns:
+    - completed_at
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: stops
+    name: index_stops_on_planned_at
+    unique: false
+    columns:
+    - planned_at
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: stops
+    name: index_stops_on_route_id_and_sequence
+    unique: true
+    columns:
+    - route_id
+    - sequence
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: stops
+    name: index_stops_on_status
+    unique: false
+    columns:
+    - status
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  street_type_lookup:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: street_type_lookup
+    name: street_type_lookup_abbrev_idx
+    unique: false
+    columns:
+    - abbrev
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  tabblock: []
+  tabblock20: []
+  topology:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: topology
+    name: topology_name_key
+    unique: true
+    columns:
+    - name
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  tract: []
+  users:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: users
+    name: index_users_on_email
+    unique: true
+    columns:
+    - email
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: users
+    name: index_users_on_role
+    unique: false
+    columns:
+    - role
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  zcta5:
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: zcta5
+    name: uidx_tiger_zcta5_gid
+    unique: true
+    columns:
+    - gid
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using: :btree
+    include:
+    nulls_not_distinct: false
+    comment:
+    valid: true
+  zip_lookup: []
+  zip_lookup_all: []
+  zip_lookup_base: []
+  zip_state: []
+  zip_state_loc: []
+version: 20250815103907
