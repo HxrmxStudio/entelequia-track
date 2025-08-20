@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_15_103907) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_20_190528) do
   create_schema "tiger"
   create_schema "tiger_data"
   create_schema "topology"
@@ -475,8 +475,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_15_103907) do
     t.datetime "updated_at", null: false
     t.index ["geom"], name: "index_locations_on_geom", using: :gist
     t.index ["recorded_at"], name: "index_locations_on_recorded_at"
-    t.check_constraint "battery_pct IS NULL OR battery_pct >= 0 AND battery_pct <= 100", name: "locations_battery_pct_range"
   end
+
+  add_check_constraint "locations", "battery_pct IS NULL OR battery_pct >= 0 AND battery_pct <= 100", name: "locations_battery_pct_range", validate: false
 
   create_table "orders", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "external_ref"
@@ -493,8 +494,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_15_103907) do
     t.index ["channel"], name: "index_orders_on_channel"
     t.index ["external_ref"], name: "index_orders_on_external_ref", unique: true
     t.index ["status"], name: "index_orders_on_status"
-    t.check_constraint "amount_cents >= 0", name: "orders_amount_cents_nonnegative"
   end
+
+  add_check_constraint "orders", "amount_cents >= 0", name: "orders_amount_cents_nonnegative", validate: false
 
   create_table "pagc_gaz", id: :serial, force: :cascade do |t|
     t.integer "seq"
@@ -619,15 +621,19 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_15_103907) do
     t.integer "otp_attempts", default: 0, null: false
     t.datetime "otp_locked_until"
     t.integer "geofence_radius_m", default: 100, null: false
+    t.datetime "otp_generated_at"
+    t.datetime "otp_expires_at"
     t.index ["assigned_courier_id"], name: "index_shipments_on_assigned_courier_id"
     t.index ["eta"], name: "index_shipments_on_eta"
     t.index ["order_id"], name: "index_shipments_on_order_id"
+    t.index ["otp_expires_at"], name: "index_shipments_on_otp_expires_at"
     t.index ["qr_token"], name: "index_shipments_on_qr_token", unique: true
     t.index ["sla_due_at"], name: "index_shipments_on_sla_due_at"
     t.index ["status"], name: "index_shipments_on_status"
-    t.check_constraint "geofence_radius_m > 0", name: "shipments_geofence_radius_positive"
-    t.check_constraint "otp_attempts >= 0", name: "shipments_otp_attempts_nonnegative"
   end
+
+  add_check_constraint "shipments", "geofence_radius_m > 0", name: "shipments_geofence_radius_positive", validate: false
+  add_check_constraint "shipments", "otp_attempts >= 0", name: "shipments_otp_attempts_nonnegative", validate: false
 
   create_table "state", primary_key: "statefp", id: { type: :string, limit: 2 }, force: :cascade do |t|
     t.serial "gid", null: false
@@ -677,8 +683,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_15_103907) do
     t.index ["planned_at"], name: "index_stops_on_planned_at"
     t.index ["route_id", "sequence"], name: "index_stops_on_route_id_and_sequence", unique: true
     t.index ["status"], name: "index_stops_on_status"
-    t.check_constraint "sequence >= 0", name: "stops_sequence_nonnegative"
   end
+
+  add_check_constraint "stops", "sequence >= 0", name: "stops_sequence_nonnegative", validate: false
 
   create_table "street_type_lookup", primary_key: "name", id: { type: :string, limit: 50 }, force: :cascade do |t|
     t.string "abbrev", limit: 50
@@ -823,18 +830,18 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_15_103907) do
     t.string "place", limit: 100, null: false
   end
 
-  add_foreign_key "alerts", "couriers", on_delete: :nullify
-  add_foreign_key "alerts", "routes", on_delete: :nullify
-  add_foreign_key "alerts", "shipments", on_delete: :nullify
-  add_foreign_key "couriers", "users", on_delete: :nullify
-  add_foreign_key "locations", "couriers", on_delete: :cascade
-  add_foreign_key "orders", "addresses", on_delete: :nullify
-  add_foreign_key "orders", "customers", on_delete: :nullify
-  add_foreign_key "proofs", "shipments", on_delete: :cascade
+  add_foreign_key "alerts", "couriers", on_delete: :nullify, validate: false
+  add_foreign_key "alerts", "routes", on_delete: :nullify, validate: false
+  add_foreign_key "alerts", "shipments", on_delete: :nullify, validate: false
+  add_foreign_key "couriers", "users", on_delete: :nullify, validate: false
+  add_foreign_key "locations", "couriers", on_delete: :cascade, validate: false
+  add_foreign_key "orders", "addresses", on_delete: :nullify, validate: false
+  add_foreign_key "orders", "customers", on_delete: :nullify, validate: false
+  add_foreign_key "proofs", "shipments", on_delete: :cascade, validate: false
   add_foreign_key "refresh_tokens", "users"
-  add_foreign_key "routes", "couriers", on_delete: :restrict
-  add_foreign_key "shipments", "couriers", column: "assigned_courier_id", on_delete: :nullify
-  add_foreign_key "shipments", "orders", on_delete: :restrict
-  add_foreign_key "stops", "routes", on_delete: :cascade
-  add_foreign_key "stops", "shipments", on_delete: :cascade
+  add_foreign_key "routes", "couriers", on_delete: :restrict, validate: false
+  add_foreign_key "shipments", "couriers", column: "assigned_courier_id", on_delete: :nullify, validate: false
+  add_foreign_key "shipments", "orders", on_delete: :restrict, validate: false
+  add_foreign_key "stops", "routes", on_delete: :cascade, validate: false
+  add_foreign_key "stops", "shipments", on_delete: :cascade, validate: false
 end

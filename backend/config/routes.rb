@@ -71,7 +71,7 @@ Rails.application.routes.draw do
       post "/proofs/presign", to: "proofs#presign"
       post "/proofs", to: "proofs#create"
       get "/proofs/:id/signed_url", to: "proofs#signed_url"
-    end
+    end 
   end
 
 end

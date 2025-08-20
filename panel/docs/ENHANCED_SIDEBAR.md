@@ -104,3 +104,4 @@ const hoverColors = "hover:bg-gray-100 dark:hover:bg-gray-800";
 - **Animation Preferences**: Respect user motion preferences
 - **Custom Themes**: User-configurable color schemes
 
+

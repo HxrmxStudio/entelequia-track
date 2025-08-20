@@ -70,4 +70,7 @@ group :development, :test do
 
   # Load environment variables from .env file
   gem "dotenv-rails"
+  
+  # Faker for generating realistic test data (install manually if missing)
+  gem "faker", "~> 3.0"
 end

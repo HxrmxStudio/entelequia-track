@@ -6,18 +6,15 @@ class AddOtpAndControlsToShipments < ActiveRecord::Migration[7.1]
       say "Skipping AddOtpAndControlsToShipments in test environment"
       return
     end
+    
+    # Only add columns that don't exist yet
     change_table :shipments do |t|
-      t.integer  :otp_attempts, default: 0, null: false
-      t.datetime :otp_locked_until
-      t.integer  :geofence_radius_m, default: 100, null: false
-      t.string   :otp_code_hash, limit: 128
-      t.datetime :otp_generated_at
-      t.datetime :otp_expires_at
-      t.string   :qr_token, limit: 128
+      t.datetime :otp_generated_at unless column_exists?(:shipments, :otp_generated_at)
+      t.datetime :otp_expires_at unless column_exists?(:shipments, :otp_expires_at)
     end
 
-    add_index :shipments, :qr_token, unique: true, algorithm: :concurrently
-    add_index :shipments, :otp_expires_at, algorithm: :concurrently
+    # Add indexes that don't exist yet
+    add_index :shipments, :otp_expires_at, algorithm: :concurrently unless index_exists?(:shipments, :otp_expires_at)
   end
 
   def down
@@ -25,17 +22,13 @@ class AddOtpAndControlsToShipments < ActiveRecord::Migration[7.1]
       say "Skipping down of AddOtpAndControlsToShipments in test environment"
       return
     end
-    remove_index :shipments, :otp_expires_at
-    remove_index :shipments, :qr_token
+    
+    # Only remove indexes and columns that were added by this migration
+    remove_index :shipments, :otp_expires_at if index_exists?(:shipments, :otp_expires_at)
 
     change_table :shipments do |t|
-      t.remove :qr_token
-      t.remove :otp_expires_at
-      t.remove :otp_generated_at
-      t.remove :otp_code_hash
-      t.remove :geofence_radius_m
-      t.remove :otp_locked_until
-      t.remove :otp_attempts
+      t.remove :otp_expires_at if column_exists?(:shipments, :otp_expires_at)
+      t.remove :otp_generated_at if column_exists?(:shipments, :otp_generated_at)
     end
   end
 end
