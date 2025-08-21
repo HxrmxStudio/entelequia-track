@@ -1,14 +1,22 @@
 import { useEffect, useState } from "react";
-import type { OrdersFilter } from "@/services/orders/types";
+import type { OrdersFilter, FilterOptions } from "@/services/orders/types";
+import { formatChannelDisplayName, formatStatusDisplayName } from "@/services/orders/utils";
 
 interface OrdersFiltersProps {
   filters: OrdersFilter;
   onChange: (f: OrdersFilter) => void;
   onRefresh: () => void;
   loading: boolean;
+  filterOptions: FilterOptions;
 }
 
-export default function OrdersFilters({ filters, onChange, onRefresh, loading }: OrdersFiltersProps) {
+export default function OrdersFilters({ 
+  filters, 
+  onChange, 
+  onRefresh, 
+  loading, 
+  filterOptions 
+}: OrdersFiltersProps) {
   const [status, setStatus] = useState(String(filters.status ?? ""));
   const [channel, setChannel] = useState(String(filters.channel ?? ""));
   const [amountRange, setAmountRange] = useState(String(filters.amount_range ?? ""));
@@ -55,11 +63,11 @@ export default function OrdersFilters({ filters, onChange, onRefresh, loading }:
             onChange={e => setStatus(e.target.value)}
           >
             <option value="">All Statuses</option>
-            <option value="draft">Draft</option>
-            <option value="placed">Placed</option>
-            <option value="confirmed">Confirmed</option>
-            <option value="fulfilled">Fulfilled</option>
-            <option value="canceled">Canceled</option>
+            {filterOptions.statuses.map(statusOption => (
+              <option key={statusOption} value={statusOption}>
+                {formatStatusDisplayName(statusOption)}
+              </option>
+            ))}
           </select>
         </div>
         
@@ -71,9 +79,11 @@ export default function OrdersFilters({ filters, onChange, onRefresh, loading }:
             onChange={e => setChannel(e.target.value)}
           >
             <option value="">All Channels</option>
-            <option value="web">Web</option>
-            <option value="mercado_libre">Mercado Libre</option>
-            <option value="tienda">Tienda</option>
+            {filterOptions.channels.map(channelOption => (
+              <option key={channelOption} value={channelOption}>
+                {formatChannelDisplayName(channelOption)}
+              </option>
+            ))}
           </select>
         </div>
         
@@ -119,12 +129,12 @@ export default function OrdersFilters({ filters, onChange, onRefresh, loading }:
           <span className="text-sm font-medium text-blue-800">Active Filters:</span>
           {status && (
             <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
-              Status: {status}
+              Status: {formatStatusDisplayName(status)}
             </span>
           )}
           {channel && (
             <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
-              Channel: {channel === 'mercado_libre' ? 'Mercado Libre' : channel}
+              Channel: {formatChannelDisplayName(channel)}
             </span>
           )}
           {amountRange && (

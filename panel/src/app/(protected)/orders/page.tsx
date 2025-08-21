@@ -3,6 +3,7 @@
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { listOrders } from "@/services/orders/listOrders";
 import type { OrderItem, OrdersFilter } from "@/services/orders/types";
+import { extractFilterOptions } from "@/services/orders/utils";
 import { useSearchParams, useRouter } from "next/navigation";
 import OrdersTable from "@/components/orders/OrdersTable";
 import OrdersFilters from "@/components/orders/OrdersFilters";
@@ -35,7 +36,7 @@ function useOrderFilters(): [OrdersFilter, (next: OrdersFilter) => void] {
 
 export default function OrdersPage() {
   return (
-    <Suspense fallback={<div className="p-6 text-sm text-gray-500">Loading…</div>}>
+    <Suspense fallback={<div className="p-6">Loading…</div>}>
       <OrdersInner />
     </Suspense>
   );
@@ -60,6 +61,9 @@ function OrdersInner() {
 
   useEffect(() => { void load(); }, [load]);
 
+  // Extract filter options from the orders data
+  const filterOptions = useMemo(() => extractFilterOptions(rows), [rows]);
+
   return (
     <div className="p-6 space-y-6">
       <header>
@@ -76,7 +80,8 @@ function OrdersInner() {
         filters={filters} 
         onChange={setFilters} 
         onRefresh={load} 
-        loading={loading} 
+        loading={loading}
+        filterOptions={filterOptions}
       />
 
       <OrdersTable orders={rows} loading={loading} />

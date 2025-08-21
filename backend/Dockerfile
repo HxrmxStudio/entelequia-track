@@ -7,7 +7,8 @@ RUN apk add --no-cache \
     postgis \
     tzdata \
     nodejs \
-    npm
+    npm \
+    yaml-dev
 
 # Set working directory
 WORKDIR /app

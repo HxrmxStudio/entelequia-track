@@ -43,8 +43,8 @@ export default function OrderRow({ order }: OrderRowProps) {
       </td>
       <td className="p-3">
         <OrderDeliveryWindow 
-          startDate={order.delivery_window_start} 
-          endDate={order.delivery_window_end} 
+          startDate={order.delivery_window?.split("..")[0]} 
+          endDate={order.delivery_window?.split("..")[1]} 
         />
       </td>
       <td className="p-3">

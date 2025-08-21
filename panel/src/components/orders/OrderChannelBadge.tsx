@@ -1,3 +1,5 @@
+import { formatChannelDisplayName } from "@/services/orders/utils";
+
 interface OrderChannelBadgeProps {
   channel?: string | null;
   className?: string;
@@ -35,46 +37,9 @@ export default function OrderChannelBadge({ channel, className = "" }: OrderChan
     }
   };
 
-  const getChannelLabel = (channel?: string | null) => {
-    switch (channel) {
-      case 'web':
-        return 'Web';
-      case 'moto':
-        return 'Moto';
-      case 'correo':
-        return 'Correo';
-      case 'correo_sucursal':
-        return 'Correo Sucursal';
-      case 'dhl':
-        return 'DHL';
-      case 'andreani':
-        return 'Andreani';
-      case 'urbano':
-        return 'Urbano';
-      case 'fast_mail':
-        return 'Fast Mail';
-      case 'mercado_envios':
-        return 'Mercado Envíos';
-      case 'email':
-        return 'Email';
-      case 'mismo_dia':
-        return 'Mismo Día';
-      case 'gratuito':
-        return 'Gratuito';
-      case 'sucursal':
-        return 'Sucursal';
-      case 'sucursal_belgrano':
-        return 'Sucursal Belgrano';
-      case 'sucursal_centro':
-        return 'Sucursal Centro';
-      default:
-        return channel || 'Unknown';
-    }
-  };
-
   return (
-    <span className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${getChannelStyles(channel)} ${className}`}>
-      {getChannelLabel(channel)}
+    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getChannelStyles(channel)} ${className}`}>
+      {channel ? formatChannelDisplayName(channel) : 'Unknown'}
     </span>
   );
 }

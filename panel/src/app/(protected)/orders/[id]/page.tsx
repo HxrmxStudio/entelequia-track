@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { getOrderById } from "@/services/orders/getOrderById";
 import type { OrderItem } from "@/services/orders/types";
+import { formatStatusDisplayName, formatChannelDisplayName } from "@/services/orders/utils";
 // Removed useRequireAuth import - handled by (protected)/layout.tsx
 
 export default function OrderDetailPage() {
@@ -24,9 +25,9 @@ export default function OrderDetailPage() {
       <div className="border rounded-lg bg-white shadow-sm p-4 text-sm space-y-2">
         <div><b>ID:</b> {order.id}</div>
         <div><b>External Ref:</b> {order.external_ref ?? "-"}</div>
-        <div><b>Status:</b> {order.status}</div>
+        <div><b>Status:</b> {formatStatusDisplayName(order.status)}</div>
         <div><b>Amount:</b> {order.amount_cents != null ? `$${(order.amount_cents/100).toFixed(2)} ${order.currency ?? ""}` : "-"}</div>
-        <div><b>Channel:</b> {order.channel ?? "-"}</div>
+        <div><b>Channel:</b> {order.channel ? formatChannelDisplayName(order.channel) : "-"}</div>
         <div><b>Created:</b> {order.created_at ? new Date(order.created_at).toLocaleString() : "-"}</div>
         <div><b>Metadata:</b> <pre className="bg-gray-50 p-2 rounded overflow-auto">{JSON.stringify(order.metadata ?? {}, null, 2)}</pre></div>
       </div>

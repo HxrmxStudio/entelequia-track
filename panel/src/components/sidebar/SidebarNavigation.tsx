@@ -58,7 +58,7 @@ export default function SidebarNavigation({ compact = false }: SidebarNavigation
 
   return (
     <nav className="p-3 space-y-1">
-      {nav.map((item, index) => {
+      {nav.map((item) => {
         const active = pathname?.startsWith(item.href);
         return (
           <Link 
