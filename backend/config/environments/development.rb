@@ -15,6 +15,8 @@ Rails.application.configure do
   # Allow RSpec requests (Rack::Test default host) when running tests in development env
   config.hosts << "example.org"
   config.hosts << "www.example.com"
+  config.hosts << "entelequia-track.onrender.com"
+  config.hosts << ".onrender.com"
 
   # Enable server timing.
   config.server_timing = true
