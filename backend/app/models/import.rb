@@ -1,4 +1,10 @@
-class Import < ApplicationRecord 
-  enum :status, { pending: "pending", dry_run: "dry_run", committed: "committed", failed: "failed" }
-   validates :source, presence: true
-   end
+class Import < ApplicationRecord
+  enum :status, { 
+    pending: "pending", 
+    dry_run: "dry_run", 
+    completed: "completed", 
+    failed: "failed" 
+  }
+  
+  validates :source, presence: true
+end
