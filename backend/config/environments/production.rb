@@ -77,18 +77,19 @@ Rails.application.configure do
   config.active_record.attributes_for_inspect = [ :id ]
 
   # Enable DNS rebinding protection and other `Host` header attacks.
-  # config.hosts = [
-  #   "example.com",     # Allow requests from example.com
-  #   /.*\.example\.com/ # Allow requests from subdomains like `www.example.com`
-  # ]
-  #
+  config.hosts = [
+    "entelequia-track.onrender.com",     # Allow requests from your domain
+    ".onrender.com"                       # Allow all onrender.com subdomains
+  ]
+  
   # Skip DNS rebinding protection for the default health check endpoint.
-  # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+  config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+  
   # Enable request logging
-config.log_level = :info
-config.log_tags = [:request_id, :remote_ip, :user_agent]
+  config.log_level = :info
+  config.log_tags = [:request_id, :remote_ip, :user_agent]
 
-# Log all requests
-Rails.logger = ActiveSupport::Logger.new(STDOUT)
-Rails.logger.level = Logger::INFO
+  # Log all requests
+  Rails.logger = ActiveSupport::TaggedLogging.logger(STDOUT)
+  Rails.logger.level = Logger::INFO
 end
