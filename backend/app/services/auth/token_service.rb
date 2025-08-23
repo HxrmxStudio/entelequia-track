@@ -36,7 +36,7 @@ module Auth
       def set_refresh_token_cookie(cookies, token)
         cookies.encrypted[:rt] = {
           value: token,
-          httponly: true,
+          httponly: true,  # Keep secure for traditional web apps
           secure: Rails.env.production?,
           same_site: :lax,
           path: "/",
