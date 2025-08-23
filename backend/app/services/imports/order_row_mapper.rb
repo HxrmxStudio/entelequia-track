@@ -70,8 +70,7 @@ module Imports
       "retiro por sucursal belgrano" => "sucursal_belgrano",
       "retiro por sucursal centro" => "sucursal_centro",
       "retirar por local belgrano" => "sucursal_belgrano",
-      "retirar por local centro" => "sucursal_centro",
-      "retiro en sucursal" => "sucursal"
+      "retirar por local centro" => "sucursal_centro"
     }.freeze
 
     # Comprehensive mapping for delivery types to shipment delivery methods
