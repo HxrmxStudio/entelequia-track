@@ -1,19 +1,17 @@
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    # Allow multiple origins for development and production
-    origins = [
-      "http://localhost:3001",        # Development panel
-      "http://localhost:3000",        # Development alternatives
-      "https://entelequia-track-420.vercel.app",  # Production Vercel domain
-      "https://entelequia-track.vercel.app"       # Alternative Vercel domain
-    ]
+    origins "https://entelequia-track-420.vercel.app"
 
-    # Add custom origin from environment if set
-    if ENV["PANEL_ORIGIN"].present?
-      origins << ENV["PANEL_ORIGIN"]
-    end
+    resource "*",
+             headers: :any,
+             methods: %i[get post put patch delete options head],
+             expose: ["Authorization"],
+             credentials: true
+  end
 
-    origins origins
+  # Development origins
+  allow do
+    origins "http://localhost:3001"
 
     resource "*",
              headers: :any,
