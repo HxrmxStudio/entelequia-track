@@ -4,13 +4,33 @@ module Auth
       def extract_refresh_token(request, cookies)
         # Try to get from cookie first (panel)
         cookie_token = cookies.encrypted[:rt]
-        return cookie_token if cookie_token.present?
-        
+        Rails.logger.info "Refresh token extraction - Cookie token present: #{cookie_token.present?}"
+
+        if cookie_token.present?
+          Rails.logger.info "Refresh token extraction - Found in cookie"
+          return cookie_token
+        end
+
         # Fallback to Authorization header (mobile app)
         auth_header = request.headers["Authorization"].to_s
+        Rails.logger.info "Refresh token extraction - Auth header present: #{auth_header.present?}"
+
         if auth_header.start_with?("Bearer ")
-          auth_header.split(" ").last
+          token = auth_header.split(" ").last
+          Rails.logger.info "Refresh token extraction - Found in header"
+          return token
         end
+
+        # Additional fallback: check for token in request parameters
+        # This can help with frontend issues where cookies aren't working
+        param_token = request.params[:refresh_token] || request.params.dig(:auth, :refresh_token)
+        if param_token.present?
+          Rails.logger.info "Refresh token extraction - Found in parameters"
+          return param_token
+        end
+
+        Rails.logger.info "Refresh token extraction - No token found anywhere"
+        nil
       end
 
       def set_refresh_token_cookie(cookies, token)

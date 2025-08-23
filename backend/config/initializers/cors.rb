@@ -1,4 +1,16 @@
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
+  # Vercel deployment origins (covers all possible Vercel domains)
+  allow do
+    origins /^https?:\/\/.*\.vercel\.app$/
+
+    resource "*",
+             headers: :any,
+             methods: %i[get post put patch delete options head],
+             expose: ["Authorization"],
+             credentials: true
+  end
+
+  # Specific Vercel app domains
   allow do
     origins "https://entelequia-track-420.vercel.app"
 
