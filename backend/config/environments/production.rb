@@ -79,7 +79,9 @@ Rails.application.configure do
   # Enable DNS rebinding protection and other `Host` header attacks.
   config.hosts = [
     "entelequia-track.onrender.com",     # Allow requests from your domain
-    ".onrender.com"                       # Allow all onrender.com subdomains
+    ".onrender.com",                      # Allow all onrender.com subdomains
+    "localhost",                          # Allow localhost for local testing
+    "127.0.0.1"                           # Allow 127.0.0.1 for local testing
   ]
   
   # Skip DNS rebinding protection for the default health check endpoint.
