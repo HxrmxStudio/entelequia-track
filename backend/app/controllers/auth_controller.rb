@@ -24,6 +24,7 @@ class AuthController < ApplicationController
       
       render json: {
         access_token: session_data[:access_token],
+        refresh_token: session_data[:refresh_token], # Include refresh token for SSR
         exp: session_data[:exp],
         token_type: "Bearer",
         user: session_data[:user]
@@ -34,25 +35,33 @@ class AuthController < ApplicationController
   end
 
   def refresh
+    # Try to get refresh token from multiple sources for SSR compatibility
     refresh_token = Auth::TokenService.extract_refresh_token(request, cookies)
-    
+
+    # Additional fallback: check request body for refresh token
+    if refresh_token.blank?
+      refresh_token = auth_params[:refresh_token] || request.params[:refresh_token]
+      Rails.logger.info "Refresh token extraction - Found in request body" if refresh_token.present?
+    end
+
     if refresh_token.blank?
       render json: { error: "missing_refresh_token" }, status: :unauthorized
       return
     end
 
     session_data = Auth::AuthService.refresh_user_session(
-      refresh_token, 
-      client: auth_params[:client], 
+      refresh_token,
+      client: auth_params[:client],
       device: auth_params[:device]
     )
 
     if session_data
       # Set new refresh token cookie
       Auth::TokenService.set_refresh_token_cookie(cookies, session_data[:refresh_token])
-      
+
       render json: {
         access_token: session_data[:access_token],
+        refresh_token: session_data[:refresh_token], # Include for SSR
         exp: session_data[:exp],
         token_type: "Bearer",
         user: session_data[:user]
