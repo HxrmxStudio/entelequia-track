@@ -16,25 +16,38 @@ interface RefreshResponse {
  * Server-side token refresh function
  * Refreshes access token using HttpOnly cookies for maximum security
  * @param request NextRequest containing HttpOnly refresh cookie
+ * @param cookies Optional cookie string to use instead of reading from request
  * @returns Promise with fresh access token and updated refresh cookie
  */
-export async function refreshAccessToken(request: NextRequest): Promise<{ 
-  success: boolean; 
-  data?: RefreshResponse; 
+export async function refreshAccessToken(request: NextRequest, cookies?: string): Promise<{
+  success: boolean;
+  data?: RefreshResponse;
   cookies?: string[];
-  error?: string; 
+  error?: string;
 }> {
   try {
     const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
-    
+
+    // Use provided cookies or get from request headers
+    const incomingCookies = cookies || request.headers.get("cookie");
+    console.log(`[AUTH SERVER] Incoming cookies: ${incomingCookies?.substring(0, 50)}...`);
+
     // Forward the request to backend with cookies
+    const requestHeaders: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+
+    // Only add Cookie header if we have cookies
+    if (incomingCookies) {
+      requestHeaders["Cookie"] = incomingCookies;
+      console.log(`[AUTH SERVER] Sending cookies to backend: ${incomingCookies.substring(0, 50)}...`);
+    } else {
+      console.log(`[AUTH SERVER] No cookies to send to backend`);
+    }
+
     const response = await fetch(`${API_URL}/auth/refresh`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        // Forward cookies to backend
-        "Cookie": request.headers.get("cookie") || "",
-      },
+      headers: requestHeaders,
     });
 
     const data = await response.text();

@@ -67,27 +67,27 @@ async function refreshAccessToken(request: NextRequest): Promise<{
  * @param cookieHeader Cookie header to forward to backend
  * @returns Promise with fresh access token and updated cookies, or null if refresh fails
  */
-async function performRefresh(request: NextRequest, cookieHeader: string): Promise<{ 
-  access_token: string; 
-  exp: number; 
+async function performRefresh(request: NextRequest, cookieHeader: string): Promise<{
+  access_token: string;
+  exp: number;
   cookies?: string[];
 } | null> {
   try {
     console.log("[PROXY] Refreshing token with cookies:", cookieHeader.substring(0, 50) + "...");
-    
-    // Use centralized auth function for token refresh
-    const result = await authRefreshAccessToken(request);
-    
+
+    // Use centralized auth function for token refresh, passing cookies directly
+    const result = await authRefreshAccessToken(request, cookieHeader);
+
     if (result.success && result.data) {
       console.log("[PROXY] Refresh successful via centralized auth");
-      
+
       return {
         access_token: result.data.access_token,
         exp: result.data.exp,
         cookies: result.cookies || [],
       };
     }
-    
+
     console.log("[PROXY] Refresh failed:", result.error);
     return null;
   } catch (error) {
