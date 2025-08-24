@@ -30,7 +30,10 @@ export default function LoginPage() {
       // Use the new auth store instead of localStorage
       setAuth(response.user);
       
-      window.location.replace("/dashboard");
+      // Small delay to ensure cookie is sent to Next.js server before redirect
+      setTimeout(() => {
+        window.location.replace("/dashboard");
+      }, 100);
     } catch {
       setError("Credenciales inválidas");
     } finally {

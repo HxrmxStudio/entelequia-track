@@ -62,7 +62,10 @@ export default function RegisterPage() {
       
       // Redirect after a brief success message
       setTimeout(() => {
-        window.location.replace("/dashboard");
+        // Small delay to ensure cookie is sent to Next.js server before redirect
+        setTimeout(() => {
+          window.location.replace("/dashboard");
+        }, 100);
       }, 1500);
       
     } catch (err: unknown) {
