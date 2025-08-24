@@ -24,15 +24,16 @@ export default function AuthLayout({
         {/* Logo and Branding */}
         <div className="text-center z-10">
           <div className="mb-8">
-            <img 
-              src="/assets/Logo-entelequia-Vector.png" 
-              alt="Entelequia" 
+            {/* Using img instead of Next.js Image due to Vercel deployment issues */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/assets/Logo-entelequia-Vector.png"
+              alt="Entelequia"
               width={192}
               height={192}
               className="w-48 h-auto mx-auto drop-shadow-2xl"
               onError={(e) => {
                 console.error('Logo failed to load:', e);
-                // Fallback to text if image fails
                 const target = e.target as HTMLImageElement;
                 target.style.display = 'none';
                 const fallback = document.createElement('div');

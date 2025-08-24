@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { hasAuthCookies } from "../server/cookies";
+import { hasRefreshTokenCookie, parseCookies } from "../server/cookies";
 
 /**
  * Server-side authentication utilities
@@ -15,12 +15,8 @@ import { hasAuthCookies } from "../server/cookies";
  */
 export async function isLikelyAuthenticated(request: NextRequest): Promise<boolean> {
   try {
-    // In NextJS 15+, we need to handle cookies differently
-    // For middleware, we can still access headers directly
-    const cookieHeader = request.headers.get("cookie") || "";
-    
-    // Check for refresh token cookie (rt=)
-    if (cookieHeader.includes("rt=")) {
+    // Use centralized cookie function instead of duplicating logic
+    if (hasRefreshTokenCookie(request)) {
       return true;
     }
     
@@ -51,13 +47,13 @@ export async function isLikelyAuthenticated(request: NextRequest): Promise<boole
  */
 export function extractUserFromCookies(request: NextRequest): { email?: string } | null {
   try {
-    // Parse cookies to see if we can extract any user info
-    const cookieHeader = request.headers.get("cookie") || "";
+    // Use centralized cookie parsing instead of duplicating logic
+    const cookies = parseCookies(request);
     
     // In the future, this could decrypt user data from cookies
     // For now, just return null since we only store refresh tokens in cookies
     // Note: We parse cookies here as a foundation for future user data extraction
-    if (cookieHeader.includes("rt=")) {
+    if (cookies.rt) {
       // We have a refresh token, but no user data in cookies yet
       // This could be extended to decrypt user info from encrypted cookies
       return { email: undefined };
@@ -80,9 +76,8 @@ export function getAuthConfidence(request: NextRequest): number {
   let confidence = 0;
   
   try {
-    // Check for refresh token cookie
-    const cookieHeader = request.headers.get("cookie") || "";
-    if (cookieHeader.includes("rt=")) {
+    // Use centralized cookie function instead of duplicating logic
+    if (hasRefreshTokenCookie(request)) {
       confidence += 0.8;
     }
     
