@@ -36,13 +36,24 @@ module Auth
       def set_refresh_token_cookie(cookies, token)
         cookies.encrypted[:rt] = {
           value: token,
-          httponly: true,  # Keep secure for traditional web apps
-          secure: Rails.env.production?,
+          httponly: true,  # Required for Vercel security
+          secure: Rails.env.production? || ENV.fetch("FORCE_HTTPS_COOKIES", "false") == "true",
           same_site: Rails.env.production? ? :none : :lax,  # None for cross-site in production, Lax for local dev
           path: "/",
-          expires: ENV.fetch("REFRESH_TOKEN_TTL_DAYS", "30").to_i.days.from_now
+          expires: ENV.fetch("REFRESH_TOKEN_TTL_DAYS", "30").to_i.days.from_now,
+          # Additional Vercel compliance
+          domain: ENV.fetch("COOKIE_DOMAIN", nil), # Set if you need cross-subdomain cookies
+          max_age: ENV.fetch("REFRESH_TOKEN_TTL_DAYS", "30").to_i.days.to_i # Alternative to expires
         }
-        Rails.logger.info "Set refresh token cookie with SameSite=#{Rails.env.production? ? 'None' : 'Lax'}, Secure=#{Rails.env.production?}"
+        
+        # Log cookie settings for debugging
+        Rails.logger.info "Set refresh token cookie with attributes:"
+        Rails.logger.info "  - SameSite: #{Rails.env.production? ? 'None' : 'Lax'}"
+        Rails.logger.info "  - Secure: #{Rails.env.production? || ENV.fetch("FORCE_HTTPS_COOKIES", "false") == "true"}"
+        Rails.logger.info "  - HttpOnly: true"
+        Rails.logger.info "  - Domain: #{ENV.fetch("COOKIE_DOMAIN", "default")}"
+        Rails.logger.info "  - Path: /"
+        Rails.logger.info "  - Max-Age: #{ENV.fetch("REFRESH_TOKEN_TTL_DAYS", "30")} days"
       end
 
       def clear_refresh_token_cookie(cookies)

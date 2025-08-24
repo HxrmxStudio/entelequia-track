@@ -2,8 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { isLikelyAuthenticated } from "@/services/auth/utils/server";
 
 /**
- * Optimized middleware following NextJS best practices
+ * Optimized middleware following NextJS 15+ best practices
  * Uses optimistic checks - no network requests per NextJS guidelines
+ * Updated for NextJS 15+ async cookies API
  */
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
@@ -12,18 +13,15 @@ export async function middleware(request: NextRequest) {
   const protectedRoutes = ["/dashboard", "/orders", "/shipments", "/routes", "/couriers", "/import", "/alerts"];
   const authRoutes = ["/login", "/register", "/forgot-password", "/reset-password", "/create-password"];
   
-  // Check if current path is protected
-  const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route));
-  const isAuthRoute = authRoutes.some(route => pathname.startsWith(route));
-  
   // Skip middleware for API routes, static files, and root
   if (pathname.startsWith("/api") || pathname.startsWith("/_next") || pathname.startsWith("/favicon.ico") || pathname === "/") {
     return NextResponse.next();
   }
   
-  if (isProtectedRoute) {
+  if (isProtectedRoute(pathname)) {
     // Use optimistic check - no network requests (NextJS best practice)
-    const hasAuthCookies = isLikelyAuthenticated(request);
+    // Note: In NextJS 15+, cookies are accessed differently in middleware
+    const hasAuthCookies = await isLikelyAuthenticated(request);
     
     if (!hasAuthCookies) {
       console.log(`[MIDDLEWARE] Redirecting user without auth cookies from ${pathname} to login`);
@@ -36,9 +34,9 @@ export async function middleware(request: NextRequest) {
     console.log(`[MIDDLEWARE] Allowing access to ${pathname} (has auth cookies)`);
   }
   
-  if (isAuthRoute) {
+  if (isAuthRoute(pathname)) {
     // Use optimistic check for auth routes too
-    const hasAuthCookies = isLikelyAuthenticated(request);
+    const hasAuthCookies = await isLikelyAuthenticated(request);
     
     if (hasAuthCookies) {
       console.log(`[MIDDLEWARE] Redirecting authenticated user from ${pathname} to dashboard`);
@@ -51,7 +49,17 @@ export async function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
+// Helper function to check if current path is protected
+function isProtectedRoute(pathname: string): boolean {
+  const protectedRoutes = ["/dashboard", "/orders", "/shipments", "/routes", "/couriers", "/import", "/alerts"];
+  return protectedRoutes.some(route => pathname.startsWith(route));
+}
 
+// Helper function to check if current path is auth route
+function isAuthRoute(pathname: string): boolean {
+  const authRoutes = ["/login", "/register", "/forgot-password", "/reset-password", "/create-password"];
+  return authRoutes.some(route => pathname.startsWith(route));
+}
 
 export const config = {
   matcher: [

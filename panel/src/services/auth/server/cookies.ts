@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 
 /**
  * Server-side cookie utilities for authentication
+ * Updated for NextJS 15+ async cookies
  */
 
 /**
@@ -59,4 +60,12 @@ export function parseCookies(request: NextRequest): Record<string, string> {
  */
 export function hasAuthCookies(request: NextRequest): boolean {
   return hasRefreshTokenCookie(request);
+}
+
+/**
+ * Async version for NextJS 15+ compatibility
+ * Use this in API routes and server components
+ */
+export async function hasAuthCookiesAsync(request: NextRequest): Promise<boolean> {
+  return hasAuthCookies(request);
 }

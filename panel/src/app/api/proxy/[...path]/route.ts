@@ -39,12 +39,15 @@ async function refreshAccessToken(request: NextRequest): Promise<{
   exp: number;
   cookies?: string[];
 } | null> {
+  // Detect if we're in Vercel environment
+  const isVercel = process.env.VERCEL === "1" || process.env.NODE_ENV === "production";
+  
   // Try multiple ways to get cookies in Vercel environment
   let cookieHeader = request.headers.get("cookie") || "";
 
   // If no cookies in headers, try alternative methods
   if (!cookieHeader) {
-    // Try different header variations
+    // Try different header variations (important for Vercel)
     cookieHeader = request.headers.get("x-cookie") ||
                    request.headers.get("Cookie") ||
                    request.headers.get("cookie") ||
@@ -63,6 +66,13 @@ async function refreshAccessToken(request: NextRequest): Promise<{
         console.log("[PROXY] Could not access cookies through request.cookies");
       }
     }
+  }
+
+  // Log Vercel-specific information
+  if (isVercel) {
+    console.log(`[PROXY] Vercel environment detected - Cookie header length: ${cookieHeader.length}`);
+    console.log(`[PROXY] Vercel - Request origin: ${request.headers.get("origin") || "unknown"}`);
+    console.log(`[PROXY] Vercel - Request host: ${request.headers.get("host") || "unknown"}`);
   }
 
   console.log(`[PROXY] Extracted cookie header: ${cookieHeader.substring(0, 50)}...`);
@@ -101,8 +111,11 @@ async function performRefresh(request: NextRequest, cookieHeader: string): Promi
 } | null> {
   try {
     console.log("[PROXY] Refreshing token with cookies:", cookieHeader.substring(0, 50) + "...");
+    console.log("[PROXY] Cookie header length:", cookieHeader.length);
+    console.log("[PROXY] Cookie header type:", typeof cookieHeader);
 
     // Use centralized auth function for token refresh, passing cookies directly
+    // Fix: Pass cookies as the second parameter, not request
     const result = await authRefreshAccessToken(request, cookieHeader);
 
     if (result.success && result.data) {
@@ -218,9 +231,21 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
  */
 async function handleRequest(request: NextRequest, { path }: { path: string[] }) {
   try {
+    // Detect Vercel environment for better debugging
+    const isVercel = process.env.VERCEL === "1" || process.env.NODE_ENV === "production";
+    
+    if (isVercel) {
+      console.log(`[PROXY] Vercel environment - Request to: ${request.nextUrl.pathname}`);
+      console.log(`[PROXY] Vercel - Origin: ${request.headers.get("origin") || "unknown"}`);
+      console.log(`[PROXY] Vercel - User-Agent: ${request.headers.get("user-agent")?.substring(0, 50) || "unknown"}...`);
+    }
+    
     const fullPath = `/${path.join("/")}`;
     const searchParams = request.nextUrl.searchParams.toString();
     const finalPath = searchParams ? `${fullPath}?${searchParams}` : fullPath;
+    
+    // Check if this is an auth endpoint (login/register) that doesn't need tokens
+    const isAuthEndpoint = fullPath.includes('/auth/login') || fullPath.includes('/auth/register');
     
     // Get request body if present
     let requestBody: string | FormData | undefined;
@@ -237,44 +262,117 @@ async function handleRequest(request: NextRequest, { path }: { path: string[] })
       }
     }
     
-    // First, try to refresh token to get current access token
-    const tokenData = await refreshAccessToken(request);
+    let tokenData = null;
     
-    if (!tokenData) {
-      console.log("[PROXY] Authentication failed - no valid refresh token");
-      return NextResponse.json({ error: "Authentication required" }, { status: 401 });
+    // For auth endpoints (login/register), skip token refresh
+    if (!isAuthEndpoint) {
+      // First, try to refresh token to get current access token
+      tokenData = await refreshAccessToken(request);
+      
+      if (!tokenData) {
+        console.log("[PROXY] Authentication failed - no valid refresh token");
+        return NextResponse.json({ error: "Authentication required" }, { status: 401 });
+      }
+      
+      console.log("[PROXY] Successfully refreshed access token for proxy request");
+    } else {
+      console.log("[PROXY] Auth endpoint - skipping token refresh");
     }
     
-    console.log("[PROXY] Successfully refreshed access token for proxy request");
+    // Make the request (with or without token)
+    let response: Response;
     
-    // Make the authenticated request
-    const response = await makeAuthenticatedRequest(finalPath, tokenData.access_token, request, requestBody);
+    if (tokenData) {
+      // Authenticated request with token
+      response = await makeAuthenticatedRequest(finalPath, tokenData.access_token, request, requestBody);
+    } else {
+      // Direct request for auth endpoints
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+      
+      const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+      };
+      
+      // Forward cookies for auth endpoints (critical for Vercel)
+      const cookieHeader = request.headers.get("cookie");
+      if (cookieHeader) {
+        headers["Cookie"] = cookieHeader;
+        console.log(`[PROXY] Forwarding cookies for auth: ${cookieHeader.substring(0, 50)}...`);
+      }
+      
+      // Add Vercel-specific headers for better compatibility
+      if (process.env.VERCEL === "1") {
+        headers["X-Forwarded-For"] = request.headers.get("x-forwarded-for") || "unknown";
+        headers["X-Real-IP"] = request.headers.get("x-real-ip") || "unknown";
+        headers["X-Forwarded-Proto"] = request.headers.get("x-forwarded-proto") || "https";
+      }
+      
+      response = await fetch(`${API_URL}${finalPath}`, {
+        method: request.method,
+        headers,
+        body: requestBody,
+      });
+    }
     
     // If we get 401, the access token might be expired, but we already refreshed it
     // So this indicates a real authentication failure
     if (response.status === 401) {
-      console.log("[PROXY] Backend returned 401 - authentication failed despite token refresh");
+      console.log("[PROXY] Backend returned 401 - authentication failed");
       return NextResponse.json({ error: "Authentication failed" }, { status: 401 });
     }
     
     // Forward the response
-    const responseData = await response.text();
+    let nextResponse: NextResponse;
     
-    const nextResponse = new NextResponse(responseData, {
-      status: response.status,
-      headers: {
-        "Content-Type": response.headers.get("Content-Type") || "application/json",
-      },
-    });
+    // Handle different response status codes properly
+    if (response.status === 204) {
+      // 204 No Content - create response without body
+      nextResponse = new NextResponse(null, {
+        status: 204,
+      });
+    } else {
+      // Normal response with content
+      const responseData = await response.text();
+      nextResponse = new NextResponse(responseData, {
+        status: response.status,
+        headers: {
+          "Content-Type": response.headers.get("Content-Type") || "application/json",
+        },
+      });
+    }
     
     // If we have new cookies from refresh, set them in the response
-    if (tokenData.cookies && tokenData.cookies.length > 0) {
+    if (tokenData?.cookies && tokenData.cookies.length > 0) {
       console.log("[PROXY] Setting cookies in response:", tokenData.cookies);
       tokenData.cookies.forEach(cookie => {
         nextResponse.headers.append("Set-Cookie", cookie);
       });
     } else {
       console.log("[PROXY] No cookies to set in response");
+    }
+    
+    // Forward Set-Cookie headers from backend for auth endpoints
+    if (isAuthEndpoint) {
+      const setCookieHeaders: string[] = [];
+      
+      // Try the modern getSetCookie method first
+      if (typeof response.headers.getSetCookie === 'function') {
+        setCookieHeaders.push(...response.headers.getSetCookie());
+      } else {
+        // Fallback: manually extract from raw headers
+        response.headers.forEach((value, name) => {
+          if (name.toLowerCase() === 'set-cookie') {
+            setCookieHeaders.push(value);
+          }
+        });
+      }
+      
+      if (setCookieHeaders.length > 0) {
+        console.log("[PROXY] Setting auth cookies in response:", setCookieHeaders);
+        setCookieHeaders.forEach(cookie => {
+          nextResponse.headers.append("Set-Cookie", cookie);
+        });
+      }
     }
     
     return nextResponse;

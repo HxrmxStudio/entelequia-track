@@ -4,16 +4,16 @@ import { useAuthStore } from "@/stores/auth";
 
 /**
  * Client-side registration function
- * Handles authentication via HttpOnly cookies - no client-side token storage
+ * Handles authentication via HttpOnly cookies through Next.js proxy
  * @param payload Registration data
  * @returns Promise containing only user data (access tokens handled server-side)
  */
 export async function register(payload: RegisterRequest): Promise<RegisterResponse> {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
-  
-  const res = await fetch(`${API_URL}${authEndpoints.register()}`, {
+  // Use Next.js proxy instead of direct backend access
+  // This ensures cookies are properly handled and forwarded
+  const res = await fetch(authEndpoints.register(), {
     method: "POST",
-    credentials: "include",
+    credentials: "include", // Important: include cookies
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload)
   });
