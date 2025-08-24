@@ -30,24 +30,31 @@ module Auth
         user = refresh_token.user
         Rails.logger.info "RefreshTokenService: Found user: #{user.email}"
         
-        # Revoke the current token
-        refresh_token.revoke!
-        Rails.logger.info "RefreshTokenService: Current token revoked"
-        
-        # Create new refresh token
-        new_token, new_refresh_token = create_for_user(user, client: client, device: device)
-        Rails.logger.info "RefreshTokenService: New token created"
-        
-        # Generate new access token
-        access_token_data = Auth::JwtService.encode_access_token(sub: user.id)
-        Rails.logger.info "RefreshTokenService: New access token generated"
-        
-        {
-          access_token: access_token_data[:token],
-          exp: access_token_data[:exp],
-          refresh_token: new_token,
-          user: UserSerializer.new(user).as_json
-        }
+        # Use transaction to ensure atomicity and prevent race conditions
+        ActiveRecord::Base.transaction do
+          # Create new refresh token FIRST (before revoking the old one)
+          new_token, new_refresh_token = create_for_user(user, client: client, device: device)
+          Rails.logger.info "RefreshTokenService: New token created"
+          
+          # Only revoke the old token AFTER successfully creating the new one
+          refresh_token.revoke!
+          Rails.logger.info "RefreshTokenService: Current token revoked"
+          
+          # Generate new access token
+          access_token_data = Auth::JwtService.encode_access_token(sub: user.id)
+          Rails.logger.info "RefreshTokenService: New access token generated"
+          
+          {
+            access_token: access_token_data[:token],
+            exp: access_token_data[:exp],
+            refresh_token: new_token,
+            user: UserSerializer.new(user).as_json
+          }
+        end
+      rescue => e
+        Rails.logger.error "RefreshTokenService: Error during token rotation: #{e.message}"
+        Rails.logger.error "RefreshTokenService: Backtrace: #{e.backtrace.first(5).join("\n")}"
+        nil
       end
 
       def revoke_for_user(user)
