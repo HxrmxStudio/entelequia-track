@@ -16,13 +16,14 @@ export default function AlertsBadge() {
 
   useEffect(() => { init(); }, []);
 
-  useEffect(() => {
-    const unsubscribe = subscribeToAlerts({
-      onAlert: () => setCount((c) => c + 1),
-      onResolved: () => setCount((c) => Math.max(0, c - 1)),
-    });
-    return () => unsubscribe();
-  }, []);
+  // TEMPORARILY DISABLED: Authentication issues with alerts subscription
+  // useEffect(() => {
+  //   const unsubscribe = subscribeToAlerts({
+  //     onAlert: () => setCount((c) => c + 1),
+  //     onResolved: () => setCount((c) => Math.max(0, c - 1)),
+  //   });
+  //   return () => unsubscribe();
+  // }, []);
 
   // UI mínima del badge (puedes reemplazar por shadcn/ui Badge)
   return (
