@@ -28,9 +28,14 @@ export async function refreshAccessToken(request: NextRequest, cookies?: string)
   try {
     const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
+    // Debug: Log all parameters
+    console.log(`[AUTH SERVER] Function called with cookies parameter: ${cookies ? 'present' : 'undefined'}`);
+    console.log(`[AUTH SERVER] Cookies parameter value: ${cookies?.substring(0, 50)}...`);
+    console.log(`[AUTH SERVER] Request headers cookie: ${request.headers.get("cookie")?.substring(0, 50)}...`);
+
     // Use provided cookies or get from request headers
     const incomingCookies = cookies || request.headers.get("cookie");
-    console.log(`[AUTH SERVER] Incoming cookies: ${incomingCookies?.substring(0, 50)}...`);
+    console.log(`[AUTH SERVER] Final incoming cookies: ${incomingCookies?.substring(0, 50)}...`);
 
     // Forward the request to backend with cookies
     const requestHeaders: Record<string, string> = {

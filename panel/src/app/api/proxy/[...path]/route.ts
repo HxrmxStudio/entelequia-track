@@ -34,12 +34,39 @@ const refreshCache = new Map<string, Promise<{
  * @param request NextRequest containing HttpOnly refresh cookie
  * @returns Promise with ephemeral access token for immediate server use, or null if refresh fails
  */
-async function refreshAccessToken(request: NextRequest): Promise<{ 
-  access_token: string; 
-  exp: number; 
+async function refreshAccessToken(request: NextRequest): Promise<{
+  access_token: string;
+  exp: number;
   cookies?: string[];
 } | null> {
-  const cookieHeader = request.headers.get("cookie") || "";
+  // Try multiple ways to get cookies in Vercel environment
+  let cookieHeader = request.headers.get("cookie") || "";
+
+  // If no cookies in headers, try alternative methods
+  if (!cookieHeader) {
+    // Try different header variations
+    cookieHeader = request.headers.get("x-cookie") ||
+                   request.headers.get("Cookie") ||
+                   request.headers.get("cookie") ||
+                   "";
+
+    // Try to get cookies from NextRequest if available
+    if (!cookieHeader && typeof request.cookies !== 'undefined') {
+      try {
+        // In Next.js 13+, cookies might be available through request.cookies
+        const cookieStore = request.cookies;
+        const allCookies = cookieStore.getAll();
+        cookieHeader = allCookies
+          .map(cookie => `${cookie.name}=${cookie.value}`)
+          .join("; ");
+      } catch {
+        console.log("[PROXY] Could not access cookies through request.cookies");
+      }
+    }
+  }
+
+  console.log(`[PROXY] Extracted cookie header: ${cookieHeader.substring(0, 50)}...`);
+
   const cacheKey = `refresh_${cookieHeader}`;
   
   // Check if there's already a refresh in progress for this user
@@ -133,10 +160,9 @@ async function makeAuthenticatedRequest(
     headers["Content-Type"] = "application/json";
   }
 
-  // Forward other headers (except authorization and content-length)
-  // Note: We DO forward cookies for auth endpoints to ensure refresh tokens work
+  // Forward other headers (except authorization, cookie, and content-length)
   for (const [key, value] of request.headers.entries()) {
-    if (!["authorization", "content-length"].includes(key.toLowerCase())) {
+    if (!["authorization", "cookie", "content-length"].includes(key.toLowerCase())) {
       // Don't forward content-type for FormData as browser sets multipart boundary
       if (key.toLowerCase() === "content-type" && requestBody instanceof FormData) {
         continue;
