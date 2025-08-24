@@ -52,7 +52,8 @@ class AuthController < ApplicationController
 
     if refresh_token.blank?
       Rails.logger.warn "Refresh failed - no token found in cookies, headers, or body"
-      Rails.logger.warn "Available cookies: #{cookies.keys.join(', ')}"
+      Rails.logger.warn "Request cookies available: #{cookies.to_h.keys.join(', ')}"
+      Rails.logger.warn "Raw cookie header: #{request.headers['Cookie'].inspect}"
       render json: { error: "missing_refresh_token" }, status: :unauthorized
       return
     end
