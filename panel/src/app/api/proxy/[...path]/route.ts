@@ -120,14 +120,23 @@ async function makeAuthenticatedRequest(
     "Authorization": `Bearer ${accessToken}`,
   };
 
+  // Log cookie forwarding for debugging
+  const cookieHeader = request.headers.get("cookie");
+  if (cookieHeader) {
+    console.log(`[PROXY] Forwarding cookies to backend: ${cookieHeader.substring(0, 50)}...`);
+  } else {
+    console.log("[PROXY] No cookies to forward to backend");
+  }
+
   // Only set Content-Type for string bodies (JSON), not for FormData
   if (typeof requestBody === "string") {
     headers["Content-Type"] = "application/json";
   }
 
-  // Forward other headers (except authorization, cookie, and content-length)
+  // Forward other headers (except authorization and content-length)
+  // Note: We DO forward cookies for auth endpoints to ensure refresh tokens work
   for (const [key, value] of request.headers.entries()) {
-    if (!["authorization", "cookie", "content-length"].includes(key.toLowerCase())) {
+    if (!["authorization", "content-length"].includes(key.toLowerCase())) {
       // Don't forward content-type for FormData as browser sets multipart boundary
       if (key.toLowerCase() === "content-type" && requestBody instanceof FormData) {
         continue;
