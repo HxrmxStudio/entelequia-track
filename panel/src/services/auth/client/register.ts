@@ -1,16 +1,17 @@
-import { API_URL } from "@/app/lib/api";
-import { authEndpoints } from "./endpoints";
-import { LoginRequest, LoginResponse, ServerLoginResponse } from "./types";
+import { authEndpoints } from "../endpoints";
+import { RegisterRequest, RegisterResponse, ServerLoginResponse } from "../types";
 import { useAuthStore } from "@/stores/auth";
 
 /**
- * Client-side login function
+ * Client-side registration function
  * Handles authentication via HttpOnly cookies - no client-side token storage
- * @param payload Login credentials
+ * @param payload Registration data
  * @returns Promise containing only user data (access tokens handled server-side)
  */
-export async function postLogin(payload: LoginRequest): Promise<LoginResponse> {
-  const res = await fetch(`${API_URL}${authEndpoints.login()}`, {
+export async function register(payload: RegisterRequest): Promise<RegisterResponse> {
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+  
+  const res = await fetch(`${API_URL}${authEndpoints.register()}`, {
     method: "POST",
     credentials: "include",
     headers: { "Content-Type": "application/json" },
@@ -29,5 +30,3 @@ export async function postLogin(payload: LoginRequest): Promise<LoginResponse> {
   // Return client-safe response without tokens
   return { user: serverResponse.user };
 }
-
-

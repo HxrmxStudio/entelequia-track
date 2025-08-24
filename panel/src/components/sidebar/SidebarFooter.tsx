@@ -1,7 +1,7 @@
 "use client";
 
 import { LogOut } from "lucide-react";
-import { logout } from "@/services/auth/logout";
+import { logout } from "@/services/auth";
 
 interface SidebarFooterProps {
   compact?: boolean;

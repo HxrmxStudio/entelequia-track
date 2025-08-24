@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { postLogin } from "@/services/auth/postLogin";
-import { isAuthenticated } from "../../../../utils/auth-utils";
+import { login, isAuthenticated } from "@/services/auth";
 import { useAuthStore } from "@/stores/auth";
 import Link from "next/link";
 
@@ -25,7 +24,7 @@ export default function LoginPage() {
     setIsLoading(true);
     
     try {
-      const response = await postLogin({ email, password });
+      const response = await login({ email, password });
       
       // Use the new auth store instead of localStorage
       setAuth(response.user);

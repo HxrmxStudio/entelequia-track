@@ -1,4 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
+import { refreshAccessToken as authRefreshAccessToken } from "@/services/auth/server";
+
+/**
+ * Proxy API route for authenticated backend requests
+ * 
+ * This route uses centralized authentication functions from @/services/auth/server
+ * to handle token refresh and maintain security. It acts as a secure proxy
+ * between client requests and the backend API.
+ * 
+ * Key features:
+ * - Uses centralized auth functions (no duplicate logic)
+ * - Implements request caching to prevent duplicate refreshes
+ * - Forwards cookies and headers appropriately
+ * - Never exposes access tokens to the client
+ */
 
 /**
  * Simple in-memory cache to prevent concurrent refresh requests
@@ -11,7 +26,7 @@ const refreshCache = new Map<string, Promise<{
 } | null>>();
 
 /**
- * Refreshes access token using HttpOnly refresh cookie (SERVER-SIDE ONLY)
+ * Refreshes access token using centralized auth functions (SERVER-SIDE ONLY)
  * 
  * This function handles token refresh entirely on the server to maintain security.
  * Access tokens are ephemeral and never exposed to the client.
@@ -46,7 +61,7 @@ async function refreshAccessToken(request: NextRequest): Promise<{
 }
 
 /**
- * Performs the actual token refresh request to the backend (SERVER-SIDE ONLY)
+ * Performs the actual token refresh request using centralized auth functions (SERVER-SIDE ONLY)
  * 
  * @param request NextRequest for error context
  * @param cookieHeader Cookie header to forward to backend
@@ -58,48 +73,25 @@ async function performRefresh(request: NextRequest, cookieHeader: string): Promi
   cookies?: string[];
 } | null> {
   try {
-    const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
-    
     console.log("[PROXY] Refreshing token with cookies:", cookieHeader.substring(0, 50) + "...");
     
-    const response = await fetch(`${API_URL}/auth/refresh`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Cookie": cookieHeader,
-      },
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      
-      // Extract ALL Set-Cookie headers to forward to browser
-      const setCookieHeaders: string[] = [];
-      
-      // Try the modern getSetCookie method first
-      if (typeof response.headers.getSetCookie === 'function') {
-        setCookieHeaders.push(...response.headers.getSetCookie());
-      } else {
-        // Fallback: manually extract from raw headers
-        response.headers.forEach((value, name) => {
-          if (name.toLowerCase() === 'set-cookie') {
-            setCookieHeaders.push(value);
-          }
-        });
-      }
-      
-      console.log("[PROXY] Refresh successful, got cookies:", setCookieHeaders);
+    // Use centralized auth function for token refresh
+    const result = await authRefreshAccessToken(request);
+    
+    if (result.success && result.data) {
+      console.log("[PROXY] Refresh successful via centralized auth");
       
       return {
-        access_token: data.access_token,
-        exp: data.exp,
-        cookies: setCookieHeaders,
+        access_token: result.data.access_token,
+        exp: result.data.exp,
+        cookies: result.cookies || [],
       };
     }
     
+    console.log("[PROXY] Refresh failed:", result.error);
     return null;
   } catch (error) {
-    console.error("Token refresh error:", error);
+    console.error("[PROXY] Token refresh error:", error);
     return null;
   }
 }
@@ -214,8 +206,11 @@ async function handleRequest(request: NextRequest, { path }: { path: string[] })
     const tokenData = await refreshAccessToken(request);
     
     if (!tokenData) {
+      console.log("[PROXY] Authentication failed - no valid refresh token");
       return NextResponse.json({ error: "Authentication required" }, { status: 401 });
     }
+    
+    console.log("[PROXY] Successfully refreshed access token for proxy request");
     
     // Make the authenticated request
     const response = await makeAuthenticatedRequest(finalPath, tokenData.access_token, request, requestBody);
@@ -223,6 +218,7 @@ async function handleRequest(request: NextRequest, { path }: { path: string[] })
     // If we get 401, the access token might be expired, but we already refreshed it
     // So this indicates a real authentication failure
     if (response.status === 401) {
+      console.log("[PROXY] Backend returned 401 - authentication failed despite token refresh");
       return NextResponse.json({ error: "Authentication failed" }, { status: 401 });
     }
     

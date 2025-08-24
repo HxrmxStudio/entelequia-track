@@ -1,7 +1,7 @@
 "use client";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { isAuthenticated } from "../../utils/auth-utils";
+import { isAuthenticated } from "@/services/auth";
 import { useAuthStore } from "@/stores/auth";
 
 export function useRequireAuth() {

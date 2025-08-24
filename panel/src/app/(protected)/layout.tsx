@@ -1,7 +1,7 @@
 "use client";
 
 import { PropsWithChildren } from "react";
-import { getCurrentUser } from "../../../utils/auth-utils";
+import { getCurrentUser } from "@/services/auth";
 import Sidebar from "@/components/sidebar/Sidebar";
 import { useSidebar } from "@/hooks/useSidebar";
 

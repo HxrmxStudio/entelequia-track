@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
+import { isLikelyAuthenticated } from "@/services/auth/utils/server";
 
+/**
+ * Optimized middleware following NextJS best practices
+ * Uses optimistic checks - no network requests per NextJS guidelines
+ */
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   
@@ -11,29 +16,33 @@ export async function middleware(request: NextRequest) {
   const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route));
   const isAuthRoute = authRoutes.some(route => pathname.startsWith(route));
   
-  // Skip middleware for API routes (except auth check), static files, and root
+  // Skip middleware for API routes, static files, and root
   if (pathname.startsWith("/api") || pathname.startsWith("/_next") || pathname.startsWith("/favicon.ico") || pathname === "/") {
     return NextResponse.next();
   }
   
   if (isProtectedRoute) {
-    // Check authentication server-side
-    const isAuthenticated = await checkAuthentication(request);
+    // Use optimistic check - no network requests (NextJS best practice)
+    const hasAuthCookies = isLikelyAuthenticated(request);
     
-    if (!isAuthenticated) {
-      // Redirect to login if not authenticated
+    if (!hasAuthCookies) {
+      console.log(`[MIDDLEWARE] Redirecting user without auth cookies from ${pathname} to login`);
+      // Redirect to login if no auth cookies
       const loginUrl = new URL("/login", request.url);
       loginUrl.searchParams.set("from", pathname);
       return NextResponse.redirect(loginUrl);
     }
+    
+    console.log(`[MIDDLEWARE] Allowing access to ${pathname} (has auth cookies)`);
   }
   
   if (isAuthRoute) {
-    // Check if user is already authenticated
-    const isAuthenticated = await checkAuthentication(request);
+    // Use optimistic check for auth routes too
+    const hasAuthCookies = isLikelyAuthenticated(request);
     
-    if (isAuthenticated) {
-      // Redirect to dashboard if already authenticated
+    if (hasAuthCookies) {
+      console.log(`[MIDDLEWARE] Redirecting authenticated user from ${pathname} to dashboard`);
+      // Redirect to dashboard if already has auth cookies
       const dashboardUrl = new URL("/dashboard", request.url);
       return NextResponse.redirect(dashboardUrl);
     }
@@ -42,27 +51,7 @@ export async function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-async function checkAuthentication(request: NextRequest): Promise<boolean> {
-  try {
-    // Use server-side config - not exposed to client
-    const apiUrl = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
-    
-    // Make internal request to session endpoint
-    const response = await fetch(`${apiUrl}/auth/session`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        // Forward cookies to backend
-        "Cookie": request.headers.get("cookie") || "",
-      },
-    });
 
-    return response.ok;
-  } catch (error) {
-    console.error("Auth check error in middleware:", error);
-    return false;
-  }
-}
 
 export const config = {
   matcher: [

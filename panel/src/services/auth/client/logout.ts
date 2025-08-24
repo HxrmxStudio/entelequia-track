@@ -1,5 +1,4 @@
-import { API_URL } from "@/app/lib/api";
-import { authEndpoints } from "./endpoints";
+import { authEndpoints } from "../endpoints";
 import { useAuthStore } from "@/stores/auth";
 
 /**
@@ -8,6 +7,8 @@ import { useAuthStore } from "@/stores/auth";
  * This ensures secure removal of HttpOnly refresh tokens
  */
 export async function logout(): Promise<void> {
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+  
   try {
     // Call backend logout endpoint - this handles all cookie clearing server-side
     const res = await fetch(`${API_URL}${authEndpoints.logout()}`, {

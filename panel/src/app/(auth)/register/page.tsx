@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { postRegister } from "@/services/auth/postRegister";
+import { register } from "@/services/auth";
 import Link from "next/link";
 import { useAuthStore } from "@/stores/auth";
 
@@ -49,7 +49,7 @@ export default function RegisterPage() {
     setError(null);
     
     try {
-      const response = await postRegister({
+      const response = await register({
         email: formData.email,
         password: formData.password,
         name: formData.name || undefined
