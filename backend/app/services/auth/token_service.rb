@@ -11,6 +11,26 @@ module Auth
           return cookie_token
         end
 
+        # Fallback to raw cookie header (Vercel compatibility)
+        raw_cookie_header = request.headers["Cookie"].to_s
+        if raw_cookie_header.present?
+          Rails.logger.info "Refresh token extraction - Raw cookie header present: #{raw_cookie_header.present?}"
+          
+          # Parse raw cookie header to find rt= value
+          raw_cookies = raw_cookie_header.split(';').reduce({}) do |acc, cookie|
+            key, value = cookie.strip.split('=', 2)
+            if key && value
+              acc[key] = value
+            end
+            acc
+          end
+          
+          if raw_cookies["rt"].present?
+            Rails.logger.info "Refresh token extraction - Found in raw cookie header"
+            return raw_cookies["rt"]
+          end
+        end
+
         # Fallback to Authorization header (mobile app)
         auth_header = request.headers["Authorization"].to_s
         Rails.logger.info "Refresh token extraction - Auth header present: #{auth_header.present?}"
