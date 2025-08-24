@@ -46,8 +46,21 @@ class RefreshToken < ApplicationRecord
   end
 
   def self.find_by_token(token)
+    Rails.logger.info "RefreshToken: Looking for token starting with: #{token&.first(20)}..."
+    
     digest = Digest::SHA256.hexdigest(token)
-    find_by(token_digest: digest)
+    Rails.logger.info "RefreshToken: Generated digest: #{digest.first(20)}..."
+    
+    result = find_by(token_digest: digest)
+    Rails.logger.info "RefreshToken: Database lookup result: #{result ? 'Found' : 'Not found'}"
+    
+    if result
+      Rails.logger.info "RefreshToken: Found token for user: #{result.user.email}"
+      Rails.logger.info "RefreshToken: Token active? #{result.active?}"
+      Rails.logger.info "RefreshToken: Token expires at: #{result.expires_at}"
+    end
+    
+    result
   end
 
   # Method to get the original token (only available on newly created instances)
