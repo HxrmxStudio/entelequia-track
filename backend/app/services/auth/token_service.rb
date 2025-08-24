@@ -38,10 +38,11 @@ module Auth
           value: token,
           httponly: true,  # Keep secure for traditional web apps
           secure: Rails.env.production?,
-          same_site: :lax,
+          same_site: Rails.env.production? ? :none : :lax,  # None for cross-site in production, Lax for local dev
           path: "/",
           expires: ENV.fetch("REFRESH_TOKEN_TTL_DAYS", "30").to_i.days.from_now
         }
+        Rails.logger.info "Set refresh token cookie with SameSite=#{Rails.env.production? ? 'None' : 'Lax'}, Secure=#{Rails.env.production?}"
       end
 
       def clear_refresh_token_cookie(cookies)

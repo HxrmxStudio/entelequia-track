@@ -20,7 +20,9 @@ class AuthController < ApplicationController
       )
       
       # Set refresh token cookie
+      Rails.logger.info "Login successful for user #{user.email}, setting refresh token cookie for cross-site compatibility"
       Auth::TokenService.set_refresh_token_cookie(cookies, session_data[:refresh_token])
+      Rails.logger.info "Login response will include Set-Cookie header for cross-site requests"
       
       render json: {
         access_token: session_data[:access_token],
@@ -35,6 +37,10 @@ class AuthController < ApplicationController
   end
 
   def refresh
+    Rails.logger.info "Refresh request received from #{request.remote_ip}"
+    Rails.logger.info "Request headers: User-Agent=#{request.headers['User-Agent']}"
+    Rails.logger.info "CORS Origin: #{request.headers['Origin']}"
+    
     # Try to get refresh token from multiple sources for SSR compatibility
     refresh_token = Auth::TokenService.extract_refresh_token(request, cookies)
 
@@ -45,6 +51,8 @@ class AuthController < ApplicationController
     end
 
     if refresh_token.blank?
+      Rails.logger.warn "Refresh failed - no token found in cookies, headers, or body"
+      Rails.logger.warn "Available cookies: #{cookies.keys.join(', ')}"
       render json: { error: "missing_refresh_token" }, status: :unauthorized
       return
     end
@@ -57,7 +65,9 @@ class AuthController < ApplicationController
 
     if session_data
       # Set new refresh token cookie
+      Rails.logger.info "Refresh successful, setting new refresh token cookie"
       Auth::TokenService.set_refresh_token_cookie(cookies, session_data[:refresh_token])
+      Rails.logger.info "Refresh response will include updated Set-Cookie header"
 
       render json: {
         access_token: session_data[:access_token],
