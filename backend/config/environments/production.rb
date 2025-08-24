@@ -80,6 +80,8 @@ Rails.application.configure do
   config.hosts = [
     "entelequia-track.onrender.com",     # Allow requests from your domain
     ".onrender.com",                      # Allow all onrender.com subdomains
+    "entelequia-track-420.vercel.app",   # Allow requests from Vercel deployment
+    ".vercel.app",                        # Allow all vercel.app subdomains
     "localhost",                          # Allow localhost for local testing
     "127.0.0.1"                           # Allow 127.0.0.1 for local testing
   ]
