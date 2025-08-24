@@ -1,7 +1,5 @@
 "use client";
 
-import Image from "next/image";
-
 export default function AuthLayout({
   children,
 }: {
@@ -26,13 +24,12 @@ export default function AuthLayout({
         {/* Logo and Branding */}
         <div className="text-center z-10">
           <div className="mb-8">
-            <Image 
+            <img 
               src="/assets/Logo-entelequia-Vector.png" 
               alt="Entelequia" 
               width={192}
               height={192}
               className="w-48 h-auto mx-auto drop-shadow-2xl"
-              priority
               onError={(e) => {
                 console.error('Logo failed to load:', e);
                 // Fallback to text if image fails
